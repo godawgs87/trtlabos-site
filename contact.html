@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talk to Us — TRT LabOS</title>
+<meta name="description" content="Connect your TRT clinic to LabOS. Tell us about your practice and we'll follow up within one business day.">
+<link rel="stylesheet" href="styles.css">
+<style>
+.contact-layout{display:grid;grid-template-columns:3fr 2fr;gap:2.5rem;align-items:start;}
+.form-card{background:#ffffff;border:1px solid var(--border);border-radius:16px;padding:2rem;}
+.form-card h2{font-family:'Instrument Serif',serif;font-size:22px;color:var(--ink);letter-spacing:-0.3px;margin-bottom:0.35rem;}
+.form-intro{font-size:13.5px;color:var(--muted);margin-bottom:1.75rem;line-height:1.55;}
+.form-group{margin-bottom:1.1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.1rem;}
+.form-label{font-size:12px;font-weight:500;color:var(--ink);display:block;margin-bottom:5px;}
+.form-label .req{color:var(--warm);}
+.form-input{width:100%;padding:12px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;transition:border-color 0.15s;}
+.form-input:focus{border-color:#1A4D3B;}
+.form-input::placeholder{color:#B0B0A8;}
+.form-select{width:100%;padding:12px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;cursor:pointer;}
+.form-select:focus{border-color:#1A4D3B;}
+.form-textarea{width:100%;padding:12px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;transition:border-color 0.15s;resize:vertical;min-height:100px;line-height:1.55;}
+.form-textarea:focus{border-color:#1A4D3B;}
+.form-textarea::placeholder{color:#B0B0A8;}
+.form-hint{font-size:11.5px;color:var(--muted);margin-top:4px;}
+.form-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0;}
+.submit-row{display:flex;align-items:center;gap:1rem;margin-top:1.5rem;}
+.submit-note{font-size:12px;color:var(--muted);line-height:1.4;}
+.sidebar-block{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1rem;}
+.sidebar-block:last-child{margin-bottom:0;}
+.sidebar-block h3{font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;}
+.next-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:0.85rem;}
+.next-step:last-child{margin-bottom:0;}
+.ns-num{width:22px;height:22px;border-radius:50%;background:#1A4D3B;color:#ffffff;font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.ns-body strong{display:block;font-size:13px;font-weight:500;color:var(--ink);margin-bottom:1px;}
+.ns-body span{font-size:12.5px;color:var(--muted);line-height:1.45;}
+.contact-link{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);text-decoration:none;margin-bottom:10px;}
+.contact-link:last-child{margin-bottom:0;}
+.contact-link:hover .cl-label{color:#1A4D3B;}
+.cl-icon{width:32px;height:32px;border-radius:7px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cl-label{transition:color 0.15s;}
+.trust-item-c{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:8px;}
+.trust-item-c:last-child{margin-bottom:0;}
+.ti-icon{width:20px;height:20px;border-radius:4px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.success-wrap{text-align:center;padding:2.5rem 1.5rem;}
+.success-icon{width:56px;height:56px;border-radius:50%;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;}
+.success-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);letter-spacing:-0.3px;margin-bottom:0.5rem;}
+.success-sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:360px;margin:0 auto 1.75rem;}
+@media(max-width:720px){.contact-layout{grid-template-columns:1fr;}}
+@media(max-width:520px){.form-row{grid-template-columns:1fr;}.submit-row{flex-direction:column;align-items:stretch;text-align:center;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/contact.html" class="active">Talk to Us</a>
+    <a href="/dashboard.html" class="nav-cta">Dashboard</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">Home</a>
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/contact.html">Talk to Us</a>
+  <a href="/dashboard.html" class="mob-cta">My Dashboard</a>
+</div>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">For TRT clinics</div>
+    <h1>Let's talk about<br><em>your clinic.</em></h1>
+    <p>Connect your practice to TRT LabOS — at-home labs, automatic result delivery, and AI insights your patients will actually act on. We'll follow up within one business day.</p>
+  </div>
+</section>
+
+<div class="wrap" style="padding-top:2.5rem;">
+  <div class="contact-layout">
+
+    <div>
+      <div class="form-card" id="form-card">
+        <h2>Tell us about your practice</h2>
+        <p class="form-intro">No commitment required. We'll reach out to answer questions and walk you through the clinic setup.</p>
+
+        <form name="clinic-inquiry" method="POST" data-netlify="true" id="contact-form" novalidate>
+          <input type="hidden" name="form-name" value="clinic-inquiry">
+
+          <div class="form-row">
+            <div>
+              <label class="form-label" for="clinic-name">Clinic name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="clinic-name" name="clinic_name" placeholder="Peak Performance TRT" required>
+            </div>
+            <div>
+              <label class="form-label" for="contact-name">Your name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="contact-name" name="contact_name" placeholder="Dr. Sarah Holt" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div>
+              <label class="form-label" for="contact-role">Your role / title</label>
+              <input class="form-input" type="text" id="contact-role" name="role" placeholder="Medical Director">
+            </div>
+            <div>
+              <label class="form-label" for="contact-email">Email <span class="req">*</span></label>
+              <input class="form-input" type="email" id="contact-email" name="email" placeholder="sarah@peakperformance.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div>
+              <label class="form-label" for="contact-phone">Phone</label>
+              <input class="form-input" type="tel" id="contact-phone" name="phone" placeholder="(555) 000-0000">
+            </div>
+            <div>
+              <label class="form-label" for="trt-volume">Patients currently on TRT</label>
+              <select class="form-select" id="trt-volume" name="trt_volume">
+                <option value="">Select range</option>
+                <option>Just getting started</option>
+                <option>Under 50</option>
+                <option>50 – 200</option>
+                <option>200 – 500</option>
+                <option>500+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="lab-workflow">Current lab workflow</label>
+            <select class="form-select" id="lab-workflow" name="lab_workflow">
+              <option value="">Select one</option>
+              <option>Quest or Labcorp only</option>
+              <option>In-house phlebotomy</option>
+              <option>Other third-party lab</option>
+              <option>No formal process yet</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-message">Anything you'd like us to know?</label>
+            <textarea class="form-textarea" id="contact-message" name="message" placeholder="Questions about EMR integration, pricing, or timeline — anything is fair game."></textarea>
+          </div>
+
+          <hr class="form-divider">
+
+          <div class="submit-row">
+            <button type="submit" class="btn-primary" id="submit-btn" style="white-space:nowrap;">Send message →</button>
+            <p class="submit-note">We respond within one business day. No sales pressure, ever.</p>
+          </div>
+        </form>
+
+        <div class="success-wrap" id="success-state" style="display:none;">
+          <div class="success-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="success-title">Message received.</div>
+          <p class="success-sub">Thanks for reaching out. Someone from our clinic team will be in touch within one business day — usually sooner.</p>
+          <a href="/" class="btn-secondary">Back to home</a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-block">
+        <h3>What happens next</h3>
+        <div class="next-step">
+          <div class="ns-num">1</div>
+          <div class="ns-body"><strong>We review your submission</strong><span>Usually within a few hours during business hours.</span></div>
+        </div>
+        <div class="next-step">
+          <div class="ns-num">2</div>
+          <div class="ns-body"><strong>A quick call to learn more</strong><span>15–20 minutes to understand your workflow and answer questions.</span></div>
+        </div>
+        <div class="next-step">
+          <div class="ns-num">3</div>
+          <div class="ns-body"><strong>Your clinic is live</strong><span>We handle the setup. Your patients start seeing better data immediately.</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <h3>Reach us directly</h3>
+        <a href="mailto:sales@trtlabos.com" class="contact-link">
+          <div class="cl-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span class="cl-label">sales@trtlabos.com</span>
+        </a>
+        <a href="tel:+18005551234" class="contact-link">
+          <div class="cl-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.2 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.66-.66a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <span class="cl-label">(800) 555-1234</span>
+        </a>
+      </div>
+
+      <div class="sidebar-block">
+        <h3>Why clinics trust us</h3>
+        <div class="trust-item-c">
+          <div class="ti-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          CLIA-certified laboratory partner
+        </div>
+        <div class="trust-item-c">
+          <div class="ti-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          HIPAA-aligned data handling
+        </div>
+        <div class="trust-item-c">
+          <div class="ti-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          No IT integration required
+        </div>
+        <div class="trust-item-c">
+          <div class="ti-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          $0 setup fee, no long-term contract
+        </div>
+        <div class="trust-item-c">
+          <div class="ti-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          40+ TRT clinic partners
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/pricing.html">Pricing</a><a href="/dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="#">Partner portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="mailto:hello@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open'); m.classList.toggle('open');
+}
+
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var form = e.target;
+  var btn = document.getElementById('submit-btn');
+
+  // Basic required field check
+  var required = form.querySelectorAll('[required]');
+  var valid = true;
+  required.forEach(function(field) {
+    field.style.borderColor = '';
+    if (!field.value.trim()) {
+      field.style.borderColor = '#E57373';
+      valid = false;
+    }
+  });
+  if (!valid) return;
+
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  fetch('/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams(new FormData(form)).toString()
+  }).then(function() {
+    showSuccess();
+  }).catch(function() {
+    showSuccess();
+  });
+});
+
+function showSuccess() {
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+  document.querySelector('.form-card h2').style.display = 'none';
+  document.querySelector('.form-intro').style.display = 'none';
+}
+</script>
+</body>
+</html>

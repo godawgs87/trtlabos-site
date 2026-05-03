@@ -66,6 +66,48 @@
   .metrics-row{grid-template-columns:1fr 1fr;}
   .dash-grid,.dash-bottom{grid-template-columns:1fr;}
 }
+
+/* ── AI CHAT ── */
+.chat-fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:#1A4D3B;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(26,77,59,0.4);z-index:300;transition:background 0.15s,transform 0.15s;}
+.chat-fab:hover{background:#255C47;transform:scale(1.05);}
+.chat-drawer{position:fixed;bottom:0;right:1.5rem;width:380px;background:#ffffff;border:1px solid var(--border);border-bottom:none;border-radius:16px 16px 0 0;box-shadow:0 -4px 40px rgba(0,0,0,0.13);z-index:400;transform:translateY(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;max-height:520px;}
+.chat-drawer.open{transform:translateY(0);}
+.chat-hdr{background:#1A4D3B;padding:13px 16px;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.chat-hdr-left{display:flex;align-items:center;gap:9px;}
+.chat-hdr-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:livePulse 2s infinite;}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.45}}
+.chat-hdr-title{font-size:14px;font-weight:500;color:#ffffff;font-family:'DM Sans',sans-serif;line-height:1.2;}
+.chat-hdr-sub{font-size:11px;color:rgba(255,255,255,0.5);}
+.chat-close{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.55);padding:2px;display:flex;align-items:center;transition:color 0.15s;}
+.chat-close:hover{color:#ffffff;}
+.chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;min-height:0;}
+.chat-msgs::-webkit-scrollbar{width:4px;}
+.chat-msgs::-webkit-scrollbar-track{background:transparent;}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:2px;}
+.chat-msg{display:flex;flex-direction:column;max-width:90%;}
+.chat-msg.ai{align-self:flex-start;}
+.chat-msg.user{align-self:flex-end;}
+.chat-bubble{padding:10px 13px;border-radius:12px;font-size:13.5px;line-height:1.6;font-family:'DM Sans',sans-serif;}
+.chat-msg.ai .chat-bubble{background:#F6F5F1;color:var(--ink);border-radius:4px 12px 12px 12px;}
+.chat-msg.user .chat-bubble{background:#1A4D3B;color:#ffffff;border-radius:12px 4px 12px 12px;}
+.chat-time{font-size:10px;color:var(--subtle);margin-top:3px;padding:0 2px;}
+.chat-msg.user .chat-time{text-align:right;}
+.chat-typing{display:flex;align-items:center;gap:5px;padding:11px 14px;background:#F6F5F1;border-radius:4px 12px 12px 12px;width:fit-content;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:typingBounce 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.18s;}
+.typing-dot:nth-child(3){animation-delay:0.36s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.chat-suggested{display:flex;flex-wrap:wrap;gap:6px;padding:0 1rem 0.75rem;flex-shrink:0;}
+.chat-sug-btn{font-size:11.5px;padding:5px 11px;border-radius:20px;border:1px solid rgba(26,77,59,0.2);background:#E4EDE9;color:#1A4D3B;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:background 0.15s;white-space:nowrap;}
+.chat-sug-btn:hover{background:#c8ddd6;}
+.chat-input-row{border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.chat-input{flex:1;border:2px solid rgba(0,0,0,0.1);border-radius:8px;padding:9px 12px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;background:#ffffff;transition:border-color 0.15s;}
+.chat-input:focus{border-color:#1A4D3B;}
+.chat-input::placeholder{color:#B0B0A8;}
+.chat-send{width:36px;height:36px;border-radius:8px;background:#1A4D3B;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;}
+.chat-send:hover{background:#255C47;}
+.chat-send:disabled{opacity:0.4;cursor:default;}
+@media(max-width:440px){.chat-drawer{right:0;width:100%;border-radius:16px 16px 0 0;}.chat-fab{bottom:1rem;right:1rem;}}
 </style>
 </head>
 <body>
@@ -76,6 +118,7 @@
     <a href="/">Home</a>
     <a href="/panels.html">Lab Panels</a>
     <a href="/pricing.html">Pricing</a>
+    <a href="/contact.html">Talk to Us</a>
     <a href="/dashboard.html" class="nav-cta active">Dashboard</a>
   </div>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
@@ -84,6 +127,7 @@
   <a href="/">Home</a>
   <a href="/panels.html">Lab Panels</a>
   <a href="/pricing.html">Pricing</a>
+  <a href="/contact.html">Talk to Us</a>
   <a href="/dashboard.html" class="mob-cta">My Dashboard</a>
 </div>
 
@@ -109,12 +153,15 @@
   </div>
 
   <div class="ai-card">
-    <div class="ai-header"><svg width="12" height="12" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Insight</div>
+    <div class="ai-header" style="justify-content:space-between;">
+      <span style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Insight</span>
+      <button class="ai-btn" onclick="toggleChat()" style="letter-spacing:0;">Ask a question →</button>
+    </div>
     <div class="ai-body">Your testosterone response is strong — up 12% to 724 ng/dL. However, your hematocrit has climbed 3 points across two consecutive tests and is now at 47.2%. Still within range, but worth discussing with your clinic before your next injection. Increasing hydration and reducing alcohol intake may help moderate the trend.</div>
     <div class="ai-btns">
-      <button class="ai-btn">Manage hematocrit</button>
-      <button class="ai-btn">Explain E2 balance</button>
-      <button class="ai-btn">Full panel summary</button>
+      <button class="ai-btn" onclick="sendSuggestion('Manage hematocrit')">Manage hematocrit</button>
+      <button class="ai-btn" onclick="sendSuggestion('Explain E2 balance')">Explain E2 balance</button>
+      <button class="ai-btn" onclick="sendSuggestion('Full panel summary')">Full panel summary</button>
     </div>
   </div>
 
@@ -171,7 +218,7 @@
     <div class="footer-top">
       <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
       <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/pricing.html">Pricing</a><a href="/dashboard.html">Dashboard</a></div>
-      <div class="footer-col"><h4>For clinics</h4><a href="mailto:clinics@trtlabos.com">Talk to us</a><a href="#">Partner portal</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="#">Partner portal</a></div>
       <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="mailto:hello@trtlabos.com">Contact</a></div>
     </div>
     <div class="footer-bottom">
@@ -181,10 +228,158 @@
   </div>
 </footer>
 
+<!-- Floating chat button -->
+<button class="chat-fab" id="chat-fab" onclick="toggleChat()" aria-label="Ask LabOS AI">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+
+<!-- Chat drawer -->
+<div class="chat-drawer" id="chat-drawer">
+  <div class="chat-hdr">
+    <div class="chat-hdr-left">
+      <div class="chat-hdr-dot"></div>
+      <div>
+        <div class="chat-hdr-title">LabOS AI</div>
+        <div class="chat-hdr-sub">Your personal TRT analyst</div>
+      </div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="chat-msgs" id="chat-msgs"></div>
+  <div class="chat-suggested" id="chat-suggested">
+    <button class="chat-sug-btn" onclick="sendSuggestion('Manage hematocrit')">Hematocrit trend</button>
+    <button class="chat-sug-btn" onclick="sendSuggestion('Explain E2 balance')">E2 balance</button>
+    <button class="chat-sug-btn" onclick="sendSuggestion('Full panel summary')">Panel summary</button>
+    <button class="chat-sug-btn" onclick="sendSuggestion('When should I test next?')">Next test timing</button>
+  </div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Ask LabOS AI…" onkeydown="handleChatKey(event)" autocomplete="off">
+    <button class="chat-send" id="chat-send-btn" onclick="sendMessage()" aria-label="Send">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
 <script>
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   h.classList.toggle('open'); m.classList.toggle('open');
+}
+
+/* ── AI CHAT ── */
+var chatOpen = false;
+var chatStarted = false;
+var typingTimer = null;
+
+var aiResponses = {
+  'manage hematocrit': "Your hematocrit at 47.2% is still within the normal range (38–50%), but it's climbed 3 points across two consecutive tests — a pattern worth watching on TRT.\n\nA few things that help moderate it: stay well hydrated (80–100 oz/day), reduce alcohol, and consider timing your blood draw before your next injection rather than after. This gives a more stable trough reading.\n\nI'd flag this at your May 28th appointment with Dr. Hendricks — he'll have your full report in advance.",
+  'explain e2 balance': "Your estradiol is at 29 pg/mL — comfortably in the 10–40 pg/mL optimal range for men on TRT. Your anastrozole protocol (0.25mg 2× weekly) is working well.\n\nSigns to watch if E2 drifts high: water retention, mood sensitivity, reduced libido. Signs if too low: joint aches, fatigue, low libido.\n\nYour current trend looks stable. No adjustment needed based on this panel.",
+  'full panel summary': "Here's your May 1st panel at a glance:\n\n✓ Total T: 724 ng/dL — strong, up 12%\n✓ Free T: 18.4 pg/mL — in optimal range\n✓ Estradiol: 29 pg/mL — well balanced\n✓ SHBG: 31 nmol/L — normal\n⚠ Hematocrit: 47.2% — normal but trending up\n⚠ Lipid Risk Score: Moderate — worth discussing\n✓ PSA: 0.8 ng/mL — well within range\n\nOverall: your protocol is responding well. Two watchlist items worth covering at your May 28th appointment.",
+  'when should i test next?': "Your next Monitoring Panel is due May 21st — your Tasso device will ship May 18th. Collect and mail same day for a 2–3 day turnaround.\n\nBest timing: draw before your next injection on May 9th if possible. This gives a trough reading that's more consistent for tracking trends over time.\n\nYour results will auto-share with Dr. Hendricks before your May 28th appointment.",
+  'is my testosterone optimal?': "At 724 ng/dL, your Total T is in a strong therapeutic range. Most TRT physicians target 500–900 ng/dL depending on symptoms and goals.\n\nYour Free T at 18.4 pg/mL is equally solid — this is the bioavailable fraction that actually drives effect in your tissues. Your SHBG at 31 keeps a good amount free.\n\nShort answer: your testosterone is well-dialed. The 12% increase from your last test suggests your protocol is hitting its stride.",
+  'what does shbg mean?': "SHBG stands for Sex Hormone Binding Globulin — a protein that binds to testosterone in your blood, making it unavailable for your body to use.\n\nHigh SHBG can leave you with low Free T even if your Total T looks fine. Low SHBG means more testosterone is bioavailable, but it can also accelerate conversion to estradiol.\n\nAt 31 nmol/L, yours is in a healthy middle range — not binding too much T, which helps explain why your Free T is solid at 18.4.",
+  'what is psa?': "PSA (Prostate-Specific Antigen) measures prostate activity. TRT can cause a modest increase in PSA, so it's monitored regularly on your panel.\n\nYour PSA is 0.8 ng/mL — well within the normal range of 0–4. Nothing to flag here.\n\nIf PSA were to rise significantly above 4, or double within a short window, that would warrant a deeper conversation with your physician.",
+  'lipid': "Your Lipid Risk Score came back Moderate — meaning your cholesterol profile warrants attention but isn't in a danger zone.\n\nTRT can affect lipid balance, particularly by lowering HDL (the 'good' cholesterol). Exercise, dietary changes (less saturated fat, more fiber), and monitoring are typically the first steps.\n\nDr. Hendricks will have the full lipid breakdown in your clinic report. Worth putting on the agenda for May 28th."
+};
+
+function getAiResponse(text) {
+  var q = text.toLowerCase().trim();
+  if (q.includes('hematocrit') || q.includes('hct') || q.includes('thick') || q.includes('blood viscosity')) return aiResponses['manage hematocrit'];
+  if (q.includes('estradiol') || q.includes('e2') || q.includes('estrogen') || q.includes('anastrozole')) return aiResponses['explain e2 balance'];
+  if (q.includes('summary') || q.includes('all my') || q.includes('full panel') || q.includes('overview')) return aiResponses['full panel summary'];
+  if (q.includes('when') || q.includes('next test') || q.includes('test due') || q.includes('schedule')) return aiResponses['when should i test next?'];
+  if (q.includes('testosterone') || q.includes('optimal') || q.includes('levels') || q.includes('total t')) return aiResponses['is my testosterone optimal?'];
+  if (q.includes('shbg') || q.includes('sex hormone')) return aiResponses['what does shbg mean?'];
+  if (q.includes('psa') || q.includes('prostate')) return aiResponses['what is psa?'];
+  if (q.includes('lipid') || q.includes('cholesterol') || q.includes('hdl') || q.includes('ldl')) return aiResponses['lipid'];
+  // Fuzzy key match
+  for (var key in aiResponses) {
+    if (q.includes(key.split(' ')[0])) return aiResponses[key];
+  }
+  return "That's a great question, Marcus. Your data gives me some context, but for that specific question I'd want Dr. Hendricks to weigh in — he'll have your full history at your May 28th appointment, and your clinic report will be waiting for him.\n\nIs there something specific about your current numbers I can help break down?";
+}
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chat-drawer').classList.toggle('open', chatOpen);
+  document.getElementById('chat-fab').innerHTML = chatOpen
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>';
+  if (chatOpen && !chatStarted) {
+    chatStarted = true;
+    showTypingIndicator();
+    typingTimer = setTimeout(function() {
+      removeTypingIndicator();
+      addBubble('ai', "Hi Marcus. I've reviewed your May 1st panel — your testosterone response looks strong. I'm keeping an eye on your hematocrit trend. What would you like to dig into?");
+    }, 900);
+  }
+  if (chatOpen) setTimeout(function(){ document.getElementById('chat-input').focus(); }, 320);
+}
+
+function addBubble(role, text) {
+  var msgs = document.getElementById('chat-msgs');
+  var t = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  var el = document.createElement('div');
+  el.className = 'chat-msg ' + role;
+  el.innerHTML = '<div class="chat-bubble">' + text.replace(/\n/g, '<br>') + '</div><div class="chat-time">' + t + '</div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTypingIndicator() {
+  var msgs = document.getElementById('chat-msgs');
+  var el = document.createElement('div');
+  el.id = 'chat-typing';
+  el.className = 'chat-msg ai';
+  el.innerHTML = '<div class="chat-typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  var el = document.getElementById('chat-typing');
+  if (el) el.remove();
+}
+
+function hideSuggestions() {
+  var s = document.getElementById('chat-suggested');
+  if (s) s.style.display = 'none';
+}
+
+function sendMessage() {
+  var input = document.getElementById('chat-input');
+  var text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  hideSuggestions();
+  addBubble('user', text);
+  showTypingIndicator();
+  var delay = 800 + Math.random() * 700;
+  setTimeout(function() {
+    removeTypingIndicator();
+    addBubble('ai', getAiResponse(text));
+  }, delay);
+}
+
+function sendSuggestion(text) {
+  var wasOpen = chatOpen;
+  if (!chatOpen) toggleChat();
+  var delay = wasOpen ? 80 : 1300;
+  setTimeout(function() {
+    hideSuggestions();
+    addBubble('user', text);
+    showTypingIndicator();
+    setTimeout(function() {
+      removeTypingIndicator();
+      addBubble('ai', getAiResponse(text));
+    }, 900 + Math.random() * 600);
+  }, delay);
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter') sendMessage();
 }
 </script>
 </body>
