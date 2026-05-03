@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 14 Biomarkers — TRT LabOS</title>
+<meta name="description" content="Every biomarker TRT LabOS tests — what it measures, why it matters for your TRT protocol, and which panel includes it.">
+<link rel="stylesheet" href="styles.css?v=2">
+<style>
+.bm-hero-sub{max-width:700px;}
+.category{margin-bottom:3.5rem;}
+.category-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:1rem;}
+.category-header h2{font-family:'Instrument Serif',serif;font-size:24px;color:var(--ink);letter-spacing:-0.3px;}
+.category-header span{font-size:12px;color:var(--muted);font-weight:300;}
+.markers-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.marker-card{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:1.5rem;}
+.marker-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem;gap:1rem;}
+.marker-name{font-size:16px;font-weight:500;color:var(--ink);}
+.marker-abbr{font-size:12px;color:var(--muted);font-weight:300;margin-top:2px;}
+.panel-badges{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+.badge{font-size:10px;font-weight:500;letter-spacing:0.5px;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+.badge-both{background:#E4EDE9;color:#1A4D3B;}
+.badge-intake{background:#EEF2FF;color:#3730A3;}
+.badge-monitoring{background:#F7EDE3;color:#B5632A;}
+.marker-why{font-size:13.5px;color:var(--muted);line-height:1.65;font-weight:300;margin-bottom:0.75rem;}
+.marker-watch{font-size:12px;color:var(--muted);background:var(--surface);border-radius:7px;padding:8px 12px;line-height:1.5;}
+.marker-watch strong{color:var(--ink);font-weight:500;}
+.intake-only-note{background:#EEF2FF;border-left:3px solid #4F46E5;border-radius:0 8px 8px 0;padding:0.75rem 1rem;font-size:13px;color:#3730A3;font-weight:400;line-height:1.5;}
+.panel-note{background:#F7EDE3;border-left:3px solid #B5632A;border-radius:0 8px 8px 0;padding:0.75rem 1rem;font-size:13px;color:#92400E;font-weight:400;line-height:1.5;margin-bottom:1.5rem;}
+.compare-table{width:100%;border-collapse:collapse;margin-top:1.5rem;}
+.compare-table th{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:500;padding:0.5rem 0.75rem;text-align:left;border-bottom:2px solid var(--border);}
+.compare-table th:not(:first-child){text-align:center;}
+.compare-table td{padding:0.7rem 0.75rem;font-size:13.5px;color:var(--muted);border-bottom:1px solid var(--border);font-weight:300;}
+.compare-table td:first-child{color:var(--ink);font-weight:400;}
+.compare-table td:not(:first-child){text-align:center;}
+.check{color:#1A4D3B;font-size:16px;}
+.dash-cell{color:var(--subtle);}
+.intake-row td{background:#F9F8FF;}
+.section-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--subtle);font-weight:500;padding:0.5rem 0.75rem 0.25rem;}
+@media(max-width:640px){
+  .markers-grid{grid-template-columns:1fr;}
+  .compare-table{font-size:12px;}
+  .compare-table td,.compare-table th{padding:0.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/contact.html">Talk to Us</a>
+    <a href="/dashboard.html" class="nav-cta">Dashboard</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/contact.html">Talk to Us</a>
+  <a href="/about.html">About</a>
+  <a href="/dashboard.html" class="mob-cta">My Dashboard</a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Biomarker guide</div>
+    <h1>The 14 markers.<br>Why every one <em>matters.</em></h1>
+    <p class="bm-hero-sub">Every biomarker TRT LabOS tests — what it measures, why it's specifically relevant to TRT, and which panel includes it. Not a generic wellness panel. Built around what actually changes on testosterone.</p>
+  </div>
+</div>
+
+<section class="wrap">
+
+  <!-- CORE HORMONES -->
+  <div class="category">
+    <div class="category-header">
+      <h2>Core hormones</h2>
+      <span>Included in both panels</span>
+    </div>
+    <div class="markers-grid">
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Total Testosterone</div><div class="marker-abbr">Total T · ng/dL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">The primary male sex hormone and TRT's main target. Total T measures all testosterone in your blood — bound and unbound. It tells you whether your dose is delivering, and tracks how that delivery changes over time. Most clinics target 700–1,100 ng/dL on TRT, but the right number depends on your individual response, not just the reference range.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Levels below target suggesting under-dosing or rapid clearance; levels above 1,200 ng/dL warranting a dose review.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Free Testosterone</div><div class="marker-abbr">Free T · pg/mL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">Only 2–3% of testosterone is "free" — unbound and biologically active. The rest is bound to SHBG and albumin and unavailable for cellular use. You can have a strong Total T and still feel terrible if your SHBG is high and Free T is low. This marker explains why two people on the same dose feel completely different.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Low Free T despite adequate Total T — a sign of high SHBG pulling bioavailable hormone out of circulation.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Estradiol</div><div class="marker-abbr">E2 · pg/mL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">The primary estrogen in men, made when testosterone converts to estradiol via the aromatase enzyme. TRT raises E2 — some elevation is healthy and necessary. Too high causes water retention, mood instability, and low libido. Too low (often from over-managing with aromatase inhibitors) causes joint pain, brain fog, and equally low libido. Balance, not elimination, is the goal.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> E2 above 50 pg/mL with symptoms; E2 below 15 pg/mL — especially if on an aromatase inhibitor.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">SHBG</div><div class="marker-abbr">Sex Hormone-Binding Globulin · nmol/L</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">A protein that binds testosterone (and estradiol) and makes it unavailable for use. High SHBG means less free testosterone from the same dose — often requiring higher doses or more frequent injections. Low SHBG means faster clearance, often requiring smaller, more frequent doses to maintain stable levels. SHBG is one of the biggest drivers of why TRT protocols are individual.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Trending up or down over time — SHBG shifts often explain why a stable protocol starts feeling different.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PITUITARY -->
+  <div class="category">
+    <div class="category-header">
+      <h2>Pituitary signals</h2>
+      <span>Intake panel only</span>
+    </div>
+    <div class="intake-only-note" style="margin-bottom:1.5rem;">These markers are suppressed to near-zero once exogenous testosterone is introduced. They're meaningful at baseline — not useful for recurring monitoring, which is why they're included in the intake panel only.</div>
+    <div class="markers-grid">
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Luteinizing Hormone</div><div class="marker-abbr">LH · mIU/mL</div></div>
+          <div class="panel-badges"><span class="badge badge-intake">Intake only</span></div>
+        </div>
+        <p class="marker-why">LH is the pituitary signal that tells your testes to produce testosterone. Before TRT, LH levels help assess whether low testosterone is primary (testicular failure) or secondary (pituitary signal problem) — a distinction that affects treatment options. Once TRT starts, exogenous testosterone suppresses LH to near-zero. Measuring it quarterly adds no clinical value on TRT.</p>
+        <div class="marker-watch"><strong>Baseline significance:</strong> Low LH with low T suggests secondary hypogonadism (pituitary origin). Normal LH with low T suggests primary.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Follicle-Stimulating Hormone</div><div class="marker-abbr">FSH · mIU/mL</div></div>
+          <div class="panel-badges"><span class="badge badge-intake">Intake only</span></div>
+        </div>
+        <p class="marker-why">FSH drives sperm production in the testes. Baseline FSH is important for understanding fertility status before starting TRT — exogenous testosterone significantly reduces FSH and sperm production. Like LH, FSH is suppressed by TRT and has no actionable value in routine monitoring of an established protocol.</p>
+        <div class="marker-watch"><strong>Baseline significance:</strong> Pre-TRT FSH and LH together establish your hormonal starting point and fertility baseline for clinical records.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BLOOD SAFETY -->
+  <div class="category">
+    <div class="category-header">
+      <h2>Blood safety</h2>
+      <span>Both panels — critical ongoing TRT markers</span>
+    </div>
+    <div class="markers-grid">
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Hematocrit</div><div class="marker-abbr">HCT · %</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">Hematocrit is the percentage of your blood volume made up of red blood cells. Testosterone stimulates red blood cell production — beneficial in small amounts, dangerous when it goes too high. Elevated hematocrit thickens the blood, raising risk of clots, stroke, and cardiovascular events. Most TRT physicians want to see this below 52–54% and will pause or adjust therapy if it climbs above that threshold.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Values above 52% — requires clinical attention. Above 54% generally warrants dose adjustment, frequency change, or therapeutic phlebotomy.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Hemoglobin</div><div class="marker-abbr">HGB · g/dL</div></div>
+          <div class="panel-badges"><span class="badge badge-monitoring">Monitoring panel</span><span class="badge badge-intake">CBC at intake</span></div>
+        </div>
+        <p class="marker-why">Hemoglobin is the oxygen-carrying protein inside red blood cells. It rises in parallel with hematocrit on TRT, and tracking both together gives a more complete picture of blood thickening risk. It's measured individually in the monitoring panel and as part of the full CBC (Complete Blood Count) in the intake panel.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Hemoglobin above 18.5 g/dL in men, especially in combination with elevated hematocrit.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PROSTATE -->
+  <div class="category">
+    <div class="category-header">
+      <h2>Prostate health</h2>
+      <span>Both panels</span>
+    </div>
+    <div class="markers-grid" style="grid-template-columns:1fr;">
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">PSA</div><div class="marker-abbr">Prostate-Specific Antigen · ng/mL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">PSA is a protein produced by the prostate gland. It's used as a prostate health marker and an early indicator of prostate issues including cancer. The current clinical consensus is that TRT does not cause prostate cancer — but it can accelerate existing disease. A baseline PSA establishes your starting point. Ongoing monitoring watches for unexpected rises that warrant further evaluation. Essential for any man over 40 on TRT, and for establishing a record before starting therapy at any age.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> A rise of more than 0.75 ng/mL per year, or any single result above 4.0 ng/mL, should prompt urological consultation.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CARDIOVASCULAR -->
+  <div class="category">
+    <div class="category-header">
+      <h2>Cardiovascular risk</h2>
+      <span>Both panels — as Lipid Panel (intake) and Lipid Risk Score (monitoring)</span>
+    </div>
+    <div class="markers-grid">
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Total Cholesterol</div><div class="marker-abbr">TC · mg/dL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">The sum of all cholesterol in your blood. TRT can shift lipid balance, so total cholesterol provides the macro-level picture. It's most useful in context with LDL, HDL, and triglycerides — a high total cholesterol driven by high HDL is very different from high LDL.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Total cholesterol above 240 mg/dL, interpreted alongside the rest of the lipid panel.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">LDL Cholesterol</div><div class="marker-abbr">LDL · mg/dL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">Low-density lipoprotein — the primary driver of arterial plaque. TRT, particularly at higher doses, can raise LDL in some individuals. Tracking LDL over time catches a trend early, before it becomes a cardiovascular event. Important for anyone with existing cardiovascular risk factors.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> LDL above 130 mg/dL (borderline high) or an upward trend over consecutive tests.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">HDL Cholesterol</div><div class="marker-abbr">HDL · mg/dL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">High-density lipoprotein — the "good" cholesterol that removes LDL from arteries. TRT, especially injectable testosterone, has a known tendency to lower HDL. A declining HDL trend is a meaningful cardiovascular signal and a reason some physicians recommend lifestyle modifications or protocol adjustments.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> HDL below 40 mg/dL, or a consistent downward trend over monitoring tests.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">Triglycerides</div><div class="marker-abbr">TG · mg/dL</div></div>
+          <div class="panel-badges"><span class="badge badge-both">Both panels</span></div>
+        </div>
+        <p class="marker-why">Blood fats that reflect dietary intake and metabolic health. Elevated triglycerides often accompany insulin resistance, poor diet, and excess body fat — all common in hypogonadal men before TRT. TRT can improve body composition and sometimes lower triglycerides, but the relationship varies. Tracking over time shows whether your protocol is improving or worsening metabolic health.</p>
+        <div class="marker-watch"><strong>Watch for:</strong> Triglycerides above 150 mg/dL (borderline), with particular concern above 200 mg/dL.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- METABOLIC BASELINE -->
+  <div class="category">
+    <div class="category-header">
+      <h2>Metabolic baseline</h2>
+      <span>Intake panel only</span>
+    </div>
+    <div class="intake-only-note" style="margin-bottom:1.5rem;">TSH and CMP are included at intake to establish a complete metabolic picture. TRT does not directly affect thyroid function or kidney/liver markers in most patients — making quarterly re-testing unnecessary and clinically redundant.</div>
+    <div class="markers-grid">
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">TSH</div><div class="marker-abbr">Thyroid-Stimulating Hormone · mIU/L</div></div>
+          <div class="panel-badges"><span class="badge badge-intake">Intake only</span></div>
+        </div>
+        <p class="marker-why">TSH controls thyroid output, which affects metabolism, energy, body temperature, and mood. Undiagnosed hypothyroidism is common and makes TRT feel much less effective — you can optimize testosterone and still feel exhausted if your thyroid is underperforming. Screening at intake catches this before attributing symptoms to TRT alone. TRT itself doesn't meaningfully change TSH, so repeat testing isn't part of routine TRT monitoring.</p>
+        <div class="marker-watch"><strong>Baseline significance:</strong> TSH above 4.0 mIU/L suggests hypothyroidism worth addressing before or alongside TRT optimization.</div>
+      </div>
+
+      <div class="marker-card">
+        <div class="marker-top">
+          <div><div class="marker-name">CMP — Liver & Kidney Function</div><div class="marker-abbr">Comprehensive Metabolic Panel</div></div>
+          <div class="panel-badges"><span class="badge badge-intake">Intake only</span></div>
+        </div>
+        <p class="marker-why">The CMP covers kidney markers (creatinine, BUN, eGFR), liver enzymes (ALT, AST), electrolytes (sodium, potassium), and blood glucose. At intake, this establishes organ health before TRT and screens for conditions that could affect therapy. Injectable testosterone at physiologic doses doesn't significantly stress kidney or liver function in most patients — unlike oral 17-alpha alkylated androgens — so CMP is not part of the standard monitoring panel.</p>
+        <div class="marker-watch"><strong>Baseline significance:</strong> Elevated liver enzymes or impaired kidney function at intake warrant further evaluation before starting TRT.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="eyebrow">Panel comparison</div>
+  <div class="sec-title" style="margin-bottom:0.75rem;">What's in each panel — and why</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;font-weight:300;">The monitoring panel isn't a reduced version of the intake panel — it's focused on the markers that actively change with TRT and require tracking. Intake-only markers are either suppressed by TRT (LH, FSH) or don't respond meaningfully to it (TSH, CMP).</p>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Biomarker</th>
+        <th>Intake panel</th>
+        <th>Monitoring panel</th>
+        <th>Why the difference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-label"><td colspan="4">Core hormones</td></tr>
+      <tr><td>Total Testosterone</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">Primary TRT target — tracked every test</td></tr>
+      <tr><td>Free Testosterone</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">Bioavailable hormone — drives how you feel</td></tr>
+      <tr><td>Estradiol (E2)</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">TRT raises E2 — balance requires ongoing monitoring</td></tr>
+      <tr><td>SHBG</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">Affects Free T — shifts can explain protocol changes</td></tr>
+      <tr class="section-label"><td colspan="4">Pituitary signals</td></tr>
+      <tr class="intake-row"><td>LH</td><td class="check">✓</td><td class="dash-cell">—</td><td style="font-size:12px;color:var(--muted);">Suppressed by TRT — meaningful at baseline only</td></tr>
+      <tr class="intake-row"><td>FSH</td><td class="check">✓</td><td class="dash-cell">—</td><td style="font-size:12px;color:var(--muted);">Suppressed by TRT — fertility baseline, not ongoing</td></tr>
+      <tr class="section-label"><td colspan="4">Blood safety</td></tr>
+      <tr><td>Hematocrit</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">TRT raises RBC production — safety-critical ongoing</td></tr>
+      <tr><td>Hemoglobin</td><td class="check">✓ <span style="font-size:11px;color:var(--muted);">(via CBC)</span></td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">Paired with hematocrit for blood thickness picture</td></tr>
+      <tr class="section-label"><td colspan="4">Prostate</td></tr>
+      <tr><td>PSA</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">Prostate baseline + ongoing surveillance on TRT</td></tr>
+      <tr class="section-label"><td colspan="4">Cardiovascular</td></tr>
+      <tr><td>Total Cholesterol</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">TRT affects lipid balance — tracked every panel</td></tr>
+      <tr><td>LDL Cholesterol</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">TRT can raise LDL — cardiovascular risk marker</td></tr>
+      <tr><td>HDL Cholesterol</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">TRT can lower HDL — declining trend is a signal</td></tr>
+      <tr><td>Triglycerides</td><td class="check">✓</td><td class="check">✓</td><td style="font-size:12px;color:var(--muted);">Metabolic health marker — changes with body composition</td></tr>
+      <tr class="section-label"><td colspan="4">Metabolic baseline</td></tr>
+      <tr class="intake-row"><td>TSH</td><td class="check">✓</td><td class="dash-cell">—</td><td style="font-size:12px;color:var(--muted);">Thyroid screening — TRT doesn't affect TSH</td></tr>
+      <tr class="intake-row"><td>CMP (liver/kidney)</td><td class="check">✓</td><td class="dash-cell">—</td><td style="font-size:12px;color:var(--muted);">Organ function baseline — stable on physiologic TRT</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:3rem;" class="cta-strip">
+    <div><h3>Ready to get your baseline?</h3><p>Order the intake panel — all 14 markers, physician reviewed, results in 2–3 days.</p></div>
+    <a href="/signup.html?plan=onetime" class="btn-white">Order intake panel — $179</a>
+  </div>
+
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/biomarkers.html">Biomarker guide</a><a href="/pricing.html">Pricing</a><a href="/dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="#">Partner portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/privacy.html">Privacy policy</a><a href="/terms.html">Terms of service</a><a href="mailto:support@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/privacy.html#hipaa">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open'); m.classList.toggle('open');
+}
+</script>
+</body>
+</html>
