@@ -42,3 +42,8 @@
   from = "/biomarkers"
   to = "/biomarkers.html"
   status = 200
+
+[[redirects]]
+  from = "/clinic"
+  to = "/clinic.html"
+  status = 200

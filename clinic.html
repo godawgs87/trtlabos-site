@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinic Portal — TRT LabOS</title>
+<meta name="description" content="TRT LabOS for clinics — automatic lab delivery, patient monitoring, and physician-ready PDFs before every appointment. Live in 48 hours.">
+<link rel="stylesheet" href="styles.css?v=2">
+<style>
+/* ── CLINIC HERO ── */
+.clinic-hero{background:#0F1A16;padding:5rem 2.5rem 4rem;text-align:center;}
+.clinic-hero .eyebrow{color:rgba(255,255,255,0.45);}
+.clinic-hero h1{font-family:'Instrument Serif',serif;font-size:clamp(38px,5.5vw,64px);color:#ffffff;letter-spacing:-1.5px;line-height:1.05;margin-bottom:1.25rem;}
+.clinic-hero h1 em{font-style:italic;color:#6BBD9B;}
+.clinic-hero p{font-size:17px;color:rgba(255,255,255,0.5);max-width:580px;margin:0 auto 2.5rem;line-height:1.7;font-weight:300;}
+.clinic-hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-green-outline{display:inline-block;background:transparent;color:#6BBD9B;border:2px solid rgba(107,189,155,0.4);padding:12px 24px;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;text-decoration:none;transition:all 0.15s;line-height:1;}
+.btn-green-outline:hover{border-color:#6BBD9B;background:rgba(107,189,155,0.08);}
+.clinic-trust-row{display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,0.07);}
+.clinic-trust-item{font-size:12.5px;color:rgba(255,255,255,0.35);display:flex;align-items:center;gap:6px;}
+
+/* ── MOCK PORTAL UI ── */
+.portal-demo-wrap{background:#0F1A16;padding:0 2.5rem 5rem;}
+.portal-demo-label{text-align:center;font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:1.25rem;}
+.portal-shell{background:#111D18;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;max-width:960px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,0.5);}
+.portal-topbar{background:#0D1712;border-bottom:1px solid rgba(255,255,255,0.06);padding:0 1.25rem;height:44px;display:flex;align-items:center;justify-content:space-between;}
+.ptb-left{display:flex;align-items:center;gap:8px;}
+.ptb-dot{width:10px;height:10px;border-radius:50%;}
+.ptb-logo{font-size:12px;font-weight:500;color:rgba(255,255,255,0.4);margin-left:10px;letter-spacing:0.5px;}
+.ptb-logo strong{color:rgba(255,255,255,0.7);}
+.ptb-clinic{font-size:12px;color:rgba(255,255,255,0.3);}
+.portal-body{display:grid;grid-template-columns:180px 1fr;}
+.portal-sidebar{background:#0D1712;border-right:1px solid rgba(255,255,255,0.06);padding:1rem 0;}
+.psb-item{padding:8px 1.25rem;font-size:12.5px;color:rgba(255,255,255,0.35);cursor:pointer;display:flex;align-items:center;gap:8px;}
+.psb-item.active{color:#6BBD9B;background:rgba(107,189,155,0.07);}
+.psb-badge{background:#1A4D3B;color:#6BBD9B;font-size:9px;font-weight:600;padding:2px 6px;border-radius:8px;margin-left:auto;}
+.psb-section{font-size:9.5px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.18);padding:1rem 1.25rem 0.4rem;}
+.portal-main{padding:1.5rem;}
+.pm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.pm-title{font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);}
+.pm-badge{background:#1A4D3B;color:#6BBD9B;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;}
+.pm-date{font-size:11.5px;color:rgba(255,255,255,0.25);}
+.result-card{background:#162520;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.75rem;display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:1rem;}
+.result-card.flagged{border-color:rgba(181,99,42,0.3);background:#1A1A12;}
+.rc-patient{display:flex;align-items:center;gap:9px;}
+.rc-avatar{width:32px;height:32px;border-radius:50%;background:#1A4D3B;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#6BBD9B;flex-shrink:0;}
+.rc-name{font-size:13px;font-weight:500;color:rgba(255,255,255,0.75);}
+.rc-date{font-size:11px;color:rgba(255,255,255,0.3);margin-top:1px;}
+.rc-values{display:flex;gap:1.25rem;}
+.rc-val{text-align:center;}
+.rc-num{font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);}
+.rc-num.flag-amber{color:#F59E0B;}
+.rc-num.flag-ok{color:#6BBD9B;}
+.rc-lbl{font-size:10px;color:rgba(255,255,255,0.25);margin-top:1px;}
+.rc-status{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.status-chip{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.chip-delivered{background:rgba(107,189,155,0.12);color:#6BBD9B;}
+.chip-transit{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);}
+.chip-scheduled{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);}
+.flag-chip{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:8px;background:rgba(245,158,11,0.15);color:#F59E0B;}
+.rc-pending{display:flex;align-items:center;gap:9px;opacity:0.45;}
+.rc-pending-text{font-size:12px;color:rgba(255,255,255,0.5);}
+.portal-footer-bar{background:#0D1712;border-top:1px solid rgba(255,255,255,0.06);padding:10px 1.25rem;display:flex;align-items:center;justify-content:space-between;}
+.pfb-text{font-size:11.5px;color:rgba(255,255,255,0.25);}
+.pfb-link{font-size:11.5px;color:#6BBD9B;text-decoration:none;}
+
+/* ── VALUE PROPS ── */
+.clinic-props{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem;}
+.clinic-prop{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;}
+.cp-icon{width:44px;height:44px;border-radius:10px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.clinic-prop h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:6px;}
+.clinic-prop p{font-size:13.5px;color:var(--muted);line-height:1.6;}
+
+/* ── HOW IT WORKS (clinic) ── */
+.clinic-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:3rem;}
+.clinic-step{text-align:center;padding:0 0.5rem;}
+.cs-circle{width:52px;height:52px;border-radius:50%;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-family:'Instrument Serif',serif;font-size:20px;color:#1A4D3B;}
+.clinic-step h4{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:5px;}
+.clinic-step p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+/* ── INCLUDES GRID ── */
+.includes-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2.5rem;}
+.include-item{display:flex;align-items:flex-start;gap:10px;padding:1rem 1.1rem;background:#ffffff;border:1px solid var(--border);border-radius:10px;}
+.inc-chk{width:20px;height:20px;border-radius:50%;background:#E4EDE9;color:#1A4D3B;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px;}
+.include-item h4{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.include-item p{font-size:12.5px;color:var(--muted);line-height:1.45;}
+
+/* ── COMPLIANCE ── */
+.compliance-band{background:#EEECEA;border-radius:14px;padding:2rem 2.5rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;margin-bottom:2.5rem;}
+.comp-item{display:flex;align-items:flex-start;gap:12px;}
+.comp-icon{width:36px;height:36px;border-radius:8px;background:#ffffff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.comp-item h4{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+.comp-item p{font-size:12px;color:var(--muted);line-height:1.45;}
+
+/* ── PRICING BAND ── */
+.clinic-pricing{background:#0D0D0B;border-radius:16px;padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;margin-bottom:2.5rem;}
+.cp-left h3{font-family:'Instrument Serif',serif;font-size:28px;color:#ffffff;margin-bottom:0.4rem;}
+.cp-left p{font-size:14px;color:rgba(255,255,255,0.45);max-width:400px;line-height:1.6;}
+.cp-right{text-align:right;flex-shrink:0;}
+.cp-price{font-family:'Instrument Serif',serif;font-size:48px;color:#ffffff;line-height:1;}
+.cp-per{font-size:13px;color:rgba(255,255,255,0.35);margin-top:3px;}
+.cp-note{font-size:12px;color:rgba(255,255,255,0.25);margin-top:4px;}
+
+@media(max-width:640px){
+  .clinic-props,.clinic-steps,.includes-grid,.compliance-band{grid-template-columns:1fr;}
+  .portal-body{grid-template-columns:1fr;}
+  .portal-sidebar{display:none;}
+  .result-card{grid-template-columns:1fr;gap:0.75rem;}
+  .rc-values{flex-wrap:wrap;}
+  .clinic-pricing{flex-direction:column;text-align:left;}
+  .cp-right{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/contact.html">Talk to Us</a>
+    <a href="/signup.html" class="nav-cta">Sign In</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/contact.html">Talk to Us</a>
+  <a href="/about.html">About</a>
+  <a href="/signup.html" class="mob-cta">Sign In</a>
+</div>
+
+<!-- HERO -->
+<section class="clinic-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">For TRT clinics</div>
+    <h1>Your patients' labs.<br>In your hands. <em>Before the appointment.</em></h1>
+    <p>TRT LabOS connects directly to your clinic workflow. Patients test at home, results arrive automatically, and you walk into every appointment already informed — no faxing, no chasing, no surprises.</p>
+    <div class="clinic-hero-actions">
+      <a href="/contact.html" class="btn-primary">Talk to our clinic team</a>
+      <a href="#how-it-works" class="btn-green-outline">See how it works →</a>
+    </div>
+    <div class="clinic-trust-row">
+      <div class="clinic-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>HIPAA-aligned</div>
+      <div class="clinic-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>CLIA-certified lab partner</div>
+      <div class="clinic-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Live in 48 hours</div>
+      <div class="clinic-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>40+ clinic partners</div>
+    </div>
+  </div>
+</section>
+
+<!-- MOCK PORTAL UI -->
+<div class="portal-demo-wrap">
+  <div class="portal-demo-label">Clinic portal — live preview</div>
+  <div class="portal-shell">
+    <div class="portal-topbar">
+      <div class="ptb-left">
+        <div class="ptb-dot" style="background:#FF5F57;"></div>
+        <div class="ptb-dot" style="background:#FFBD2E;"></div>
+        <div class="ptb-dot" style="background:#28C840;"></div>
+        <span class="ptb-logo"><strong>TRT</strong> · LabOS Clinic</span>
+      </div>
+      <span class="ptb-clinic">Peak Performance TRT · Dr. A. Rivera</span>
+    </div>
+    <div class="portal-body">
+      <div class="portal-sidebar">
+        <div class="psb-section">Overview</div>
+        <div class="psb-item active">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Incoming results <span class="psb-badge">3</span>
+        </div>
+        <div class="psb-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          All patients
+        </div>
+        <div class="psb-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          PDF reports
+        </div>
+        <div class="psb-section">Settings</div>
+        <div class="psb-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          Clinic settings
+        </div>
+      </div>
+      <div class="portal-main">
+        <div class="pm-header">
+          <div>
+            <div class="pm-title">Incoming results</div>
+            <div class="pm-date">Sunday, May 3, 2026</div>
+          </div>
+          <div class="pm-badge">3 new today</div>
+        </div>
+
+        <!-- Patient 1 — flagged hematocrit -->
+        <div class="result-card flagged">
+          <div class="rc-patient">
+            <div class="rc-avatar">JT</div>
+            <div>
+              <div class="rc-name">James T.</div>
+              <div class="rc-date">Collected Apr 30</div>
+            </div>
+          </div>
+          <div class="rc-values">
+            <div class="rc-val"><div class="rc-num">981 <span style="font-size:10px;color:rgba(255,255,255,0.3);">ng/dL</span></div><div class="rc-lbl">Total T</div></div>
+            <div class="rc-val"><div class="rc-num flag-amber">53.8%</div><div class="rc-lbl">Hematocrit ↑</div></div>
+            <div class="rc-val"><div class="rc-num">38 <span style="font-size:10px;color:rgba(255,255,255,0.3);">pg/mL</span></div><div class="rc-lbl">Estradiol</div></div>
+            <div class="rc-val"><div class="rc-num">41 <span style="font-size:10px;color:rgba(255,255,255,0.3);">mg/dL</span></div><div class="rc-lbl">HDL</div></div>
+          </div>
+          <div class="rc-status">
+            <div class="status-chip chip-delivered">✓ PDF delivered</div>
+            <div class="flag-chip">HCT elevated</div>
+          </div>
+        </div>
+
+        <!-- Patient 2 — clean -->
+        <div class="result-card">
+          <div class="rc-patient">
+            <div class="rc-avatar">DM</div>
+            <div>
+              <div class="rc-name">Derek M.</div>
+              <div class="rc-date">Collected Apr 29</div>
+            </div>
+          </div>
+          <div class="rc-values">
+            <div class="rc-val"><div class="rc-num flag-ok">842 <span style="font-size:10px;color:rgba(255,255,255,0.3);">ng/dL</span></div><div class="rc-lbl">Total T</div></div>
+            <div class="rc-val"><div class="rc-num">49.1%</div><div class="rc-lbl">Hematocrit</div></div>
+            <div class="rc-val"><div class="rc-num">31 <span style="font-size:10px;color:rgba(255,255,255,0.3);">pg/mL</span></div><div class="rc-lbl">Estradiol</div></div>
+            <div class="rc-val"><div class="rc-num flag-ok">52 <span style="font-size:10px;color:rgba(255,255,255,0.3);">mg/dL</span></div><div class="rc-lbl">HDL</div></div>
+          </div>
+          <div class="rc-status">
+            <div class="status-chip chip-delivered">✓ PDF delivered</div>
+          </div>
+        </div>
+
+        <!-- Patient 3 — in transit -->
+        <div class="result-card">
+          <div class="rc-patient">
+            <div class="rc-avatar" style="background:#1A2520;">RS</div>
+            <div>
+              <div class="rc-name" style="color:rgba(255,255,255,0.4);">Ryan S.</div>
+              <div class="rc-date">Mailed May 2</div>
+            </div>
+          </div>
+          <div class="rc-values" style="opacity:0.35;">
+            <div class="rc-val"><div class="rc-num">— </div><div class="rc-lbl">Total T</div></div>
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">Hematocrit</div></div>
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">Estradiol</div></div>
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">HDL</div></div>
+          </div>
+          <div class="rc-status">
+            <div class="status-chip chip-transit">⏳ In transit</div>
+          </div>
+        </div>
+
+        <!-- Patient 4 — scheduled -->
+        <div class="result-card">
+          <div class="rc-patient">
+            <div class="rc-avatar" style="background:#1A2520;">MJ</div>
+            <div>
+              <div class="rc-name" style="color:rgba(255,255,255,0.4);">Marcus J.</div>
+              <div class="rc-date">Next due May 10</div>
+            </div>
+          </div>
+          <div class="rc-values" style="opacity:0.35;">
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">Total T</div></div>
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">Hematocrit</div></div>
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">Estradiol</div></div>
+            <div class="rc-val"><div class="rc-num">—</div><div class="rc-lbl">HDL</div></div>
+          </div>
+          <div class="rc-status">
+            <div class="status-chip chip-scheduled">📅 Scheduled</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="portal-footer-bar">
+      <span class="pfb-text">All PDFs auto-delivered · HIPAA-aligned · Last sync 2 min ago</span>
+      <a href="#" class="pfb-link">View all patients →</a>
+    </div>
+  </div>
+</div>
+
+<!-- VALUE PROPS -->
+<section class="wrap">
+  <div class="eyebrow">Why clinics connect</div>
+  <div class="sec-title" style="margin-bottom:1.25rem;">Everything you need. Zero added workflow.</div>
+  <div class="clinic-props">
+    <div class="clinic-prop">
+      <div class="cp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+      <h3>Zero manual steps</h3>
+      <p>Results are auto-delivered to your clinic the moment they're ready — no faxes, no patient emails, no login-sharing. The PDF is formatted and in your hands before the appointment starts.</p>
+    </div>
+    <div class="clinic-prop">
+      <div class="cp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <h3>Flags before you open the chart</h3>
+      <p>Elevated hematocrit, E2 imbalance, declining HDL — TRT LabOS flags abnormal markers and surfaces them in your portal before the appointment. You walk in knowing what to discuss.</p>
+    </div>
+    <div class="clinic-prop">
+      <div class="cp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <h3>Patient compliance improves</h3>
+      <p>Testing at a lab requires scheduling, driving, and waiting — so patients skip it. At-home testing with a Tasso device removes every barrier. Your patients show up tested. Every appointment.</p>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div id="how-it-works" class="eyebrow" style="scroll-margin-top:80px;">How it works</div>
+  <div class="sec-title" style="margin-bottom:1.5rem;">Live in 48 hours. No IT required.</div>
+  <div class="clinic-steps">
+    <div class="clinic-step">
+      <div class="cs-circle">1</div>
+      <h4>Connect your clinic</h4>
+      <p>Fill out the intake form. We set up your clinic account and configure auto-delivery in 48 hours.</p>
+    </div>
+    <div class="clinic-step">
+      <div class="cs-circle">2</div>
+      <h4>Patients link their account</h4>
+      <p>Patients select your clinic at signup or from their dashboard. Authorization is immediate — no paperwork.</p>
+    </div>
+    <div class="clinic-step">
+      <div class="cs-circle">3</div>
+      <h4>They test at home</h4>
+      <p>Tasso device ships to them. They collect, mail it back. No scheduling. No waiting rooms. No no-shows.</p>
+    </div>
+    <div class="clinic-step">
+      <div class="cs-circle">4</div>
+      <h4>Results arrive automatically</h4>
+      <p>Physician-ready PDF auto-delivered to your clinic 2–3 days after collection. Flagged markers highlighted.</p>
+    </div>
+  </div>
+
+  <!-- WHAT'S INCLUDED -->
+  <div class="eyebrow">What's included</div>
+  <div class="sec-title" style="margin-bottom:1.25rem;">Everything in the $299/mo clinic plan</div>
+  <div class="includes-grid">
+    <div class="include-item"><div class="inc-chk">✓</div><div><h4>Unlimited patient connections</h4><p>No per-patient fees. Connect your entire TRT panel under one clinic account.</p></div></div>
+    <div class="include-item"><div class="inc-chk">✓</div><div><h4>Auto-delivered PDFs</h4><p>Every result formatted as a physician-ready report, delivered before the appointment.</p></div></div>
+    <div class="include-item"><div class="inc-chk">✓</div><div><h4>Real-time result alerts</h4><p>Hematocrit, E2, PSA, and lipid flags surfaced proactively — you see the issue before the patient mentions it.</p></div></div>
+    <div class="include-item"><div class="inc-chk">✓</div><div><h4>Patient compliance dashboard</h4><p>See which patients have tested, which are in transit, and who has an overdue panel — all in one view.</p></div></div>
+    <div class="include-item"><div class="inc-chk">✓</div><div><h4>Longitudinal trend access</h4><p>Full test history for each patient — hematocrit trends, dose changes, protocol timeline. Context for every appointment.</p></div></div>
+    <div class="include-item"><div class="inc-chk">✓</div><div><h4>Dedicated clinic support</h4><p>Direct line to our clinic team. Setup, patient questions, and integration troubleshooting — handled by us.</p></div></div>
+  </div>
+
+  <!-- COMPLIANCE -->
+  <div class="compliance-band">
+    <div class="comp-item">
+      <div class="comp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div><h4>HIPAA-aligned</h4><p>Patient data handled as PHI. Business Associate Agreement available for all clinic partners.</p></div>
+    </div>
+    <div class="comp-item">
+      <div class="comp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div><h4>CLIA-certified lab</h4><p>All samples processed by a CLIA-certified laboratory partner. Physician-reviewed before release.</p></div>
+    </div>
+    <div class="comp-item">
+      <div class="comp-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div><h4>Encrypted &amp; access-controlled</h4><p>TLS 1.2+ in transit, AES-256 at rest. Clinic staff see only their own patients' data.</p></div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="clinic-pricing">
+    <div class="cp-left">
+      <h3>Simple, flat clinic pricing.</h3>
+      <p>One monthly fee covers your entire patient panel. No per-test charges, no volume tiers, no surprise invoices. As your TRT practice grows, your per-patient cost drops.</p>
+    </div>
+    <div class="cp-right">
+      <div class="cp-price">$299<span style="font-size:20px;color:rgba(255,255,255,0.4)">/mo</span></div>
+      <div class="cp-per">Unlimited patients · scales with volume</div>
+      <div class="cp-note">Patients pay for their own lab tests</div>
+      <a href="/contact.html" class="btn-primary" style="margin-top:1.25rem;display:inline-block;">Talk to our clinic team</a>
+    </div>
+  </div>
+
+  <div class="cta-strip">
+    <div><h3>Ready to see it live?</h3><p>We'll walk you through a full demo and have your clinic live within 48 hours of signing off.</p></div>
+    <a href="/contact.html" class="btn-white">Book a clinic demo</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/biomarkers.html">Biomarker guide</a><a href="/pricing.html">Pricing</a><a href="/signup.html">Sign in</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="/clinic.html">Clinic portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/privacy.html">Privacy policy</a><a href="/terms.html">Terms of service</a><a href="mailto:support@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/privacy.html#hipaa">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open'); m.classList.toggle('open');
+}
+</script>
+</body>
+</html>
