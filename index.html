@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRT LabOS — TRT finally has an operating system.</title>
+<meta name="description" content="At-home blood collection. TRT-specific lab panels. AI insights that track your protocol over time — and deliver directly to your clinic.">
+<meta property="og:title" content="TRT LabOS — TRT finally has an operating system.">
+<meta property="og:description" content="At-home blood collection. TRT-specific lab panels. AI insights that track your protocol over time.">
+<meta property="og:url" content="https://trtlabos.com">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#0D0D0B;--muted:#6A6A63;--subtle:#B0B0A8;
+  --border:rgba(0,0,0,0.07);--border-mid:rgba(0,0,0,0.14);
+  --accent:#1A4D3B;--accent-light:#E4EDE9;--accent-mid:#255C47;
+  --warm:#B5632A;--warm-light:#F7EDE3;
+  --bg:#F6F5F1;--card:#FFFFFF;--surface:#EEECEA;
+  --dark:#0F1A16;--dark-border:rgba(255,255,255,0.07);
+  --success-bg:#E8F5E9;--success-text:#1B5E20;
+  --warn-bg:#FFF3E0;--warn-text:#B34A00;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;animation:fadeUp 0.22s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ── NAV ── */
+.nav{background:rgba(246,245,241,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nav-logo{display:flex;align-items:baseline;gap:2px;cursor:pointer;text-decoration:none;}
+.nav-trt{font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;color:var(--muted);letter-spacing:0.5px;}
+.nav-labos{font-family:'Instrument Serif',serif;font-size:21px;color:var(--accent);}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:var(--warm);margin:0 1px 3px;}
+.nav-links{display:flex;align-items:center;gap:1.75rem;}
+.nav-links a{font-size:13.5px;color:var(--muted);text-decoration:none;cursor:pointer;transition:color 0.15s;padding-bottom:2px;border-bottom:1.5px solid transparent;}
+.nav-links a:hover{color:var(--ink);}
+.nav-links a.active{color:var(--ink);border-bottom-color:var(--accent);}
+.nav-cta-btn{background:#1A4D3B!important;color:#ffffff!important;padding:8px 16px!important;border-radius:6px!important;border-bottom:none!important;font-weight:500!important;font-size:13px!important;}
+.nav-cta-btn.active{border-bottom:none!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-menu{display:none;background:var(--card);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem 1.25rem;}
+.mobile-menu.open{display:block;}
+.mobile-menu a{display:block;padding:12px 0;font-size:15px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);cursor:pointer;}
+.mobile-menu a:last-of-type{border-bottom:none;}
+.mob-cta{display:block;margin-top:12px;background:#1A4D3B;color:#ffffff;padding:13px;border-radius:8px;text-align:center;font-weight:500;font-size:15px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;}
+
+/* ── ALL BUTTONS ── */
+.btn-primary{display:inline-block;background:#1A4D3B;color:#ffffff;border:2px solid #1A4D3B;padding:13px 28px;border-radius:8px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.15s;line-height:1;text-align:center;}
+.btn-primary:hover{background:#255C47;border-color:#255C47;}
+.btn-secondary{display:inline-block;background:#ffffff;color:#0D0D0B;border:2px solid rgba(0,0,0,0.16);padding:13px 24px;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.15s;line-height:1;text-align:center;}
+.btn-secondary:hover{background:#EEECEA;}
+.btn-white{display:inline-block;background:#ffffff;color:#1A4D3B;border:2px solid #ffffff;padding:11px 22px;border-radius:7px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity 0.15s;line-height:1;}
+.btn-white:hover{opacity:0.88;}
+.btn-sm-g{display:inline-block;background:#ffffff;color:#0D0D0B;border:2px solid rgba(0,0,0,0.16);padding:10px 20px;border-radius:7px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;line-height:1;}
+.btn-sm-g:hover{background:#EEECEA;}
+.btn-full{display:block;width:100%;background:#1A4D3B;color:#ffffff;border:2px solid #1A4D3B;padding:14px;border-radius:9px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:center;transition:background 0.15s;line-height:1;}
+.btn-full:hover{background:#255C47;}
+.btn-full-g{display:block;width:100%;background:#ffffff;color:#0D0D0B;border:2px solid rgba(0,0,0,0.16);padding:13px;border-radius:9px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:400;text-align:center;transition:background 0.15s;margin-top:10px;line-height:1;}
+.btn-full-g:hover{background:#EEECEA;}
+.btn-plan{width:100%;padding:13px;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;border:2px solid rgba(0,0,0,0.16);background:#ffffff;color:#0D0D0B;transition:all 0.15s;margin-top:auto;display:block;text-align:center;line-height:1;}
+.btn-plan:hover{background:#EEECEA;}
+.plan.featured .btn-plan{background:#1A4D3B;border-color:#1A4D3B;color:#ffffff;}
+.plan.featured .btn-plan:hover{background:#255C47;}
+.ai-btn{font-size:12px;padding:6px 12px;border-radius:6px;border:1px solid rgba(26,77,59,0.25);background:#E4EDE9;color:#1A4D3B;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:background 0.15s;}
+.ai-btn:hover{background:#c8ddd6;}
+.btn-dash{width:100%;padding:9px;border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;border:2px solid rgba(0,0,0,0.16);background:#ffffff;color:#0D0D0B;transition:background 0.15s;}
+.btn-dash:hover{background:#EEECEA;}
+.btn-outline-sm{border:2px solid rgba(0,0,0,0.16);background:#ffffff;color:#0D0D0B;padding:9px 18px;border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;display:inline-block;margin-top:10px;line-height:1;transition:background 0.15s;}
+.btn-outline-sm:hover{background:#EEECEA;}
+
+/* ── SHARED ── */
+.wrap{max-width:960px;margin:0 auto;padding:3rem 1.5rem;}
+.eyebrow{font-size:10.5px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:#1A4D3B;margin-bottom:0.6rem;}
+.sec-title{font-family:'Instrument Serif',serif;font-size:clamp(28px,4vw,46px);color:var(--ink);letter-spacing:-0.8px;line-height:1.1;margin-bottom:1.25rem;}
+.sec-sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:2.5rem;font-weight:300;}
+.divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0;}
+
+/* ── MARKETING PAGE ── */
+.hero{padding:4rem 1.5rem 5rem;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:88vh;}
+.hero-bg{position:absolute;inset:0;background:var(--bg);z-index:0;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;z-index:0;opacity:0.5;}
+.hero-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(26,77,59,0.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;}
+.hero-content{position:relative;z-index:1;max-width:800px;}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;background:#E4EDE9;color:#1A4D3B;font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:20px;margin-bottom:2rem;letter-spacing:0.4px;}
+.kicker-dot{width:6px;height:6px;border-radius:50%;background:#1A4D3B;}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(42px,7vw,80px);line-height:1.0;color:var(--ink);letter-spacing:-2px;margin-bottom:1.5rem;}
+.hero h1 em{font-style:italic;color:#1A4D3B;}
+.hero-sub{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:540px;margin:0 auto 2.5rem;line-height:1.7;font-weight:300;}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;}
+.hero-trust{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);}
+.trust-dot{width:4px;height:4px;border-radius:50%;background:var(--subtle);}
+.marquee-wrap{background:#1A4D3B;padding:14px 0;overflow:hidden;white-space:nowrap;}
+.marquee-track{display:inline-flex;animation:marquee 28s linear infinite;}
+.marquee-item{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.75);padding:0 2.5rem;}
+.marquee-sep{color:rgba(255,255,255,0.3);}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+.pain-card{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;position:relative;overflow:hidden;}
+.pain-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--surface);}
+.pain-card.solved::before{background:#1A4D3B;}
+.pain-label{font-size:10.5px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
+.pain-card.solved .pain-label{color:#1A4D3B;}
+.pain-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.45;}
+.pain-item.bad{color:var(--muted);}
+.pain-item.good{color:var(--ink);}
+.pain-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px;}
+.pi-bad{background:#FEE2E2;color:#B91C1C;}
+.pi-good{background:#E4EDE9;color:#1A4D3B;}
+.stats-band{background:#1A4D3B;border-radius:20px;padding:3rem 2.5rem;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin:0 1.5rem;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Instrument Serif',serif;font-size:48px;color:#ffffff;line-height:1;margin-bottom:4px;}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.4;}
+.hiw-dark{background:#0F1A16;padding:5rem 1.5rem;}
+.hiw-inner{max-width:960px;margin:0 auto;}
+.hiw-dark .eyebrow{color:rgba(255,255,255,0.45);}
+.hiw-dark .sec-title{color:#ffffff;}
+.hiw-dark .sec-sub{color:rgba(255,255,255,0.45);}
+.hiw-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;}
+.hiw-steps::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:rgba(255,255,255,0.08);}
+.hiw-step{text-align:center;padding:0 0.75rem;position:relative;}
+.hiw-num{width:56px;height:56px;border-radius:50%;background:#162520;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-family:'Instrument Serif',serif;font-size:22px;color:rgba(255,255,255,0.35);position:relative;z-index:1;}
+.hiw-step.active-step .hiw-num{background:#1A4D3B;border-color:#1A4D3B;color:#ffffff;}
+.hiw-step h4{font-size:13px;font-weight:500;color:#ffffff;margin-bottom:4px;line-height:1.3;}
+.hiw-step p{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.45;}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+.feat-card{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;transition:border-color 0.2s;}
+.feat-card:hover{border-color:var(--border-mid);}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.feat-card h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:6px;}
+.feat-card p{font-size:13.5px;color:var(--muted);line-height:1.6;}
+.feat-tag{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.6px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-top:12px;}
+.tag-green{background:#E4EDE9;color:#1A4D3B;}
+.tag-warm{background:#F7EDE3;color:#B5632A;}
+.tag-blue{background:#E6EEF8;color:#1E3A6E;}
+.bm-section{background:#EEECEA;padding:5rem 1.5rem;}
+.bm-inner{max-width:960px;margin:0 auto;}
+.bm-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:2rem;}
+.bm-pill{font-size:12.5px;padding:7px 15px;border-radius:20px;background:#ffffff;border:1px solid var(--border);color:var(--ink);}
+.bm-pill.primary{background:#1A4D3B;border-color:#1A4D3B;color:#ffffff;font-weight:500;}
+.bm-pill.secondary{background:#E4EDE9;border-color:rgba(26,77,59,0.15);color:#1A4D3B;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+.testi-card{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;}
+.testi-stars{display:flex;gap:3px;margin-bottom:0.75rem;}
+.star{width:14px;height:14px;background:#B5632A;border-radius:2px;}
+.testi-quote{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:1.25rem;font-style:italic;}
+.testi-author{font-size:12.5px;font-weight:500;color:var(--ink);}
+.testi-role{font-size:11.5px;color:var(--muted);}
+.clinic-section{background:#0F1A16;padding:5rem 1.5rem;}
+.clinic-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.clinic-inner .eyebrow{color:rgba(255,255,255,0.4);}
+.clinic-inner .sec-title{color:#ffffff;}
+.clinic-dark-sub{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:2rem;font-weight:300;}
+.clinic-features{display:flex;flex-direction:column;gap:14px;}
+.clinic-feat{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:rgba(255,255,255,0.65);}
+.cf-icon{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.final-cta{padding:6rem 1.5rem;text-align:center;}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;}
+.cta-trust{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap;}
+.ct-item{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.cta-strip{background:#1A4D3B;border-radius:14px;padding:2.25rem 2.5rem;display:flex;justify-content:space-between;align-items:center;gap:1.5rem;}
+.cta-strip h3{font-family:'Instrument Serif',serif;font-size:24px;color:#ffffff;margin-bottom:0.3rem;}
+.cta-strip p{font-size:13.5px;color:rgba(255,255,255,0.6);max-width:360px;}
+
+/* ── PRODUCT PAGE ── */
+.panels-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:2rem;}
+.panel-card{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;}
+.panel-card.featured{border:1.5px solid #1A4D3B;}
+.panel-tag{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:1rem;}
+.tag-g{background:#E4EDE9;color:#1A4D3B;}
+.tag-w{background:#F7EDE3;color:#B5632A;}
+.panel-card h3{font-size:16px;font-weight:500;color:var(--ink);margin-bottom:0.4rem;}
+.panel-card .desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:1rem;}
+.biomarkers{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem;}
+.bm{font-size:11px;padding:3px 8px;border-radius:4px;background:var(--surface);color:var(--muted);}
+.bm.flag{background:#E4EDE9;color:#1A4D3B;}
+.panel-price{font-size:13px;font-weight:500;color:#1A4D3B;}
+.diff-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.diff-card{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:1.25rem;}
+.diff-icon{width:36px;height:36px;border-radius:8px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;}
+.diff-card h4{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+.diff-card p{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* ── PRICING PAGE ── */
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:2.5rem;}
+.tgl-label{font-size:13px;color:var(--muted);}
+.tgl-label.active{color:var(--ink);font-weight:500;}
+.tgl-track{width:44px;height:24px;background:#1A4D3B;border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;}
+.tgl-thumb{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
+.tgl-track.monthly .tgl-thumb{transform:translateX(20px);}
+.save-badge{background:#F7EDE3;color:#B5632A;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;}
+.val-item{text-align:center;}
+.val-num{font-family:'Instrument Serif',serif;font-size:32px;color:#1A4D3B;line-height:1;margin-bottom:4px;}
+.val-lbl{font-size:12.5px;color:var(--muted);line-height:1.4;}
+.entry-band{background:var(--surface);border-radius:14px;padding:1.5rem 2rem;margin-bottom:1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.entry-band h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+.entry-band p{font-size:13px;color:var(--muted);max-width:440px;line-height:1.5;}
+.entry-price{text-align:right;flex-shrink:0;}
+.entry-big{font-family:'Instrument Serif',serif;font-size:36px;color:var(--ink);line-height:1;}
+.entry-per{font-size:12px;color:var(--muted);margin-top:2px;}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.plan{background:#ffffff;border:1px solid var(--border);border-radius:16px;padding:1.75rem;display:flex;flex-direction:column;}
+.plan.featured{border:2px solid #1A4D3B;}
+.plan-eyebrow{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;display:flex;align-items:center;gap:6px;}
+.pop-badge{background:#1A4D3B;color:#ffffff;font-size:9.5px;padding:2px 8px;border-radius:8px;}
+.plan-name{font-family:'Instrument Serif',serif;font-size:26px;color:var(--ink);line-height:1;margin-bottom:0.4rem;}
+.plan-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+.plan-price-row{display:flex;align-items:baseline;gap:6px;margin:1rem 0 0.2rem;}
+.plan-price-num{font-family:'Instrument Serif',serif;font-size:42px;color:var(--ink);line-height:1;}
+.plan-price-num sup{font-family:'DM Sans',sans-serif;font-size:18px;vertical-align:super;}
+.plan-cycle{font-size:13px;color:var(--muted);}
+.plan-commit{font-size:11.5px;color:#B5632A;font-weight:500;margin-bottom:1.25rem;}
+.plan-test-row{background:#E4EDE9;border-radius:8px;padding:10px 13px;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.plan-test-row .tl{font-size:12.5px;color:#1A4D3B;font-weight:500;}
+.plan-test-row .tr{font-size:12px;color:#1A4D3B;}
+.feats{list-style:none;flex:1;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:8px;}
+.feats li{font-size:13px;color:var(--ink);display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.feats li.dim{color:var(--muted);}
+.chk{width:16px;height:16px;border-radius:50%;background:#E4EDE9;color:#1A4D3B;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;flex-shrink:0;margin-top:1px;}
+.chk.dim{background:var(--surface);color:var(--subtle);}
+.pdf-note{background:#F7EDE3;border-radius:10px;padding:12px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.5rem;}
+.pdf-icon{width:32px;height:32px;background:#B5632A;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pdf-note h4{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.pdf-note p{font-size:12px;color:var(--muted);line-height:1.45;}
+.clinic-band-p{background:#0D0D0B;border-radius:14px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;}
+.clinic-band-p h3{font-family:'Instrument Serif',serif;font-size:22px;color:#ffffff;margin-bottom:4px;}
+.clinic-band-p p{font-size:13px;color:rgba(255,255,255,0.5);max-width:400px;line-height:1.55;}
+.clinic-price-big{font-family:'Instrument Serif',serif;font-size:32px;color:#ffffff;line-height:1;margin-bottom:3px;}
+.clinic-per-s{font-size:12px;color:rgba(255,255,255,0.4);}
+.price-footer{text-align:center;font-size:12px;color:var(--muted);padding-bottom:2rem;}
+.price-footer a{color:#1A4D3B;text-decoration:none;}
+
+/* ── DASHBOARD ── */
+.dash{max-width:960px;margin:0 auto;padding:1.75rem 1.5rem;}
+.dash-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;}
+.dash-greeting{font-family:'Instrument Serif',serif;font-size:26px;color:var(--ink);margin-bottom:3px;}
+.dash-meta{font-size:12.5px;color:var(--muted);}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
+.metric{background:#ffffff;border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;}
+.metric-lbl{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px;}
+.metric-val{font-family:'Instrument Serif',serif;font-size:28px;line-height:1;color:var(--ink);margin-bottom:2px;}
+.metric-unit{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.trend-pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:20px;}
+.up{background:var(--success-bg);color:var(--success-text);}
+.warn{background:var(--warn-bg);color:var(--warn-text);}
+.ok{background:var(--surface);color:var(--muted);}
+.ai-card{background:#ffffff;border:1px solid rgba(26,77,59,0.18);border-left:3px solid #1A4D3B;border-radius:11px;padding:1.25rem;margin-bottom:1.25rem;}
+.ai-header{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:#1A4D3B;margin-bottom:0.6rem;}
+.ai-body{font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:0.75rem;}
+.ai-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.dash-grid{display:grid;grid-template-columns:3fr 2fr;gap:1rem;margin-bottom:1rem;}
+.dash-card{background:#ffffff;border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.25rem;}
+.card-title{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
+.card-sub{font-size:11px;color:var(--muted);font-weight:400;}
+.bar-chart{height:100px;display:flex;align-items:flex-end;gap:5px;}
+.bar{flex:1;border-radius:3px 3px 0 0;background:#E4EDE9;cursor:pointer;transition:background 0.12s;}
+.bar:hover{background:#255C47;}
+.bar.now{background:#1A4D3B;}
+.chart-x{display:flex;gap:5px;margin-top:5px;}
+.chart-x span{flex:1;font-size:9.5px;color:var(--muted);text-align:center;}
+.lab-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.lab-row:last-child{border-bottom:none;}
+.lab-name{color:var(--ink);}
+.lab-right{display:flex;align-items:center;gap:8px;}
+.lab-val{font-weight:500;color:var(--ink);}
+.lab-range{font-size:10.5px;color:var(--muted);}
+.pill{font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:10px;}
+.p-ok{background:var(--success-bg);color:var(--success-text);}
+.p-watch{background:var(--warn-bg);color:var(--warn-text);}
+.clinic-hdr{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
+.clinic-ico{width:34px;height:34px;background:#E4EDE9;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.clinic-nm{font-size:13.5px;font-weight:500;color:var(--ink);}
+.clinic-dr{font-size:11.5px;color:var(--muted);}
+.clinic-meta-d{font-size:11.5px;color:var(--muted);margin-bottom:10px;}
+.clinic-proto{background:var(--surface);border-radius:7px;padding:9px 11px;margin-bottom:12px;}
+.proto-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:3px;}
+.proto-val{font-size:12.5px;color:var(--ink);font-weight:500;}
+.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.reminder{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.reminder:last-child{border-bottom:none;}
+.rem-dot{width:8px;height:8px;border-radius:50%;background:#1A4D3B;flex-shrink:0;}
+.rem-dot.dim{background:var(--subtle);}
+.rem-title{color:var(--ink);}
+.rem-date{font-size:11px;color:var(--muted);}
+
+/* ── ONBOARDING ── */
+.ob-prog-wrap{background:#ffffff;border-bottom:1px solid var(--border);padding:0 2rem;}
+.ob-steps{max-width:540px;margin:0 auto;display:flex;align-items:center;padding:1rem 0;}
+.obs{display:flex;align-items:center;gap:8px;flex:1;}
+.obs-circle{width:24px;height:24px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#6A6A63;transition:all 0.2s;}
+.obs-circle.active{background:#1A4D3B;border-color:#1A4D3B;color:#ffffff;}
+.obs-circle.done{background:#E4EDE9;border-color:#1A4D3B;color:#1A4D3B;}
+.obs-label{font-size:12px;color:var(--muted);white-space:nowrap;}
+.obs-label.active{color:var(--ink);font-weight:500;}
+.obs-line{flex:1;height:1px;background:rgba(0,0,0,0.12);margin:0 8px;}
+.obs-line.done{background:#1A4D3B;}
+.ob-wrap{max-width:540px;margin:0 auto;padding:2.5rem 1.5rem;}
+.ob-step{display:none;}
+.ob-step.active{display:block;animation:fadeUp 0.2s ease;}
+.ob-eyebrow{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:#1A4D3B;margin-bottom:0.5rem;}
+.ob-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);letter-spacing:-0.4px;line-height:1.1;margin-bottom:0.4rem;}
+.ob-sub{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.55;}
+.plan-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:1.75rem;}
+.plan-opt{background:#ffffff;border:2px solid rgba(0,0,0,0.1);border-radius:12px;padding:1.1rem 1.25rem;cursor:pointer;display:flex;align-items:flex-start;gap:11px;transition:border-color 0.15s;}
+.plan-opt.selected{border-color:#1A4D3B;background:#E4EDE9;}
+.plan-opt.selected .po-name{color:#1A4D3B;}
+.plan-opt.onetime.selected{border-color:#B5632A;background:#F7EDE3;}
+.plan-opt.onetime.selected .po-name{color:#B5632A;}
+.plan-opt.onetime.selected .radio-c{border-color:#B5632A;background:#B5632A;}
+.radio-c{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.15s;}
+.plan-opt.selected .radio-c{border-color:#1A4D3B;background:#1A4D3B;}
+.radio-d{width:7px;height:7px;border-radius:50%;background:#ffffff;display:none;}
+.plan-opt.selected .radio-d{display:block;}
+.po-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.po-desc{font-size:12.5px;color:var(--muted);line-height:1.45;margin-bottom:5px;}
+.po-price{font-size:12px;font-weight:500;color:#1A4D3B;}
+.plan-opt.onetime .po-price{color:#B5632A;}
+.po-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:8px;background:#1A4D3B;color:#ffffff;margin-left:5px;vertical-align:middle;}
+.sel-pill{display:inline-flex;align-items:center;gap:6px;background:#E4EDE9;color:#1A4D3B;font-size:12px;font-weight:500;padding:4px 11px;border-radius:20px;margin-bottom:1.25rem;}
+.sel-pill.warm{background:#F7EDE3;color:#B5632A;}
+.chg-plan{font-size:11px;color:#1A4D3B;cursor:pointer;text-decoration:underline;margin-left:3px;}
+.form-group{margin-bottom:1.1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.1rem;}
+.form-label{font-size:12px;font-weight:500;color:var(--ink);display:block;margin-bottom:5px;}
+.form-input{width:100%;padding:11px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;transition:border-color 0.15s;}
+.form-input:focus{border-color:#1A4D3B;}
+.form-input::placeholder{color:#B0B0A8;}
+.form-select{width:100%;padding:11px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;}
+.form-select:focus{border-color:#1A4D3B;}
+.form-hint{font-size:11.5px;color:var(--muted);margin-top:4px;}
+.pw-bars{display:flex;gap:4px;margin-top:6px;}
+.pw-bar{height:3px;flex:1;border-radius:2px;background:#EEECEA;transition:background 0.2s;}
+.pw-bar.weak{background:#E57373;}
+.pw-bar.fair{background:#FFB74D;}
+.pw-bar.good{background:#81C784;}
+.pw-bar.strong{background:#1A4D3B;}
+.pw-label{font-size:11px;color:var(--muted);margin-top:4px;}
+.hipaa-note{background:#E4EDE9;border-left:3px solid #1A4D3B;border-radius:0 8px 8px 0;padding:10px 13px;margin-bottom:1.1rem;font-size:12.5px;color:#1A4D3B;line-height:1.55;}
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:0.9rem;}
+.check-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:#1A4D3B;flex-shrink:0;cursor:pointer;}
+.check-row label{font-size:12.5px;color:var(--muted);line-height:1.5;cursor:pointer;}
+.check-row a{color:#1A4D3B;}
+.order-summary{background:#EEECEA;border-radius:11px;padding:1.25rem;margin-bottom:1.5rem;}
+.os-title{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:0.75rem;}
+.os-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.07);}
+.os-row:last-child{border-bottom:none;}
+.os-row.total{padding-top:10px;margin-top:4px;font-size:14px;font-weight:500;}
+.os-label{color:var(--muted);}
+.os-row.total .os-label{color:var(--ink);}
+.sec-note{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);justify-content:center;margin-top:1rem;}
+.signin-note{text-align:center;font-size:13px;color:var(--muted);margin-top:1rem;}
+.signin-note a{color:#1A4D3B;text-decoration:none;font-weight:500;}
+.ship-callout{background:#E4EDE9;border-radius:9px;padding:11px 13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:1.25rem;}
+.confirm-icon{width:56px;height:56px;border-radius:50%;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;}
+.confirm-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);text-align:center;margin-bottom:0.5rem;}
+.confirm-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:2rem;line-height:1.6;}
+.confirm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:2rem;}
+.confirm-step{display:flex;align-items:flex-start;gap:11px;background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;}
+.cs-num{width:24px;height:24px;border-radius:50%;background:#1A4D3B;color:#ffffff;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.cs-title{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.cs-desc{font-size:12.5px;color:var(--muted);line-height:1.45;}
+
+/* ── FOOTER ── */
+footer{background:#0F1A16;padding:4rem 1.5rem 2.5rem;}
+.footer-inner{max-width:960px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-logo{font-family:'Instrument Serif',serif;font-size:22px;color:#ffffff;margin-bottom:0.5rem;}
+.footer-logo span{color:rgba(255,255,255,0.35);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;margin-right:4px;}
+.footer-tagline{font-size:13px;color:rgba(255,255,255,0.3);line-height:1.6;max-width:240px;margin-top:0.5rem;}
+.footer-col h4{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.28);margin-bottom:1rem;}
+.footer-col a{display:block;font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;margin-bottom:9px;transition:color 0.15s;cursor:pointer;}
+.footer-col a:hover{color:rgba(255,255,255,0.85);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:12px;color:rgba(255,255,255,0.22);}
+.footer-legal{display:flex;gap:1.5rem;}
+.footer-legal a{font-size:12px;color:rgba(255,255,255,0.22);text-decoration:none;transition:color 0.15s;}
+.footer-legal a:hover{color:rgba(255,255,255,0.6);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .pain-grid,.panels-grid,.features-grid,.dash-grid,.dash-bottom,.plans,.clinic-inner{grid-template-columns:1fr;}
+  .metrics-row{grid-template-columns:1fr 1fr;}
+  .diff-grid{grid-template-columns:1fr 1fr;}
+  .stats-band{grid-template-columns:1fr 1fr;gap:1.5rem;margin:0 1rem;padding:2rem 1.5rem;}
+  .testi-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:2rem;}
+  .hero{padding:3rem 1.25rem 4rem;min-height:auto;}
+  .hero h1{letter-spacing:-1px;}
+  .hero-actions{flex-direction:column;align-items:stretch;max-width:320px;margin:0 auto 2rem;}
+  .btn-primary,.btn-secondary{width:100%;text-align:center;}
+  .hiw-steps{grid-template-columns:1fr 1fr;gap:1.25rem;}
+  .hiw-steps::before{display:none;}
+  .entry-band{flex-direction:column;align-items:flex-start;}
+  .cta-strip{flex-direction:column;text-align:center;}
+  .wrap{padding:2.5rem 1.25rem;}
+  .form-row{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  .footer-top{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('marketing')">
+    <span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span>
+  </div>
+  <div class="nav-links" id="nav-desktop">
+    <a onclick="showPage('marketing')" id="nav-marketing" class="active">Home</a>
+    <a onclick="showPage('product')" id="nav-product">Lab Panels</a>
+    <a onclick="showPage('pricing')" id="nav-pricing">Pricing</a>
+    <a onclick="showPage('dashboard')" id="nav-dashboard" class="nav-cta-btn">Dashboard</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <div id="ob-nav-back" style="display:none;font-size:13px;color:var(--muted);cursor:pointer;align-items:center;gap:5px;" onclick="obBack()">← Back</div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a onclick="showPage('marketing');toggleMenu()">Home</a>
+  <a onclick="showPage('product');toggleMenu()">Lab Panels</a>
+  <a onclick="showPage('pricing');toggleMenu()">Pricing</a>
+  <button class="mob-cta" onclick="showPage('dashboard');toggleMenu()">My Dashboard</button>
+</div>
+
+<!-- ONBOARDING PROGRESS BAR -->
+<div id="ob-prog-outer" style="display:none;">
+  <div class="ob-prog-wrap">
+    <div class="ob-steps">
+      <div class="obs"><div class="obs-circle active" id="obc1">1</div><span class="obs-label active" id="obl1">Plan</span></div>
+      <div class="obs-line" id="obline1"></div>
+      <div class="obs"><div class="obs-circle" id="obc2">2</div><span class="obs-label" id="obl2">Account</span></div>
+      <div class="obs-line" id="obline2"></div>
+      <div class="obs"><div class="obs-circle" id="obc3">3</div><span class="obs-label" id="obl3">Shipping</span></div>
+      <div class="obs-line" id="obline3"></div>
+      <div class="obs"><div class="obs-circle" id="obc4">4</div><span class="obs-label" id="obl4">Confirm</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MARKETING PAGE ===== -->
+<div id="page-marketing" class="page active">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-content">
+      <div class="hero-kicker"><span class="kicker-dot"></span>Now live · trtlabos.com</div>
+      <h1>TRT finally has an<br><em>operating system.</em></h1>
+      <p class="hero-sub">At-home blood collection. TRT-specific lab panels. AI insights that track your protocol over time — and deliver directly to your clinic.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="startOnboarding('onetime')">Order your first test — $179</button>
+        <button class="btn-secondary" onclick="showPage('product')">See how it works ↓</button>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>HIPAA-aligned</div>
+        <div class="trust-dot"></div>
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>CLIA-certified lab</div>
+        <div class="trust-dot"></div>
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>HSA/FSA eligible</div>
+        <div class="trust-dot"></div>
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>40+ clinic partners</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">Total Testosterone <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Free Testosterone <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Estradiol (E2) <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Hematocrit <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">SHBG <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Lipid Risk Score <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">PSA <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">LH / FSH <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">CBC <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">CMP <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">TSH <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Hemoglobin <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Total Testosterone <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Free Testosterone <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Estradiol (E2) <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Hematocrit <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">SHBG <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">Lipid Risk Score <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">PSA <span class="marquee-sep">·</span></span>
+      <span class="marquee-item">LH / FSH <span class="marquee-sep">·</span></span>
+    </div>
+  </div>
+
+  <section class="wrap">
+    <div class="eyebrow">The problem</div>
+    <div class="sec-title">Labs weren't built<br>for TRT patients.</div>
+    <div class="sec-sub">Generic lab systems give you numbers without context. TRT LabOS was built from the ground up for the specific biomarkers, risk patterns, and clinic workflows that TRT actually requires.</div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-label">Without TRT LabOS</div>
+        <div class="pain-item bad"><span class="pain-icon pi-bad">✕</span>Schedule, drive to, and wait at Quest or Labcorp</div>
+        <div class="pain-item bad"><span class="pain-icon pi-bad">✕</span>Generic results with no TRT context or interpretation</div>
+        <div class="pain-item bad"><span class="pain-icon pi-bad">✕</span>Hematocrit risk goes untracked between clinic visits</div>
+        <div class="pain-item bad"><span class="pain-icon pi-bad">✕</span>Results faxed or emailed manually to your clinic</div>
+        <div class="pain-item bad"><span class="pain-icon pi-bad">✕</span>No longitudinal view of how your protocol is performing</div>
+      </div>
+      <div class="pain-card solved">
+        <div class="pain-label">With TRT LabOS</div>
+        <div class="pain-item good"><span class="pain-icon pi-good">✓</span>Order from your phone — collect at home with Tasso device</div>
+        <div class="pain-item good"><span class="pain-icon pi-good">✓</span>AI insights calibrated specifically to your TRT protocol</div>
+        <div class="pain-item good"><span class="pain-icon pi-good">✓</span>Hematocrit, E2, and lipid risk tracked and flagged over time</div>
+        <div class="pain-item good"><span class="pain-icon pi-good">✓</span>Results auto-delivered to your clinic before every appointment</div>
+        <div class="pain-item good"><span class="pain-icon pi-good">✓</span>Longitudinal dashboard — your full protocol history in one place</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-band">
+    <div class="stat-item"><div class="stat-num">14</div><div class="stat-lbl">TRT-specific biomarkers tracked per panel</div></div>
+    <div class="stat-item"><div class="stat-num">2–3</div><div class="stat-lbl">Day turnaround, physician reviewed</div></div>
+    <div class="stat-item"><div class="stat-num">40+</div><div class="stat-lbl">Integrated TRT clinic partners</div></div>
+    <div class="stat-item"><div class="stat-num">$0</div><div class="stat-lbl">Extra cost to connect your existing clinic</div></div>
+  </div>
+
+  <section class="hiw-dark">
+    <div class="hiw-inner">
+      <div class="eyebrow">How it works</div>
+      <div class="sec-title">From your arm to your clinic<br>in five steps.</div>
+      <div class="sec-sub">No lab visits. No waiting rooms. No manual paperwork.</div>
+      <div class="hiw-steps">
+        <div class="hiw-step active-step"><div class="hiw-num">1</div><h4>Order your panel</h4><p>Choose intake or monitoring from your phone</p></div>
+        <div class="hiw-step"><div class="hiw-num">2</div><h4>Collect at home</h4><p>Tasso device — painless, no needles, 3 minutes</p></div>
+        <div class="hiw-step"><div class="hiw-num">3</div><h4>Mail your sample</h4><p>Drop in any USPS mailbox — prepaid included</p></div>
+        <div class="hiw-step"><div class="hiw-num">4</div><h4>Get TRT insights</h4><p>Results + AI interpretation in 2–3 days</p></div>
+        <div class="hiw-step"><div class="hiw-num">5</div><h4>Clinic receives report</h4><p>Clinic-ready PDF auto-delivered</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="eyebrow">Built different</div>
+    <div class="sec-title">Every feature exists<br>because TRT demanded it.</div>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Hematocrit risk tracking</h3><p>TRT raises red blood cell production over time. LabOS monitors your hematocrit across every test and flags rising trends before they become a problem.</p><span class="feat-tag tag-green">TRT-specific safety</span></div>
+      <div class="feat-card"><div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><h3>Estradiol balance insights</h3><p>E2 doesn't mean anything in isolation — it means something relative to your testosterone level. LabOS reads both together with AI interpretation.</p><span class="feat-tag tag-green">AI-powered</span></div>
+      <div class="feat-card"><div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><h3>Longitudinal dashboard</h3><p>Every test builds a richer picture. Track trends, spot anomalies, and see your complete protocol timeline — test by test, marker by marker.</p><span class="feat-tag tag-blue">Continuous monitoring</span></div>
+      <div class="feat-card"><div class="feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Clinic integration</h3><p>Connect your TRT clinic and every result auto-delivers before your appointment — formatted as a physician-ready PDF. No faxing, no login-sharing.</p><span class="feat-tag tag-warm">Auto-delivery</span></div>
+    </div>
+  </section>
+
+  <section class="bm-section">
+    <div class="bm-inner">
+      <div class="eyebrow">Lab panels</div>
+      <div class="sec-title">14 biomarkers. Every one matters.</div>
+      <div class="sec-sub" style="margin-bottom:0;">Designed with TRT physicians — not pulled from a generic wellness menu.</div>
+      <div class="bm-grid">
+        <span class="bm-pill primary">Total Testosterone</span><span class="bm-pill primary">Free Testosterone</span><span class="bm-pill primary">Estradiol (E2)</span><span class="bm-pill primary">Hematocrit</span><span class="bm-pill secondary">SHBG</span><span class="bm-pill secondary">LH / FSH</span><span class="bm-pill secondary">Lipid Risk Score</span><span class="bm-pill secondary">PSA</span><span class="bm-pill">Hemoglobin</span><span class="bm-pill">CBC</span><span class="bm-pill">CMP</span><span class="bm-pill">TSH</span><span class="bm-pill">ALT / AST</span><span class="bm-pill">Cortisol</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="eyebrow">Early users</div>
+    <div class="sec-title">What TRT patients say.</div>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="testi-quote">"I've been on TRT for 2 years and always dreaded the quarterly lab run. This is the first time testing has actually felt like part of my routine."</div><div class="testi-author">Derek M.</div><div class="testi-role">On TRT 2 years · Pro subscriber</div></div>
+      <div class="testi-card"><div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="testi-quote">"My hematocrit crept up and LabOS flagged it two tests before my clinic noticed. That kind of early warning is exactly what I needed."</div><div class="testi-author">James T.</div><div class="testi-role">Clinical+ · 8 months</div></div>
+      <div class="testi-card"><div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="testi-quote">"My doctor already has my results when I walk in. No more emailing PDFs at 11pm before an appointment."</div><div class="testi-author">Ryan S.</div><div class="testi-role">Pro · TRT Vitality Clinic</div></div>
+    </div>
+  </section>
+
+  <section class="clinic-section">
+    <div class="clinic-inner">
+      <div>
+        <div class="eyebrow">For TRT clinics</div>
+        <div class="sec-title">Give your patients the lab infrastructure they've been missing.</div>
+        <p class="clinic-dark-sub">TRT LabOS connects directly to your clinic workflow. Your patients test at home, results arrive automatically, and you walk into every appointment already informed.</p>
+        <button class="btn-primary" onclick="window.location.href='mailto:clinics@trtlabos.com'">Talk to our clinic team</button>
+      </div>
+      <div class="clinic-features">
+        <div class="clinic-feat"><div class="cf-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>Automatic result delivery before every appointment</div>
+        <div class="clinic-feat"><div class="cf-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>Physician-ready PDF generated for every patient test</div>
+        <div class="clinic-feat"><div class="cf-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>Hematocrit and E2 risk alerts surfaced proactively</div>
+        <div class="clinic-feat"><div class="cf-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>Patient compliance improves — testing happens at home</div>
+        <div class="clinic-feat"><div class="cf-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>Integration live in 48 hours · $299/mo per clinic</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="eyebrow">Get started</div>
+    <div class="sec-title">Your protocol deserves better data.</div>
+    <div class="sec-sub">Start with a single test or subscribe for continuous monitoring. First Tasso device ships in 2 business days.</div>
+    <div class="cta-actions">
+      <button class="btn-primary" onclick="startOnboarding('onetime')">Order a single test — $179</button>
+      <button class="btn-secondary" onclick="startOnboarding('pro')">Start Pro — $49/mo</button>
+    </div>
+    <div class="cta-trust">
+      <div class="ct-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit encrypted</div>
+      <div class="ct-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>CLIA-certified lab</div>
+      <div class="ct-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>HSA/FSA eligible</div>
+      <div class="ct-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/></svg>Results in 2–3 days</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+        <div class="footer-col"><h4>Product</h4><a onclick="showPage('product')">Lab panels</a><a onclick="showPage('product')">How it works</a><a onclick="showPage('pricing')">Pricing</a><a onclick="showPage('dashboard')">Dashboard</a></div>
+        <div class="footer-col"><h4>For clinics</h4><a href="mailto:clinics@trtlabos.com">Talk to us</a><a href="#">Partner portal</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="mailto:hello@trtlabos.com">Contact</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+        <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">HIPAA notice</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== PRODUCT PAGE ===== -->
+<div id="page-product" class="page">
+  <div class="wrap">
+    <div class="eyebrow">Lab panels</div>
+    <div class="sec-title">Two panels built for TRT</div>
+    <div class="panels-grid">
+      <div class="panel-card">
+        <div class="panel-tag tag-g">Intake panel</div>
+        <h3>TRT Intake Panel</h3>
+        <p class="desc">Full hormonal, metabolic, and cardiovascular baseline. Physician reviewed and clinic-ready.</p>
+        <div class="biomarkers"><span class="bm flag">Total T</span><span class="bm flag">Free T</span><span class="bm flag">Estradiol</span><span class="bm flag">SHBG</span><span class="bm flag">LH/FSH</span><span class="bm">Hematocrit</span><span class="bm">PSA</span><span class="bm">Lipid Panel</span><span class="bm">CMP</span><span class="bm">TSH</span><span class="bm">CBC</span></div>
+        <div class="panel-price">$179 one-time · Tasso device included</div>
+      </div>
+      <div class="panel-card featured">
+        <div class="panel-tag tag-w">Monitoring panel</div>
+        <h3>TRT Monitoring Panel</h3>
+        <p class="desc">Recurring check-ins flagging hematocrit, E2, and lipid shifts over time.</p>
+        <div class="biomarkers"><span class="bm flag">Total T</span><span class="bm flag">Free T</span><span class="bm flag">Estradiol</span><span class="bm flag">Hematocrit</span><span class="bm flag">Lipid Risk</span><span class="bm">SHBG</span><span class="bm">PSA</span><span class="bm">Hemoglobin</span></div>
+        <div class="panel-price">$179 one-time · $69 on Pro · $59 on Clinical+</div>
+      </div>
+    </div>
+    <div class="eyebrow" style="margin-top:2rem;">Differentiators</div>
+    <div class="sec-title" style="margin-bottom:1.25rem;">Built for TRT, not general labs</div>
+    <div class="diff-grid">
+      <div class="diff-card"><div class="diff-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h4>Hematocrit tracking</h4><p>Monitors polycythemia risk — a critical TRT safety marker.</p></div>
+      <div class="diff-card"><div class="diff-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><h4>Estradiol insights</h4><p>E2 balance relative to testosterone with AI interpretation.</p></div>
+      <div class="diff-card"><div class="diff-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div><h4>Lipid monitoring</h4><p>Tracks cardiovascular risk shifts caused by TRT.</p></div>
+      <div class="diff-card"><div class="diff-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><h4>TRT-specific flags</h4><p>Results interpreted for TRT — not generic reference ranges.</p></div>
+    </div>
+    <div class="cta-strip" style="margin-top:3rem;">
+      <div><h3>Ready to get started?</h3><p>Order a single test or subscribe for continuous monitoring.</p></div>
+      <button class="btn-white" onclick="showPage('pricing')">See pricing →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRICING PAGE ===== -->
+<div id="page-pricing" class="page">
+  <div class="wrap">
+    <div class="eyebrow">Pricing</div>
+    <div class="sec-title">Invest in your protocol,<br>not your lab visits</div>
+    <div style="font-size:15px;color:var(--muted);margin-bottom:2rem;font-weight:300;">One-time or subscription — built around what TRT patients actually need.</div>
+    <div class="billing-toggle">
+      <span class="tgl-label active" id="tl-q">Quarterly billing</span>
+      <div class="tgl-track" id="p-tgl" onclick="toggleBilling()"><div class="tgl-thumb"></div></div>
+      <span class="tgl-label" id="tl-m">Monthly billing</span>
+      <span class="save-badge" id="p-save">Save 20% quarterly</span>
+    </div>
+    <div class="val-grid">
+      <div class="val-item"><div class="val-num">14</div><div class="val-lbl">TRT biomarkers per panel</div></div>
+      <div class="val-item"><div class="val-num">2–3</div><div class="val-lbl">Day turnaround</div></div>
+      <div class="val-item"><div class="val-num">40+</div><div class="val-lbl">Clinic partners</div></div>
+    </div>
+    <hr class="divider">
+    <div class="entry-band">
+      <div><h3>Just getting started? Try a single test first.</h3><p>Full TRT intake panel with Tasso device, 14 biomarkers, physician review, clinic-ready PDF.</p></div>
+      <div class="entry-price"><div class="entry-big">$179</div><div class="entry-per">one-time · device included</div><button class="btn-outline-sm" onclick="startOnboarding('onetime')">Order now</button></div>
+    </div>
+    <div style="font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Subscription plans</div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-eyebrow">For most patients</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-desc">Quarterly monitoring, AI dashboard, and clinic sync.</div>
+        <div class="plan-price-row"><div class="plan-price-num" id="pro-price"><sup>$</sup>49</div><div class="plan-cycle" id="pro-cycle">/mo · billed quarterly</div></div>
+        <div class="plan-commit" id="pro-commit">3-month commitment · cancel anytime after</div>
+        <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">4/yr at <strong>$69/test</strong></span></div>
+        <ul class="feats">
+          <li><span class="chk">✓</span>Tasso device each cycle</li>
+          <li><span class="chk">✓</span>TRT monitoring panel (8 markers)</li>
+          <li><span class="chk">✓</span>AI dashboard + trend tracking</li>
+          <li><span class="chk">✓</span>Hematocrit &amp; E2 alerts</li>
+          <li><span class="chk">✓</span>Clinic integration + PDF export</li>
+          <li class="dim"><span class="chk dim">–</span>Monthly testing cadence</li>
+          <li class="dim"><span class="chk dim">–</span>Priority clinical support</li>
+        </ul>
+        <button class="btn-plan" onclick="startOnboarding('pro')">Start Pro</button>
+      </div>
+      <div class="plan featured">
+        <div class="plan-eyebrow">Active optimization <span class="pop-badge">Best value</span></div>
+        <div class="plan-name">Clinical+</div>
+        <div class="plan-desc">Monthly testing with priority clinical support.</div>
+        <div class="plan-price-row"><div class="plan-price-num" id="clin-price"><sup>$</sup>69</div><div class="plan-cycle" id="clin-cycle">/mo · billed quarterly</div></div>
+        <div class="plan-commit" id="clin-commit">3-month commitment · cancel anytime after</div>
+        <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">12/yr at <strong>$59/test</strong></span></div>
+        <ul class="feats">
+          <li><span class="chk">✓</span>Tasso device each cycle</li>
+          <li><span class="chk">✓</span>Full TRT panel (14 markers)</li>
+          <li><span class="chk">✓</span>AI dashboard + trend tracking</li>
+          <li><span class="chk">✓</span>Hematocrit, E2 &amp; lipid alerts</li>
+          <li><span class="chk">✓</span>Clinic integration + PDF export</li>
+          <li><span class="chk">✓</span>Monthly testing cadence</li>
+          <li><span class="chk">✓</span>Priority clinical support</li>
+        </ul>
+        <button class="btn-plan" onclick="startOnboarding('clinical')">Start Clinical+</button>
+      </div>
+    </div>
+    <div class="pdf-note">
+      <div class="pdf-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <div><h4>Clinic-ready PDF on every plan</h4><p>Auto-generated after every test. Share directly or via clinic integration — no faxing.</p></div>
+    </div>
+    <hr class="divider">
+    <div class="clinic-band-p">
+      <div><h3>Are you a TRT clinic?</h3><p>At-home lab infrastructure, automatic result delivery, and a dashboard for your patients. Live in 48 hours.</p></div>
+      <div style="text-align:right;flex-shrink:0;"><div class="clinic-price-big">$299<span style="font-size:16px;color:rgba(255,255,255,0.4)">/mo</span></div><div class="clinic-per-s">scales with patient volume</div><button class="btn-white" style="margin-top:10px;" onclick="window.location.href='mailto:clinics@trtlabos.com'">Talk to us</button></div>
+    </div>
+    <div class="price-footer">HSA/FSA eligible · No hidden fees · Results in 2–3 days<br><br><a href="mailto:hello@trtlabos.com">Talk to a LabOS advisor →</a></div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="page-dashboard" class="page">
+  <div class="dash">
+    <div class="dash-header">
+      <div><div class="dash-greeting">Good morning, Marcus</div><div class="dash-meta">Sunday, May 3, 2026 · Pro plan · Next test due in 18 days</div></div>
+      <button class="btn-primary" style="font-size:13px;padding:9px 18px;">+ Log symptoms</button>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-lbl">Total T</div><div class="metric-val">724</div><div class="metric-unit">ng/dL</div><span class="trend-pill up">↑ 12% from last</span></div>
+      <div class="metric"><div class="metric-lbl">Free T</div><div class="metric-val">18.4</div><div class="metric-unit">pg/mL</div><span class="trend-pill up">↑ 8% from last</span></div>
+      <div class="metric"><div class="metric-lbl">Estradiol E2</div><div class="metric-val">29</div><div class="metric-unit">pg/mL</div><span class="trend-pill ok">In balance</span></div>
+      <div class="metric"><div class="metric-lbl">Hematocrit</div><div class="metric-val">47.2</div><div class="metric-unit">%</div><span class="trend-pill warn">⚠ Monitor</span></div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-header"><svg width="12" height="12" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Insight</div>
+      <div class="ai-body">Your testosterone response is strong — up 12% to 724 ng/dL. However, your hematocrit has climbed 3 points across two consecutive tests and is now at 47.2%. Still within range, but worth discussing with your clinic before your next injection.</div>
+      <div class="ai-btns">
+        <button class="ai-btn">Manage hematocrit</button>
+        <button class="ai-btn">Explain E2 balance</button>
+        <button class="ai-btn">Full panel summary</button>
+      </div>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card">
+        <div class="card-title">Testosterone trend <span class="card-sub">8 tests · Aug 2025 – May 2026</span></div>
+        <div class="bar-chart"><div class="bar" style="height:52%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:59%"></div><div class="bar" style="height:56%"></div><div class="bar" style="height:64%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:77%"></div><div class="bar now" style="height:90%"></div></div>
+        <div class="chart-x"><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Jan</span><span>Feb</span><span>Mar</span><span>May</span></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-title">Clinic connection</div>
+        <div class="clinic-hdr"><div class="clinic-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div><div class="clinic-nm">TRT Vitality Clinic</div><div class="clinic-dr">Dr. Aaron Hendricks, MD</div></div></div>
+        <div class="clinic-meta-d">Last synced: May 1, 2026 · Auto-share on</div>
+        <div class="clinic-proto"><div class="proto-lbl">Current protocol</div><div class="proto-val">Cypionate 200mg / 2wk</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Anastrozole 0.25mg / 2× wk</div></div>
+        <button class="btn-dash">Message clinic</button>
+      </div>
+    </div>
+    <div class="dash-bottom">
+      <div class="dash-card">
+        <div class="card-title">Full panel — May 1, 2026 <span class="card-sub">14 biomarkers</span></div>
+        <div class="lab-row"><span class="lab-name">Total Testosterone</span><div class="lab-right"><span class="lab-val">724 ng/dL</span><span class="lab-range">300–1000</span><span class="pill p-ok">Normal</span></div></div>
+        <div class="lab-row"><span class="lab-name">Free Testosterone</span><div class="lab-right"><span class="lab-val">18.4 pg/mL</span><span class="lab-range">9–30</span><span class="pill p-ok">Normal</span></div></div>
+        <div class="lab-row"><span class="lab-name">Estradiol (E2)</span><div class="lab-right"><span class="lab-val">29 pg/mL</span><span class="lab-range">10–40</span><span class="pill p-ok">Normal</span></div></div>
+        <div class="lab-row"><span class="lab-name">SHBG</span><div class="lab-right"><span class="lab-val">31 nmol/L</span><span class="lab-range">16–55</span><span class="pill p-ok">Normal</span></div></div>
+        <div class="lab-row"><span class="lab-name">Hematocrit</span><div class="lab-right"><span class="lab-val">47.2%</span><span class="lab-range">38–50</span><span class="pill p-watch">Watch</span></div></div>
+        <div class="lab-row"><span class="lab-name">Lipid Risk Score</span><div class="lab-right"><span class="lab-val">Moderate</span><span class="lab-range">—</span><span class="pill p-watch">Watch</span></div></div>
+        <div class="lab-row"><span class="lab-name">PSA</span><div class="lab-right"><span class="lab-val">0.8 ng/mL</span><span class="lab-range">0–4</span><span class="pill p-ok">Normal</span></div></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-title">Upcoming reminders</div>
+        <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Next test due</div><div class="rem-date">May 21 · Tasso ships May 18</div></div></div>
+        <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Clinic appointment</div><div class="rem-date">May 28 · Dr. Hendricks</div></div></div>
+        <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Next injection day</div><div class="rem-date">May 9 · Cypionate 200mg</div></div></div>
+        <div class="reminder"><div class="rem-dot dim"></div><div><div class="rem-title" style="color:var(--muted);">Anastrozole dose</div><div class="rem-date">May 5 · 0.25mg</div></div></div>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);"><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px;">Longitudinal data</div><div style="font-size:12.5px;color:var(--ink);">8 tests over 9 months · 14 markers tracked · 2 active watchlist items</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ONBOARDING ===== -->
+<div id="page-onboarding" class="page">
+  <div class="ob-wrap">
+    <div class="ob-step active" id="ob-s1">
+      <div class="ob-eyebrow">Step 1 of 4</div>
+      <div class="ob-title">Choose your plan</div>
+      <div class="ob-sub">Start with a single test or subscribe for continuous monitoring and better per-test pricing.</div>
+      <div class="plan-opts">
+        <div class="plan-opt onetime" id="opt-onetime" onclick="selectPlan('onetime')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Single test</div><div class="po-desc">Full intake panel · 14 biomarkers · no commitment</div><div class="po-price">$179 one-time · device included</div></div></div>
+        <div class="plan-opt selected" id="opt-pro" onclick="selectPlan('pro')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Pro <span class="po-badge">Most popular</span></div><div class="po-desc">Quarterly monitoring · AI dashboard · clinic sync</div><div class="po-price">$49/mo · billed quarterly</div></div></div>
+        <div class="plan-opt" id="opt-clinical" onclick="selectPlan('clinical')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Clinical+ <span class="po-badge" style="background:#B5632A;">Best value</span></div><div class="po-desc">Monthly testing · priority clinical support</div><div class="po-price">$69/mo · billed quarterly</div></div></div>
+      </div>
+      <button class="btn-full" onclick="obGoTo(2)">Continue →</button>
+      <div class="signin-note">Already have an account? <a href="#">Sign in</a></div>
+    </div>
+
+    <div class="ob-step" id="ob-s2">
+      <div class="ob-eyebrow">Step 2 of 4</div>
+      <div class="ob-title">Create your account</div>
+      <div class="ob-sub">Your health data is encrypted and never sold or shared without your explicit consent.</div>
+      <div class="sel-pill" id="sp2">Pro · $49/mo <span class="chg-plan" onclick="obGoTo(1)">Change</span></div>
+      <div class="hipaa-note"><strong>Your data, your control.</strong> TRT LabOS does not access your results without your permission. You choose what to share.</div>
+      <div class="form-row"><div><label class="form-label">First name</label><input class="form-input" type="text" placeholder="Marcus" id="fname"></div><div><label class="form-label">Last name</label><input class="form-input" type="text" placeholder="Johnson" id="lname"></div></div>
+      <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" placeholder="marcus@example.com" id="email"></div>
+      <div class="form-group"><label class="form-label">Date of birth</label><input class="form-input" type="text" placeholder="MM / DD / YYYY" id="dob"><div class="form-hint">Required for physician review.</div></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Create a password" id="pw" oninput="checkPw(this.value)">
+        <div class="pw-bars"><div class="pw-bar" id="pb1"></div><div class="pw-bar" id="pb2"></div><div class="pw-bar" id="pb3"></div><div class="pw-bar" id="pb4"></div></div>
+        <div class="pw-label" id="pw-lbl">Enter a password</div>
+      </div>
+      <div class="check-row"><input type="checkbox" id="tos" checked><label for="tos">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label></div>
+      <div class="check-row"><input type="checkbox" id="share"><label for="share">I consent to share my de-identified results with TRT LabOS for product improvement. <a href="#">What does this mean?</a></label></div>
+      <div class="check-row"><input type="checkbox" id="remind" checked><label for="remind">Send me test reminders and AI insights about my results.</label></div>
+      <button class="btn-full" onclick="obGoTo(3)">Create account →</button>
+      <div class="sec-note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit encrypted · HIPAA-aligned · HSA/FSA eligible</div>
+    </div>
+
+    <div class="ob-step" id="ob-s3">
+      <div class="ob-eyebrow">Step 3 of 4</div>
+      <div class="ob-title">Where should we ship your Tasso device?</div>
+      <div class="ob-sub">Ships within 2 business days. Return mailer included — drop in any mailbox.</div>
+      <div class="sel-pill" id="sp3">Pro · $49/mo <span class="chg-plan" onclick="obGoTo(1)">Change</span></div>
+      <div class="form-group"><label class="form-label">Street address</label><input class="form-input" type="text" placeholder="123 Main Street"></div>
+      <div class="form-group"><label class="form-label">Apt / suite <span style="color:#B0B0A8;font-weight:400;">(optional)</span></label><input class="form-input" type="text" placeholder="Apt 4B"></div>
+      <div class="form-row"><div><label class="form-label">City</label><input class="form-input" type="text" placeholder="Indianapolis"></div><div><label class="form-label">State</label><select class="form-select"><option>Indiana</option><option>California</option><option>Texas</option><option>Florida</option><option>New York</option><option>Illinois</option><option>Ohio</option><option>Georgia</option><option>Arizona</option><option>Washington</option></select></div></div>
+      <div class="form-row"><div><label class="form-label">ZIP code</label><input class="form-input" type="text" placeholder="46201"></div><div><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(317) 555-0100"></div></div>
+      <div class="ship-callout"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg><div style="font-size:12.5px;color:#1A4D3B;line-height:1.5;">Ships free via USPS Priority Mail. Drop your return sample in any mailbox.</div></div>
+      <div class="order-summary">
+        <div class="os-title">Order summary</div>
+        <div class="os-row"><span class="os-label" id="os-lbl">Pro plan (quarterly)</span><span id="os-val">$147 / quarter</span></div>
+        <div class="os-row"><span class="os-label">Tasso device</span><span>Included</span></div>
+        <div class="os-row"><span class="os-label">Shipping</span><span>Free</span></div>
+        <div class="os-row total"><span class="os-label">Due today</span><span id="os-due" style="color:#1A4D3B;">$147</span></div>
+      </div>
+      <button class="btn-full" onclick="obGoTo(4)">Review &amp; confirm →</button>
+    </div>
+
+    <div class="ob-step" id="ob-s4">
+      <div style="text-align:center;padding-top:0.5rem;">
+        <div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="confirm-title">You're in, <span id="cname">there</span>.</div>
+        <div class="confirm-sub">Your <span id="cplan" style="font-weight:500;color:var(--ink);">Pro</span> subscription is active. Here's what happens next.</div>
+      </div>
+      <div class="confirm-steps">
+        <div class="confirm-step"><div class="cs-num">1</div><div><div class="cs-title">Device ships to you</div><div class="cs-desc">Arrives in 2–4 days. About 3 minutes to collect your sample.</div></div></div>
+        <div class="confirm-step"><div class="cs-num">2</div><div><div class="cs-title">Mail your sample</div><div class="cs-desc">Drop the prepaid return mailer in any mailbox.</div></div></div>
+        <div class="confirm-step"><div class="cs-num">3</div><div><div class="cs-title">Results in 2–3 days</div><div class="cs-desc">Dashboard, AI insights, and clinic-ready PDF — auto-generated.</div></div></div>
+        <div class="confirm-step"><div class="cs-num">4</div><div><div class="cs-title">Connect your clinic <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></div><div class="cs-desc">Auto-deliver results before every appointment.</div></div></div>
+      </div>
+      <button class="btn-full" onclick="showPage('dashboard')">Go to my dashboard →</button>
+      <div class="sec-note" style="margin-top:1rem;">Confirmation sent to <strong id="cemail" style="color:var(--ink);">your email</strong></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var curPage='marketing', obStep=1, selPlan='pro', menuOpen=false, billingMonthly=false;
+var planMeta={
+  onetime:{pill:'Single test · $179',osLbl:'Intake panel (one-time)',osVal:'$179',osDue:'$179',name:'Single test',warm:true},
+  pro:{pill:'Pro · $49/mo',osLbl:'Pro plan (quarterly)',osVal:'$147 / quarter',osDue:'$147',name:'Pro',warm:false},
+  clinical:{pill:'Clinical+ · $69/mo',osLbl:'Clinical+ (quarterly)',osVal:'$207 / quarter',osDue:'$207',name:'Clinical+',warm:false}
+};
+
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});
+  document.getElementById('page-'+p).classList.add('active');
+  var n=document.getElementById('nav-'+p); if(n) n.classList.add('active');
+  var isOb=p==='onboarding';
+  document.getElementById('ob-prog-outer').style.display=isOb?'block':'none';
+  document.getElementById('ob-nav-back').style.display=isOb&&obStep>1?'flex':'none';
+  document.getElementById('hamburger').style.display=isOb?'none':'flex';
+  if(menuOpen) toggleMenu();
+  curPage=p; window.scrollTo(0,0);
+}
+
+function toggleMenu(){
+  menuOpen=!menuOpen;
+  document.getElementById('hamburger').classList.toggle('open',menuOpen);
+  document.getElementById('mobile-menu').classList.toggle('open',menuOpen);
+}
+
+function startOnboarding(plan){
+  selectPlan(plan); obGoTo(1); showPage('onboarding');
+}
+
+function selectPlan(p){
+  selPlan=p;
+  ['onetime','pro','clinical'].forEach(function(id){
+    document.getElementById('opt-'+id).classList.toggle('selected',id===p);
+  });
+}
+
+function syncMeta(){
+  var m=planMeta[selPlan];
+  ['sp2','sp3'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    el.className='sel-pill'+(m.warm?' warm':'');
+    el.innerHTML=m.pill+' <span class="chg-plan" onclick="obGoTo(1)">Change</span>';
+  });
+  document.getElementById('os-lbl').textContent=m.osLbl;
+  document.getElementById('os-val').textContent=m.osVal;
+  document.getElementById('os-due').textContent=m.osDue;
+  document.getElementById('cplan').textContent=m.name;
+  var fn=document.getElementById('fname'); if(fn&&fn.value.trim()) document.getElementById('cname').textContent=fn.value.trim();
+  var em=document.getElementById('email'); if(em&&em.value.trim()) document.getElementById('cemail').textContent=em.value.trim();
+}
+
+function obGoTo(n){
+  document.getElementById('ob-s'+obStep).classList.remove('active');
+  obStep=n;
+  document.getElementById('ob-s'+n).classList.add('active');
+  syncMeta(); updateObProg(n);
+  document.getElementById('ob-nav-back').style.display=n>1?'flex':'none';
+  window.scrollTo(0,0);
+}
+
+function obBack(){ if(obStep>1) obGoTo(obStep-1); }
+
+function updateObProg(n){
+  for(var i=1;i<=4;i++){
+    var c=document.getElementById('obc'+i), l=document.getElementById('obl'+i);
+    c.className='obs-circle'+(i<n?' done':i===n?' active':'');
+    c.textContent=i<n?'✓':String(i);
+    l.className='obs-label'+(i===n?' active':'');
+  }
+  for(var j=1;j<=3;j++){
+    var ln=document.getElementById('obline'+j);
+    if(ln) ln.className='obs-line'+(j<n?' done':'');
+  }
+}
+
+function checkPw(v){
+  var s=0;
+  if(v.length>=8)s++; if(/[A-Z]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+  var cls=['','weak','fair','good','strong'],lbl=['','Weak','Fair','Good','Strong'];
+  for(var i=1;i<=4;i++) document.getElementById('pb'+i).className='pw-bar'+(i<=s?' '+cls[s]:'');
+  document.getElementById('pw-lbl').textContent=v.length===0?'Enter a password':lbl[s]||'Weak';
+}
+
+function toggleBilling(){
+  billingMonthly=!billingMonthly;
+  document.getElementById('p-tgl').classList.toggle('monthly',billingMonthly);
+  document.getElementById('tl-q').classList.toggle('active',!billingMonthly);
+  document.getElementById('tl-m').classList.toggle('active',billingMonthly);
+  document.getElementById('p-save').style.opacity=billingMonthly?'0.4':'1';
+  document.getElementById('pro-price').innerHTML=billingMonthly?'<sup>$</sup>59':'<sup>$</sup>49';
+  document.getElementById('pro-cycle').textContent=billingMonthly?'/mo · billed monthly':'/mo · billed quarterly';
+  document.getElementById('pro-commit').textContent=billingMonthly?'No commitment · cancel anytime':'3-month commitment · cancel anytime after';
+  document.getElementById('clin-price').innerHTML=billingMonthly?'<sup>$</sup>85':'<sup>$</sup>69';
+  document.getElementById('clin-cycle').textContent=billingMonthly?'/mo · billed monthly':'/mo · billed quarterly';
+  document.getElementById('clin-commit').textContent=billingMonthly?'No commitment · cancel anytime':'3-month commitment · cancel anytime after';
+}
+</script>
+</body>
+</html>
