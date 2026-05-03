@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — TRT LabOS</title>
+<meta name="description" content="TRT LabOS was built by a TRT patient tired of the existing lab experience. Meet Chad Manley and learn about our mission, clinical credentials, and clinic partnerships.">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ── FOUNDER ── */
+.founder-section{padding:4rem 1.5rem 5rem;}
+.founder-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:4.5rem;align-items:start;}
+.founder-photo-wrap{position:relative;flex-shrink:0;}
+.founder-photo{width:220px;height:220px;border-radius:20px;object-fit:cover;object-position:center top;display:block;background:#E4EDE9;}
+.founder-photo-ph{width:220px;height:220px;border-radius:20px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;}
+.founder-badge{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:#1A4D3B;color:#ffffff;font-size:10.5px;font-weight:500;padding:5px 13px;border-radius:20px;white-space:nowrap;letter-spacing:0.2px;}
+.founder-eyebrow{font-size:10.5px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:var(--warm);margin-bottom:0.5rem;}
+.founder-name{font-family:'Instrument Serif',serif;font-size:34px;color:var(--ink);letter-spacing:-0.6px;line-height:1.05;margin-bottom:0.3rem;}
+.founder-title{font-size:13.5px;color:var(--muted);margin-bottom:1.75rem;line-height:1.5;}
+.founder-story{font-size:15px;color:var(--ink);line-height:1.8;font-weight:300;}
+.founder-story p{margin-bottom:1.1rem;}
+.founder-story p:last-child{margin-bottom:0;}
+.founder-quote{border-left:3px solid #1A4D3B;padding-left:1.25rem;margin:1.75rem 0;font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink);line-height:1.5;font-style:italic;}
+.founder-creds{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.75rem;}
+.cred-pill{font-size:12px;padding:5px 12px;border-radius:20px;background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+
+/* ── MISSION CARDS ── */
+.mission-section{background:var(--surface);padding:4rem 1.5rem;}
+.mission-inner{max-width:960px;margin:0 auto;}
+.mission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.mission-card{background:#ffffff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;}
+.mission-icon{width:44px;height:44px;border-radius:10px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.mission-card h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:6px;}
+.mission-card p{font-size:13.5px;color:var(--muted);line-height:1.65;}
+
+/* ── TRUST / CREDENTIALS ── */
+.trust-section{padding:4rem 1.5rem;}
+.trust-inner{max-width:960px;margin:0 auto;}
+.trust-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:2.5rem;}
+.trust-item{display:flex;align-items:flex-start;gap:14px;background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;}
+.trust-icon-box{width:40px;height:40px;border-radius:9px;background:#E4EDE9;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.trust-item h4{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+.trust-item p{font-size:13px;color:var(--muted);line-height:1.55;}
+
+/* ── CLINIC PARTNERS ── */
+.partners-section{background:#0F1A16;padding:4.5rem 1.5rem;}
+.partners-inner{max-width:960px;margin:0 auto;}
+.partners-section .eyebrow{color:rgba(255,255,255,0.35);}
+.partners-section .sec-title{color:#ffffff;}
+.partners-section .sec-sub{color:rgba(255,255,255,0.4);}
+.partners-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-bottom:3rem;}
+.p-stat{text-align:center;}
+.p-stat-num{font-family:'Instrument Serif',serif;font-size:52px;color:#ffffff;line-height:1;margin-bottom:5px;}
+.p-stat-lbl{font-size:13px;color:rgba(255,255,255,0.38);line-height:1.4;}
+.partner-logos{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.partner-logo-ph{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;height:60px;display:flex;align-items:center;justify-content:center;padding:0 1rem;}
+.partner-logo-ph span{font-size:12.5px;color:rgba(255,255,255,0.2);font-weight:500;letter-spacing:0.3px;text-align:center;line-height:1.3;}
+.partner-note{font-size:12px;color:rgba(255,255,255,0.18);text-align:center;margin-top:1.5rem;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:720px){
+  .founder-inner{grid-template-columns:1fr;gap:2.5rem;}
+  .founder-photo,.founder-photo-ph{width:160px;height:160px;}
+  .founder-badge{font-size:10px;}
+  .mission-grid{grid-template-columns:1fr;}
+  .trust-grid{grid-template-columns:1fr;}
+  .partners-stats{grid-template-columns:1fr;gap:1.5rem;text-align:center;}
+  .partner-logos{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/contact.html">Talk to Us</a>
+    <a href="/dashboard.html" class="nav-cta">Dashboard</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">Home</a>
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/contact.html">Talk to Us</a>
+  <a href="/dashboard.html" class="mob-cta">My Dashboard</a>
+</div>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Our story</div>
+    <h1>Built by a patient who<br><em>needed it.</em></h1>
+    <p>TRT LabOS didn't start in a lab or a boardroom. It started with a frustrating experience that millions of TRT patients know too well.</p>
+  </div>
+</section>
+
+<!-- Founder -->
+<section class="founder-section">
+  <div class="founder-inner">
+    <div class="founder-photo-wrap">
+      <img
+        src="img/chad-manley.jpg"
+        alt="Chad Manley, Founder of TRT LabOS"
+        class="founder-photo"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <div class="founder-photo-ph" style="display:none;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="founder-badge">Founder &amp; CEO</div>
+    </div>
+
+    <div>
+      <div class="founder-eyebrow">The founder</div>
+      <div class="founder-name">Chad Manley</div>
+      <div class="founder-title">Indianapolis, IN · MBA, Butler University · VP at Synchrony Financial</div>
+
+      <div class="founder-story">
+        <p>I've been on TRT for years. Like a lot of patients, I spent too long frustrated by the same broken loop — scheduling a draw at Quest or Labcorp, dreading the waiting room, getting back generic results with no context, and hoping my clinic actually received them before my next appointment.</p>
+
+        <div class="founder-quote">"I have vasovagal reactions to blood draws. For me, every in-clinic appointment wasn't just inconvenient — it was something I genuinely dreaded."</div>
+
+        <p>When I discovered at-home microsampling devices, something clicked. The anxiety was gone. The results were the same. But the infrastructure around them — the TRT-specific interpretation, the longitudinal tracking, the automatic clinic delivery — didn't exist. So I built it.</p>
+
+        <p>My background is in enterprise transformation — helping large organizations build systems that actually work at scale. I've spent 15+ years turning complex operational problems into clean, reliable processes. TRT lab infrastructure is exactly that kind of problem, and patients deserve better than what exists today.</p>
+
+        <p>TRT LabOS is what I wished existed when I started. I'm building it for every patient who dreads the waiting room, questions their numbers, and deserves a clinic experience that starts with real data.</p>
+      </div>
+
+      <div class="founder-creds">
+        <span class="cred-pill">TRT patient</span>
+        <span class="cred-pill">MBA · Butler University</span>
+        <span class="cred-pill">VP · Synchrony Financial</span>
+        <span class="cred-pill">Enterprise transformation</span>
+        <span class="cred-pill">Indianapolis, IN</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission -->
+<section class="mission-section">
+  <div class="mission-inner">
+    <div class="eyebrow">What we believe</div>
+    <div class="sec-title">Three things we won't compromise on.</div>
+    <div class="mission-grid">
+      <div class="mission-card">
+        <div class="mission-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Built from the inside out</h3>
+        <p>This product was designed by a patient, for patients. Every feature exists because someone on TRT actually needed it — not because a market study said it might convert.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>No shortcuts on clinical quality</h3>
+        <p>CLIA-certified lab. Physician-reviewed results. Every panel is designed with TRT physicians, not pulled from a generic wellness menu. Your data is accurate or it's worthless.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <h3>Your data stays yours</h3>
+        <p>HIPAA-aligned from day one. Your results are shared with your clinic because you choose to, not because it's the default. You control who sees your data and when.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Clinical credentials -->
+<section class="trust-section">
+  <div class="trust-inner">
+    <div class="eyebrow">Clinical credentials</div>
+    <div class="sec-title">What makes the lab side trustworthy.</div>
+    <div class="sec-sub">At-home doesn't mean unregulated. Every test runs through the same certified infrastructure as a traditional lab draw.</div>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h4>CLIA-certified laboratory</h4>
+          <p>All samples are processed by a federally certified laboratory under CLIA (Clinical Laboratory Improvement Amendments). The same certification standard required of every hospital and reference lab in the US.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div>
+          <h4>Physician-reviewed results</h4>
+          <p>Every panel is reviewed by a licensed physician before results are released. You receive interpretation, not just numbers — and your clinic receives a structured clinical report.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div>
+          <h4>HIPAA-aligned data handling</h4>
+          <p>Your health data is encrypted in transit and at rest. Access controls, audit logs, and data sharing are built to meet HIPAA standards. Your information is never sold or used for advertising.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div>
+          <h4>At-home collection via Tasso</h4>
+          <p>The Tasso device uses a capillary microsampling method — painless, needle-free, and validated against venipuncture for the biomarkers in our panels. No trained phlebotomist required.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <h4>HSA / FSA eligible</h4>
+          <p>TRT LabOS panels qualify as medical expenses under IRS guidelines. Pay with your HSA or FSA card at checkout — no reimbursement forms, no waiting.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <h4>2–3 day turnaround</h4>
+          <p>Mail your sample via USPS (prepaid label included) and results are typically ready in 2–3 business days. Physician review and clinic delivery happen automatically — no follow-up needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Clinic partners -->
+<section class="partners-section">
+  <div class="partners-inner">
+    <div class="eyebrow">Clinic partnerships</div>
+    <div class="sec-title">Trusted by the clinics that take TRT seriously.</div>
+    <div class="sec-sub">TRT LabOS connects your patients' at-home labs directly into your clinic workflow — no IT integration, no extra staff, no new software to learn.</div>
+    <div class="partners-stats">
+      <div class="p-stat"><div class="p-stat-num">40+</div><div class="p-stat-lbl">TRT clinic partners</div></div>
+      <div class="p-stat"><div class="p-stat-num">$0</div><div class="p-stat-lbl">Setup fee for partner clinics</div></div>
+      <div class="p-stat"><div class="p-stat-num">100%</div><div class="p-stat-lbl">Automatic report delivery</div></div>
+    </div>
+    <div class="partner-logos">
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+      <div class="partner-logo-ph"><span>Partner clinic</span></div>
+    </div>
+    <p class="partner-note">Clinic partner logos displayed with permission · Interested in partnering? <a href="/contact.html" style="color:rgba(255,255,255,0.35);text-decoration:none;">Talk to us →</a></p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="wrap">
+  <div class="cta-strip">
+    <div>
+      <h3>Ready to take control of your protocol?</h3>
+      <p>Order your first test today or connect your clinic to get started.</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0;">
+      <a href="/signup.html?plan=onetime" class="btn-white">Order a test — $179</a>
+      <a href="/contact.html" style="display:inline-block;background:rgba(255,255,255,0.1);color:#ffffff;border:2px solid rgba(255,255,255,0.25);padding:11px 22px;border-radius:7px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;text-decoration:none;line-height:1;transition:background 0.15s;">For clinics →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/pricing.html">Pricing</a><a href="/dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="#">Partner portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="mailto:hello@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open'); m.classList.toggle('open');
+}
+</script>
+</body>
+</html>
