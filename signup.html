@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Get Started — TRT LabOS</title>
-<meta name="description" content="Order your first TRT lab panel or start a subscription. At-home blood collection, TRT-specific biomarkers, AI insights.">
+<meta name="description" content="Order your TRT lab panel or start a monitoring subscription. At-home blood collection, TRT-specific biomarkers, AI insights.">
 <link rel="stylesheet" href="styles.css?v=2">
 <style>
 .ob-prog-wrap{background:#ffffff;border-bottom:1px solid var(--border);padding:0 2rem;}
-.ob-steps{max-width:520px;margin:0 auto;display:flex;align-items:center;padding:1rem 0;}
-.obs{display:flex;align-items:center;gap:8px;flex:1;}
+.ob-steps{max-width:560px;margin:0 auto;display:flex;align-items:center;padding:1rem 0;}
+.obs{display:flex;align-items:center;gap:6px;flex:1;}
 .obs-circle{width:24px;height:24px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#6A6A63;transition:all 0.2s;}
 .obs-circle.active{background:#1A4D3B;border-color:#1A4D3B;color:#ffffff;}
 .obs-circle.done{background:#E4EDE9;border-color:#1A4D3B;color:#1A4D3B;}
-.obs-label{font-size:12px;color:var(--muted);white-space:nowrap;}
+.obs-label{font-size:11.5px;color:var(--muted);white-space:nowrap;}
 .obs-label.active{color:var(--ink);font-weight:500;}
-.obs-line{flex:1;height:1px;background:rgba(0,0,0,0.12);margin:0 8px;}
+.obs-line{flex:1;height:1px;background:rgba(0,0,0,0.12);margin:0 6px;}
 .obs-line.done{background:#1A4D3B;}
 .ob-wrap{max-width:520px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
 .ob-step{display:none;}
@@ -32,10 +32,11 @@
 .plan-opt.onetime.selected{border-color:#B5632A;background:#F7EDE3;}
 .plan-opt.onetime.selected .po-name{color:#B5632A;}
 .plan-opt.onetime.selected .radio-c{border-color:#B5632A;background:#B5632A;}
-.radio-c{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.15s;}
+.radio-c{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;transition:all 0.15s;}
 .plan-opt.selected .radio-c{border-color:#1A4D3B;background:#1A4D3B;}
 .radio-d{width:7px;height:7px;border-radius:50%;background:#ffffff;display:none;}
 .plan-opt.selected .radio-d{display:block;}
+.po-best{font-size:10px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;color:var(--subtle);margin-bottom:3px;}
 .po-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px;}
 .po-desc{font-size:12.5px;color:var(--muted);line-height:1.45;margin-bottom:5px;}
 .po-price{font-size:12px;font-weight:500;color:#1A4D3B;}
@@ -75,6 +76,10 @@
 .signin-note{text-align:center;font-size:13px;color:var(--muted);margin-top:1rem;}
 .signin-note a{color:#1A4D3B;text-decoration:none;font-weight:500;}
 .ship-callout{background:#E4EDE9;border-radius:9px;padding:11px 13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:1.25rem;}
+.card-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:1.1rem;}
+.hsa-badge{background:#F7EDE3;color:#B5632A;border-radius:8px;padding:9px 12px;font-size:12.5px;display:flex;align-items:center;gap:7px;margin-bottom:1.1rem;line-height:1.45;}
+.card-brands{display:flex;gap:6px;align-items:center;margin-bottom:1.25rem;}
+.card-brand{background:#ffffff;border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:11px;color:var(--muted);font-weight:500;}
 .confirm-icon{width:56px;height:56px;border-radius:50%;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;}
 .confirm-title{font-family:'Instrument Serif',serif;font-size:30px;color:var(--ink);text-align:center;margin-bottom:0.5rem;}
 .confirm-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:2rem;line-height:1.6;}
@@ -84,7 +89,7 @@
 .cs-title{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:2px;}
 .cs-desc{font-size:12.5px;color:var(--muted);line-height:1.45;}
 @media(max-width:520px){
-  .form-row{grid-template-columns:1fr;}
+  .form-row,.card-row{grid-template-columns:1fr;}
   .ob-steps{overflow-x:auto;}
 }
 </style>
@@ -108,88 +113,172 @@
     <div class="obs-line" id="obline2"></div>
     <div class="obs"><div class="obs-circle" id="obc3">3</div><span class="obs-label" id="obl3">Shipping</span></div>
     <div class="obs-line" id="obline3"></div>
-    <div class="obs"><div class="obs-circle" id="obc4">4</div><span class="obs-label" id="obl4">Confirm</span></div>
+    <div class="obs"><div class="obs-circle" id="obc4">4</div><span class="obs-label" id="obl4">Payment</span></div>
+    <div class="obs-line" id="obline4"></div>
+    <div class="obs"><div class="obs-circle" id="obc5">5</div><span class="obs-label" id="obl5">Confirm</span></div>
   </div>
 </div>
 
 <div class="ob-wrap">
 
-  <!-- STEP 1 -->
+  <!-- STEP 1: PLAN -->
   <div class="ob-step active" id="ob-s1">
-    <div class="ob-eyebrow">Step 1 of 4</div>
+    <div class="ob-eyebrow">Step 1 of 5</div>
     <div class="ob-title">Choose your plan</div>
-    <div class="ob-sub">Start with a single test or subscribe for continuous monitoring and better per-test pricing.</div>
+    <div class="ob-sub">New to TRT or want a complete baseline? Start with a single test. Already on a protocol and ready to monitor? Subscribe.</div>
     <div class="plan-opts">
-      <div class="plan-opt onetime" id="opt-onetime" onclick="selectPlan('onetime')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Single test</div><div class="po-desc">Full intake panel · 14 biomarkers · no commitment</div><div class="po-price">$179 one-time · device included</div></div></div>
-      <div class="plan-opt selected" id="opt-pro" onclick="selectPlan('pro')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Pro <span class="po-badge">Most popular</span></div><div class="po-desc">Quarterly monitoring · AI dashboard · clinic sync</div><div class="po-price">$49/mo · billed quarterly</div></div></div>
-      <div class="plan-opt" id="opt-clinical" onclick="selectPlan('clinical')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Clinical+ <span class="po-badge" style="background:#B5632A;">Best value</span></div><div class="po-desc">Monthly testing · priority clinical support</div><div class="po-price">$69/mo · billed quarterly</div></div></div>
+      <div class="plan-opt onetime" id="opt-onetime" onclick="selectPlan('onetime')">
+        <div class="radio-c"><div class="radio-d"></div></div>
+        <div>
+          <div class="po-best">New to TRT or want a baseline</div>
+          <div class="po-name">Single test — Intake panel</div>
+          <div class="po-desc">Complete diagnostic snapshot — hormones, blood safety, lipids, CMP, PSA, thyroid, and pituitary markers. Physician reviewed. No commitment.</div>
+          <div class="po-price">$179 one-time · Tasso device included</div>
+        </div>
+      </div>
+      <div class="plan-opt selected" id="opt-pro" onclick="selectPlan('pro')">
+        <div class="radio-c"><div class="radio-d"></div></div>
+        <div>
+          <div class="po-best">Already on TRT · most patients</div>
+          <div class="po-name">Pro <span class="po-badge">Most popular</span></div>
+          <div class="po-desc">10 core markers every quarter + CMP &amp; PSA safety check every 6 months. AI dashboard, trend tracking, and clinic sync.</div>
+          <div class="po-price">$49/mo · billed quarterly · 4 tests/year</div>
+        </div>
+      </div>
+      <div class="plan-opt" id="opt-clinical" onclick="selectPlan('clinical')">
+        <div class="radio-c"><div class="radio-d"></div></div>
+        <div>
+          <div class="po-best">Active optimization</div>
+          <div class="po-name">Clinical+ <span class="po-badge" style="background:#B5632A;">Best value</span></div>
+          <div class="po-desc">10 core markers every month + CMP &amp; PSA safety check every 3 months. Monthly cadence with priority clinical support.</div>
+          <div class="po-price">$69/mo · billed quarterly · 12 tests/year</div>
+        </div>
+      </div>
     </div>
     <button class="btn-full" onclick="obGoTo(2)">Continue →</button>
     <div class="signin-note">Already have an account? <a href="#">Sign in</a></div>
   </div>
 
-  <!-- STEP 2 -->
+  <!-- STEP 2: ACCOUNT -->
   <div class="ob-step" id="ob-s2">
-    <div class="ob-eyebrow">Step 2 of 4</div>
+    <div class="ob-eyebrow">Step 2 of 5</div>
     <div class="ob-title">Create your account</div>
-    <div class="ob-sub">Your health data is encrypted and never sold or shared without your explicit consent.</div>
-    <div class="sel-pill" id="sp2" onclick="obGoTo(1)">Pro · $49/mo · change →</div>
-    <div class="hipaa-note"><strong>Your data, your control.</strong> TRT LabOS does not access your results without your permission. You choose what to share — with your clinic, with us, or no one.</div>
-    <div class="form-row"><div><label class="form-label">First name</label><input class="form-input" type="text" placeholder="Marcus" id="fname"></div><div><label class="form-label">Last name</label><input class="form-input" type="text" placeholder="Johnson" id="lname"></div></div>
+    <div class="ob-sub">Your health data is encrypted, HIPAA-aligned, and never shared without your consent.</div>
+    <div class="sel-pill" id="sp2" onclick="obGoTo(1)"></div>
+    <div class="hipaa-note"><strong>Your data, your control.</strong> Lab results are yours. You choose what to share with your clinic — and you can revoke access at any time.</div>
+    <div class="form-row">
+      <div><label class="form-label">First name</label><input class="form-input" type="text" placeholder="Marcus" id="fname"></div>
+      <div><label class="form-label">Last name</label><input class="form-input" type="text" placeholder="Johnson" id="lname"></div>
+    </div>
     <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" placeholder="marcus@example.com" id="email"></div>
-    <div class="form-group"><label class="form-label">Date of birth</label><input class="form-input" type="text" placeholder="MM / DD / YYYY" id="dob"><div class="form-hint">Required for physician review of your lab results.</div></div>
-    <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Create a password" id="pw" oninput="checkPw(this.value)">
+    <div class="form-group">
+      <label class="form-label">Date of birth</label>
+      <input class="form-input" type="text" placeholder="MM / DD / YYYY" id="dob">
+      <div class="form-hint">Required for physician review of your lab results.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" placeholder="Create a password" id="pw" oninput="checkPw(this.value)">
       <div class="pw-bars"><div class="pw-bar" id="pb1"></div><div class="pw-bar" id="pb2"></div><div class="pw-bar" id="pb3"></div><div class="pw-bar" id="pb4"></div></div>
       <div class="pw-label" id="pw-lbl">Enter a password</div>
     </div>
+    <div class="form-group">
+      <label class="form-label">TRT clinic <span style="color:#B0B0A8;font-weight:400;">(optional)</span></label>
+      <input class="form-input" type="text" placeholder="e.g. Defy Medical, your local clinic..." id="clinic">
+      <div class="form-hint">We'll auto-deliver your results before each appointment. You can connect or change this later.</div>
+    </div>
     <div class="check-row"><input type="checkbox" id="tos" checked><label for="tos">I agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</label></div>
-    <div class="check-row"><input type="checkbox" id="share"><label for="share">I consent to share my de-identified results with TRT LabOS for product improvement. <a href="#">What does this mean?</a></label></div>
     <div class="check-row"><input type="checkbox" id="remind" checked><label for="remind">Send me test reminders and AI insights about my results.</label></div>
-    <button class="btn-full" onclick="obGoTo(3)">Create account →</button>
+    <button class="btn-full" onclick="obGoTo(3)">Continue →</button>
     <div class="sec-note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit encrypted · HIPAA-aligned · HSA/FSA eligible</div>
   </div>
 
-  <!-- STEP 3 -->
+  <!-- STEP 3: SHIPPING -->
   <div class="ob-step" id="ob-s3">
-    <div class="ob-eyebrow">Step 3 of 4</div>
+    <div class="ob-eyebrow">Step 3 of 5</div>
     <div class="ob-title">Where should we ship your Tasso device?</div>
-    <div class="ob-sub">First device ships within 2 business days. Return mailer included.</div>
-    <div class="sel-pill" id="sp3" onclick="obGoTo(1)">Pro · $49/mo · change →</div>
+    <div class="ob-sub">Ships within 2 business days. Prepaid return mailer included — drop it in any USPS mailbox.</div>
+    <div class="sel-pill" id="sp3" onclick="obGoTo(1)"></div>
     <div class="form-group"><label class="form-label">Street address</label><input class="form-input" type="text" placeholder="123 Main Street"></div>
     <div class="form-group"><label class="form-label">Apt / suite <span style="color:#B0B0A8;font-weight:400;">(optional)</span></label><input class="form-input" type="text" placeholder="Apt 4B"></div>
     <div class="form-row">
       <div><label class="form-label">City</label><input class="form-input" type="text" placeholder="Indianapolis"></div>
-      <div><label class="form-label">State</label>
+      <div>
+        <label class="form-label">State</label>
         <select class="form-select">
           <option value="">Select state</option>
           <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option selected>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
         </select>
       </div>
     </div>
-    <div class="form-row"><div><label class="form-label">ZIP code</label><input class="form-input" type="text" placeholder="46201"></div><div><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(317) 555-0100"></div></div>
-    <div class="ship-callout"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg><div style="font-size:12.5px;color:#1A4D3B;line-height:1.5;">Ships free via USPS Priority Mail. Drop your return sample in any mailbox.</div></div>
+    <div class="form-row">
+      <div><label class="form-label">ZIP code</label><input class="form-input" type="text" placeholder="46201"></div>
+      <div><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(317) 555-0100"></div>
+    </div>
+    <div class="ship-callout">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <div style="font-size:12.5px;color:#1A4D3B;line-height:1.5;">Free shipping via USPS Priority Mail to all 50 states. Continental US addresses ship within 2 business days.</div>
+    </div>
+    <button class="btn-full" onclick="obGoTo(4)">Continue to payment →</button>
+  </div>
+
+  <!-- STEP 4: PAYMENT -->
+  <div class="ob-step" id="ob-s4">
+    <div class="ob-eyebrow">Step 4 of 5</div>
+    <div class="ob-title">Payment</div>
+    <div class="ob-sub">Secure checkout. HSA and FSA cards accepted.</div>
+    <div class="sel-pill" id="sp4" onclick="obGoTo(1)"></div>
+
     <div class="order-summary">
       <div class="os-title">Order summary</div>
       <div class="os-row"><span class="os-label" id="os-lbl">Pro plan (quarterly)</span><span id="os-val">$147 / quarter</span></div>
       <div class="os-row"><span class="os-label">Tasso device</span><span>Included</span></div>
       <div class="os-row"><span class="os-label">Shipping</span><span>Free</span></div>
-      <div class="os-row total"><span class="os-label">Due today</span><span id="os-due" style="color:#1A4D3B;">$147</span></div>
+      <div class="os-row total"><span class="os-label">Due today</span><span id="os-due" style="color:#1A4D3B;font-weight:600;">$147</span></div>
     </div>
-    <button class="btn-full" onclick="obGoTo(4)">Review &amp; confirm →</button>
+
+    <div class="hsa-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B5632A" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      HSA / FSA eligible — enter your benefits card below
+    </div>
+
+    <div class="card-brands">
+      <span class="card-brand">Visa</span>
+      <span class="card-brand">Mastercard</span>
+      <span class="card-brand">Amex</span>
+      <span class="card-brand">Discover</span>
+      <span class="card-brand">HSA/FSA</span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Card number</label>
+      <input class="form-input" type="text" placeholder="1234  5678  9012  3456" id="cardnum" maxlength="19" oninput="fmtCard(this)">
+    </div>
+    <div class="card-row">
+      <div><label class="form-label">Name on card</label><input class="form-input" type="text" placeholder="Marcus Johnson"></div>
+      <div><label class="form-label">Expiry</label><input class="form-input" type="text" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this)"></div>
+      <div><label class="form-label">CVV</label><input class="form-input" type="text" placeholder="123" maxlength="4"></div>
+    </div>
+
+    <button class="btn-full" onclick="obGoTo(5)">Place order →</button>
+    <div class="sec-note" style="margin-top:1rem;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      256-bit SSL · PCI compliant · Powered by Stripe
+    </div>
   </div>
 
-  <!-- STEP 4 -->
-  <div class="ob-step" id="ob-s4">
+  <!-- STEP 5: CONFIRM -->
+  <div class="ob-step" id="ob-s5">
     <div style="text-align:center;padding-top:0.5rem;">
       <div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="confirm-title">You're in, <span id="cname">there</span>.</div>
-      <div class="confirm-sub">Your <span id="cplan" style="font-weight:500;color:var(--ink);">Pro</span> subscription is active. Here's what happens next.</div>
+      <div class="confirm-sub">Your <span id="cplan" style="font-weight:500;color:var(--ink);">Pro</span> plan is active. Here's what happens next.</div>
     </div>
     <div class="confirm-steps">
-      <div class="confirm-step"><div class="cs-num">1</div><div><div class="cs-title">Device ships to you</div><div class="cs-desc">Arrives in 2–4 days. About 3 minutes to collect your sample.</div></div></div>
-      <div class="confirm-step"><div class="cs-num">2</div><div><div class="cs-title">Mail your sample</div><div class="cs-desc">Drop the prepaid return mailer in any mailbox.</div></div></div>
-      <div class="confirm-step"><div class="cs-num">3</div><div><div class="cs-title">Results in 2–3 days</div><div class="cs-desc">Dashboard, AI insights, and clinic-ready PDF — auto-generated.</div></div></div>
-      <div class="confirm-step"><div class="cs-num">4</div><div><div class="cs-title">Connect your clinic <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></div><div class="cs-desc">Auto-deliver results before every appointment.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">1</div><div><div class="cs-title">Device ships to you</div><div class="cs-desc">Arrives in 2–4 business days. About 3 minutes to collect your sample at home.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">2</div><div><div class="cs-title">Mail your sample</div><div class="cs-desc">Drop the prepaid return mailer in any USPS mailbox — no post office trip required.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">3</div><div><div class="cs-title">Results in 2–3 days</div><div class="cs-desc">Dashboard unlocks with AI insights and a clinic-ready PDF — auto-generated the moment results are ready.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">4</div><div><div class="cs-title">Clinic receives your report <span style="font-size:11px;color:var(--muted);font-weight:400;">(if connected)</span></div><div class="cs-desc">Results auto-delivered before your next appointment. No faxing, no manual upload.</div></div></div>
     </div>
     <a href="/dashboard.html" class="btn-full">Go to my dashboard →</a>
     <div class="sec-note" style="margin-top:1rem;">Confirmation sent to <strong id="cemail" style="color:var(--ink);">your email</strong></div>
@@ -200,12 +289,11 @@
 <script>
 var obStep=1, selPlan='pro';
 var planMeta={
-  onetime:{pill:'Single test · $179 →',osLbl:'Intake panel (one-time)',osVal:'$179',osDue:'$179',name:'Single test',warm:true},
-  pro:{pill:'Pro · $49/mo · change →',osLbl:'Pro plan (quarterly)',osVal:'$147 / quarter',osDue:'$147',name:'Pro',warm:false},
-  clinical:{pill:'Clinical+ · $69/mo · change →',osLbl:'Clinical+ (quarterly)',osVal:'$207 / quarter',osDue:'$207',name:'Clinical+',warm:false}
+  onetime:{pill:'Single test · $179',osLbl:'Intake panel (one-time)',osVal:'$179',osDue:'$179',name:'Single test',warm:true},
+  pro:{pill:'Pro · $49/mo · change',osLbl:'Pro plan (quarterly)',osVal:'$147 / quarter',osDue:'$147',name:'Pro',warm:false},
+  clinical:{pill:'Clinical+ · $69/mo · change',osLbl:'Clinical+ (quarterly)',osVal:'$207 / quarter',osDue:'$207',name:'Clinical+',warm:false}
 };
 
-// Read plan from URL param
 var params=new URLSearchParams(window.location.search);
 var urlPlan=params.get('plan');
 if(urlPlan&&planMeta[urlPlan]) selectPlan(urlPlan);
@@ -220,18 +308,20 @@ function selectPlan(p){
 
 function syncMeta(){
   var m=planMeta[selPlan];
-  ['sp2','sp3'].forEach(function(id){
+  ['sp2','sp3','sp4'].forEach(function(id){
     var el=document.getElementById(id); if(!el) return;
     el.className='sel-pill'+(m.warm?' warm':'');
-    el.textContent=m.pill;
+    el.textContent=m.pill+' ·  change →';
     el.onclick=function(){obGoTo(1);};
   });
-  if(document.getElementById('os-lbl')) document.getElementById('os-lbl').textContent=m.osLbl;
-  if(document.getElementById('os-val')) document.getElementById('os-val').textContent=m.osVal;
-  if(document.getElementById('os-due')) document.getElementById('os-due').textContent=m.osDue;
-  if(document.getElementById('cplan')) document.getElementById('cplan').textContent=m.name;
-  var fn=document.getElementById('fname'); if(fn&&fn.value.trim()&&document.getElementById('cname')) document.getElementById('cname').textContent=fn.value.trim();
-  var em=document.getElementById('email'); if(em&&em.value.trim()&&document.getElementById('cemail')) document.getElementById('cemail').textContent=em.value.trim();
+  var osLbl=document.getElementById('os-lbl'); if(osLbl) osLbl.textContent=m.osLbl;
+  var osVal=document.getElementById('os-val'); if(osVal) osVal.textContent=m.osVal;
+  var osDue=document.getElementById('os-due'); if(osDue) osDue.textContent=m.osDue;
+  var cplan=document.getElementById('cplan'); if(cplan) cplan.textContent=m.name;
+  var fn=document.getElementById('fname');
+  if(fn&&fn.value.trim()){var cn=document.getElementById('cname'); if(cn) cn.textContent=fn.value.trim();}
+  var em=document.getElementById('email');
+  if(em&&em.value.trim()){var ce=document.getElementById('cemail'); if(ce) ce.textContent=em.value.trim();}
 }
 
 function obGoTo(n){
@@ -246,13 +336,13 @@ function obGoTo(n){
 function obBack(){ if(obStep>1) obGoTo(obStep-1); }
 
 function updateObProg(n){
-  for(var i=1;i<=4;i++){
+  for(var i=1;i<=5;i++){
     var c=document.getElementById('obc'+i), l=document.getElementById('obl'+i);
     c.className='obs-circle'+(i<n?' done':i===n?' active':'');
     c.textContent=i<n?'✓':String(i);
     l.className='obs-label'+(i===n?' active':'');
   }
-  for(var j=1;j<=3;j++){
+  for(var j=1;j<=4;j++){
     var ln=document.getElementById('obline'+j);
     if(ln) ln.className='obs-line'+(j<n?' done':'');
   }
@@ -264,6 +354,17 @@ function checkPw(v){
   var cls=['','weak','fair','good','strong'],lbl=['','Weak','Fair','Good','Strong'];
   for(var i=1;i<=4;i++) document.getElementById('pb'+i).className='pw-bar'+(i<=s?' '+cls[s]:'');
   document.getElementById('pw-lbl').textContent=v.length===0?'Enter a password':lbl[s]||'Weak';
+}
+
+function fmtCard(el){
+  var v=el.value.replace(/\D/g,'').substring(0,16);
+  el.value=v.replace(/(.{4})/g,'$1  ').trim();
+}
+
+function fmtExp(el){
+  var v=el.value.replace(/\D/g,'').substring(0,4);
+  if(v.length>=2) v=v.substring(0,2)+' / '+v.substring(2);
+  el.value=v;
 }
 </script>
 </body>
