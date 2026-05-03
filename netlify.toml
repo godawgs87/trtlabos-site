@@ -15,7 +15,12 @@
 
 [[redirects]]
   from = "/dashboard"
-  to = "/dashboard.html"
+  to = "/demo-dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/demo-dashboard"
+  to = "/demo-dashboard.html"
   status = 200
 
 [[redirects]]
@@ -46,4 +51,14 @@
 [[redirects]]
   from = "/clinic"
   to = "/clinic.html"
+  status = 200
+
+[[redirects]]
+  from = "/demo-clinic-dashboard"
+  to = "/demo-clinic-dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/clinic-portal"
+  to = "/demo-clinic-dashboard.html"
   status = 200

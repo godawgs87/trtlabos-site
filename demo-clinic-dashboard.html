@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinic Portal Demo — TRT LabOS</title>
+<meta name="description" content="TRT LabOS clinic portal demo — patient results inbox, flagged biomarkers, and auto-delivered PDFs for TRT physicians.">
+<link rel="stylesheet" href="styles.css?v=2">
+<style>
+
+/* ── PORTAL LAYOUT ── */
+.cp-wrap{display:flex;align-items:flex-start;}
+.cp-sidebar{width:230px;flex-shrink:0;background:#0F1A16;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.06);}
+.cp-main{flex:1;min-width:0;background:var(--bg);}
+
+/* ── SIDEBAR ── */
+.cp-clinic-hdr{padding:1.25rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,0.07);}
+.cp-clinic-logo{width:36px;height:36px;background:#1A4D3B;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;margin-bottom:0.65rem;letter-spacing:0.5px;}
+.cp-clinic-name{font-size:13.5px;font-weight:500;color:#fff;line-height:1.25;}
+.cp-clinic-dr{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.cp-portal-badge{display:inline-block;font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;background:rgba(107,189,155,0.15);color:#6BBD9B;padding:2px 7px;border-radius:10px;margin-top:6px;}
+
+.cp-nav{padding:0.75rem 0;flex:1;}
+.cp-nav-item{display:flex;align-items:center;gap:9px;padding:9px 1.25rem;font-size:13px;color:rgba(255,255,255,0.45);cursor:pointer;transition:background 0.12s,color 0.12s;border:none;background:none;width:100%;text-align:left;text-decoration:none;font-family:'DM Sans',sans-serif;line-height:1.3;}
+.cp-nav-item:hover{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.75);}
+.cp-nav-item.active{background:rgba(107,189,155,0.1);color:#6BBD9B;}
+.cp-nav-item svg{flex-shrink:0;opacity:0.7;}
+.cp-nav-item.active svg{opacity:1;}
+.cp-nav-badge{margin-left:auto;background:#1A4D3B;color:#fff;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;}
+.cp-nav-count{margin-left:auto;font-size:10.5px;color:rgba(255,255,255,0.25);}
+.cp-nav-soon{margin-left:auto;font-size:9px;padding:1px 6px;border-radius:5px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);}
+
+.cp-sidebar-footer{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.07);margin-top:auto;}
+.cp-sidebar-footer a{display:block;font-size:11.5px;color:rgba(255,255,255,0.3);text-decoration:none;padding:4px 0;transition:color 0.12s;}
+.cp-sidebar-footer a:hover{color:rgba(255,255,255,0.6);}
+
+/* ── MAIN TOPBAR ── */
+.cp-topbar{background:#fff;border-bottom:1px solid var(--border);padding:0.9rem 1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.cp-topbar-title{font-size:17px;font-weight:500;color:var(--ink);font-family:'Instrument Serif',serif;}
+.cp-topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.cp-new-pill{background:#E4EDE9;color:#1A4D3B;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:20px;}
+.cp-btn-sm{font-size:12.5px;padding:7px 14px;border-radius:7px;border:1px solid var(--border);background:#fff;color:var(--ink);cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.12s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
+.cp-btn-sm:hover{background:var(--surface);}
+
+/* ── CONTENT AREA ── */
+.cp-content{padding:1.5rem 1.75rem 4rem;}
+
+/* ── DEMO BANNER ── */
+.cp-demo-banner{background:#E4EDE9;border-radius:10px;padding:10px 16px;font-size:13px;color:#1A4D3B;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+.cp-demo-banner a{color:#1A4D3B;font-weight:500;margin-left:4px;}
+
+/* ── ALERT ── */
+.cp-alert{background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:11px 16px;font-size:13px;color:#92400E;display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;line-height:1.5;}
+
+/* ── STATS ── */
+.cp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.cp-stat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;}
+.cp-stat-num{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);line-height:1;margin-bottom:3px;}
+.cp-stat-lbl{font-size:11.5px;color:var(--muted);}
+.cp-stat.alert .cp-stat-num{color:#B45309;}
+
+/* ── SECTION LABELS ── */
+.cp-section-lbl{font-size:10px;font-weight:500;letter-spacing:0.9px;text-transform:uppercase;color:var(--muted);margin-bottom:0.6rem;margin-top:1.25rem;}
+.cp-section-lbl:first-of-type{margin-top:0;}
+
+/* ── PATIENT ROWS ── */
+.cp-patient-list{display:flex;flex-direction:column;gap:6px;}
+.cp-row{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:border-color 0.15s,box-shadow 0.15s;}
+.cp-row:hover{border-color:#1A4D3B;box-shadow:0 2px 12px rgba(26,77,59,0.08);}
+.cp-row.flagged{border-color:#FCD34D;background:#FFFBEB;}
+.cp-row.flagged:hover{border-color:#F59E0B;box-shadow:0 2px 12px rgba(245,158,11,0.12);}
+.cp-row.passive{cursor:default;opacity:0.6;}
+.cp-row.passive:hover{border-color:var(--border);box-shadow:none;}
+
+.cp-avatar{width:38px;height:38px;border-radius:50%;background:#E4EDE9;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:#1A4D3B;flex-shrink:0;letter-spacing:0.5px;}
+.cp-avatar.flagged-av{background:#FEF3C7;color:#92400E;}
+.cp-avatar.dim-av{background:var(--surface);color:var(--muted);}
+
+.cp-patient-info{flex:1;min-width:0;}
+.cp-patient-name{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.cp-patient-meta{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.cp-markers{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0;}
+.cp-marker{font-size:11px;padding:3px 8px;border-radius:5px;background:var(--surface);color:var(--muted);white-space:nowrap;}
+.cp-marker.ok{background:#E4EDE9;color:#1A4D3B;}
+.cp-marker.watch{background:#FEF3C7;color:#92400E;font-weight:500;}
+.cp-marker.flag{background:#FEE2E2;color:#991B1B;font-weight:500;}
+
+.sc{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;flex-shrink:0;white-space:nowrap;}
+.sc-flagged{background:#FEF3C7;color:#92400E;}
+.sc-delivered{background:#E4EDE9;color:#1A4D3B;}
+.sc-transit{background:#EEF2FF;color:#3730A3;}
+.sc-scheduled{background:var(--surface);color:var(--muted);}
+
+.cp-row-actions{display:flex;gap:6px;flex-shrink:0;}
+.cp-action-btn{font-size:11.5px;padding:5px 11px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--ink);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background 0.12s;}
+.cp-action-btn:hover{background:var(--surface);}
+.cp-action-btn.primary{background:#1A4D3B;color:#fff;border-color:#1A4D3B;}
+.cp-action-btn.primary:hover{background:#255C47;}
+.cp-action-btn.dim{opacity:0.5;cursor:default;}
+
+/* ── DETAIL PANEL ── */
+.cp-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.22);z-index:199;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.cp-overlay.show{opacity:1;pointer-events:auto;}
+
+.cp-detail{position:fixed;right:0;top:56px;width:440px;height:calc(100vh - 56px);background:#fff;border-left:1px solid var(--border);box-shadow:-6px 0 40px rgba(0,0,0,0.1);transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);z-index:200;display:flex;flex-direction:column;overflow:hidden;}
+.cp-detail.open{transform:translateX(0);}
+
+.cd-hdr{padding:1.1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#fff;position:sticky;top:0;}
+.cd-hdr-title{font-size:14px;font-weight:500;color:var(--ink);}
+.cd-close{background:none;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center;padding:4px;border-radius:6px;transition:background 0.12s;}
+.cd-close:hover{background:var(--surface);}
+
+.cd-body{padding:1.25rem 1.5rem;flex:1;overflow-y:auto;}
+.cd-body::-webkit-scrollbar{width:4px;}
+.cd-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:2px;}
+
+.cd-patient-hdr{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;}
+.cd-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0;}
+.cd-avatar.green{background:#E4EDE9;color:#1A4D3B;}
+.cd-avatar.amber{background:#FEF3C7;color:#92400E;}
+.cd-name{font-size:16px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.cd-meta{font-size:12px;color:var(--muted);line-height:1.4;}
+
+.cd-ai{background:#F6F5F1;border-left:3px solid #1A4D3B;border-radius:0 9px 9px 0;padding:1rem 1.1rem;margin-bottom:1.25rem;}
+.cd-ai-lbl{font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#1A4D3B;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.cd-ai-text{font-size:12.5px;color:var(--ink);line-height:1.65;}
+
+.cd-section-title{font-size:10px;font-weight:500;letter-spacing:0.9px;text-transform:uppercase;color:var(--muted);margin-bottom:0.6rem;}
+.cd-section{margin-bottom:1.25rem;}
+
+.cd-trend{margin-bottom:1.25rem;}
+.cd-trend-bars{height:44px;display:flex;align-items:flex-end;gap:6px;margin-bottom:5px;}
+.cd-bar{flex:1;border-radius:3px 3px 0 0;}
+.cd-trend-labels{display:flex;gap:6px;}
+.cd-trend-lbl{flex:1;font-size:10px;color:var(--muted);text-align:center;}
+.cd-trend-lbl.hi{color:#92400E;font-weight:500;}
+
+.cd-bm{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.cd-bm:last-child{border-bottom:none;}
+.cd-bm-name{color:var(--muted);}
+.cd-bm-right{display:flex;align-items:center;gap:8px;}
+.cd-bm-val{font-weight:500;color:var(--ink);}
+.cd-bm-range{font-size:10.5px;color:var(--subtle);}
+.cd-bm-pill{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500;}
+.bm-ok{background:#E4EDE9;color:#1A4D3B;}
+.bm-watch{background:#FEF3C7;color:#92400E;}
+.bm-flag{background:#FEE2E2;color:#991B1B;}
+
+.cd-actions{display:flex;flex-direction:column;gap:8px;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);}
+.cd-action{display:block;padding:11px;border-radius:8px;font-size:13.5px;font-weight:500;text-align:center;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:background 0.12s;text-decoration:none;line-height:1;}
+.cd-action.green{background:#1A4D3B;color:#fff;}
+.cd-action.green:hover{background:#255C47;}
+.cd-action.outline{background:#fff;color:var(--ink);border:1px solid var(--border);}
+.cd-action.outline:hover{background:var(--surface);}
+.cd-action.amber-btn{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}
+.cd-action.amber-btn:hover{background:#FDE68A;}
+
+@media(max-width:900px){
+  .cp-sidebar{display:none;}
+  .cp-stats{grid-template-columns:1fr 1fr;}
+  .cp-markers{display:none;}
+}
+@media(max-width:640px){
+  .cp-detail{width:100%;top:56px;height:calc(100vh - 56px);}
+  .cp-stats{grid-template-columns:1fr 1fr;}
+  .cp-topbar-right .cp-btn-sm{display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/contact.html">Talk to Us</a>
+    <a href="/signup.html" class="nav-cta">Sign In</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/contact.html">Talk to Us</a>
+  <a href="/about.html">About</a>
+  <a href="/signup.html" class="mob-cta">Sign In</a>
+</div>
+
+<div class="cp-wrap">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="cp-sidebar">
+    <div class="cp-clinic-hdr">
+      <div class="cp-clinic-logo">TV</div>
+      <div class="cp-clinic-name">TRT Vitality Clinic</div>
+      <div class="cp-clinic-dr">Dr. Aaron Hendricks, MD</div>
+      <div class="cp-portal-badge">Clinic Portal</div>
+    </div>
+
+    <nav class="cp-nav">
+      <button class="cp-nav-item active" onclick="cpNav(this,'inbox')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Results Inbox
+        <span class="cp-nav-badge">3</span>
+      </button>
+      <button class="cp-nav-item" onclick="cpNav(this,'patients')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        All Patients
+        <span class="cp-nav-count">6</span>
+      </button>
+      <button class="cp-nav-item" onclick="cpNav(this,'pdfs')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        PDF Reports
+      </button>
+      <button class="cp-nav-item" style="opacity:0.45;cursor:not-allowed;" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+        <span class="cp-nav-soon">Soon</span>
+      </button>
+      <button class="cp-nav-item" style="opacity:0.45;cursor:not-allowed;" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+        Settings
+        <span class="cp-nav-soon">Soon</span>
+      </button>
+    </nav>
+
+    <div class="cp-sidebar-footer">
+      <a href="/clinic.html">About clinic portal</a>
+      <a href="/contact.html">Talk to sales</a>
+      <a href="/">← TRT LabOS home</a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="cp-main">
+    <div class="cp-topbar">
+      <div class="cp-topbar-title" id="cp-view-title">Results Inbox</div>
+      <div class="cp-topbar-right">
+        <span class="cp-new-pill" id="cp-new-pill">3 new results</span>
+        <button class="cp-btn-sm" onclick="">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download all PDFs
+        </button>
+      </div>
+    </div>
+
+    <!-- INBOX VIEW -->
+    <div class="cp-content" id="view-inbox">
+      <div class="cp-demo-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        Demo portal — patient data is simulated.
+        <a href="/contact.html">Talk to us about going live →</a>
+      </div>
+
+      <div class="cp-alert">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#92400E" stroke-width="2" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div><strong>1 result requires attention —</strong> James T. · Hematocrit 53.8% on 3rd consecutive draw. Consider protocol review before next injection.</div>
+      </div>
+
+      <div class="cp-stats">
+        <div class="cp-stat"><div class="cp-stat-num">6</div><div class="cp-stat-lbl">Active patients</div></div>
+        <div class="cp-stat"><div class="cp-stat-num">3</div><div class="cp-stat-lbl">Results this month</div></div>
+        <div class="cp-stat alert"><div class="cp-stat-num">1</div><div class="cp-stat-lbl">Flagged for review</div></div>
+        <div class="cp-stat"><div class="cp-stat-num">100%</div><div class="cp-stat-lbl">PDF delivery rate</div></div>
+      </div>
+
+      <div class="cp-section-lbl">Action needed</div>
+      <div class="cp-patient-list">
+        <div class="cp-row flagged" onclick="openDetail('james')">
+          <div class="cp-avatar flagged-av">JT</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">James T.</div>
+            <div class="cp-patient-meta">Results · May 2, 2026 · Cypionate 150mg/wk</div>
+          </div>
+          <div class="cp-markers">
+            <span class="cp-marker">Total T: 612</span>
+            <span class="cp-marker flag">HCT: 53.8% ↑↑</span>
+            <span class="cp-marker ok">E2: 31</span>
+          </div>
+          <span class="sc sc-flagged">Needs review</span>
+          <div class="cp-row-actions">
+            <button class="cp-action-btn primary" onclick="event.stopPropagation();openDetail('james')">View report</button>
+            <button class="cp-action-btn" onclick="event.stopPropagation();">PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cp-section-lbl">New results</div>
+      <div class="cp-patient-list">
+        <div class="cp-row" onclick="openDetail('marcus')">
+          <div class="cp-avatar">MJ</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Marcus J.</div>
+            <div class="cp-patient-meta">Results · May 1, 2026 · Cypionate 200mg/2wk + Anastrozole</div>
+          </div>
+          <div class="cp-markers">
+            <span class="cp-marker ok">Total T: 724</span>
+            <span class="cp-marker watch">HCT: 47.2% ↑</span>
+            <span class="cp-marker ok">E2: 29</span>
+          </div>
+          <span class="sc sc-delivered">Delivered</span>
+          <div class="cp-row-actions">
+            <button class="cp-action-btn primary" onclick="event.stopPropagation();openDetail('marcus')">View report</button>
+            <button class="cp-action-btn" onclick="event.stopPropagation();">PDF</button>
+          </div>
+        </div>
+        <div class="cp-row" onclick="openDetail('derek')">
+          <div class="cp-avatar">DM</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Derek M.</div>
+            <div class="cp-patient-meta">Results · Apr 28, 2026 · Cypionate 120mg/wk</div>
+          </div>
+          <div class="cp-markers">
+            <span class="cp-marker ok">Total T: 689</span>
+            <span class="cp-marker ok">HCT: 45.1%</span>
+            <span class="cp-marker ok">E2: 27</span>
+          </div>
+          <span class="sc sc-delivered">Delivered</span>
+          <div class="cp-row-actions">
+            <button class="cp-action-btn primary" onclick="event.stopPropagation();openDetail('derek')">View report</button>
+            <button class="cp-action-btn" onclick="event.stopPropagation();">PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cp-section-lbl">In progress</div>
+      <div class="cp-patient-list">
+        <div class="cp-row passive">
+          <div class="cp-avatar dim-av">RS</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Ryan S.</div>
+            <div class="cp-patient-meta">In transit — mailed May 2 · Est. results May 5</div>
+          </div>
+          <div class="cp-markers"><span class="cp-marker">Lab processing</span></div>
+          <span class="sc sc-transit">In transit</span>
+          <div class="cp-row-actions"><button class="cp-action-btn dim">Pending</button></div>
+        </div>
+        <div class="cp-row passive">
+          <div class="cp-avatar dim-av">KP</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Kevin P.</div>
+            <div class="cp-patient-meta">Tasso ships May 12 · Test due May 15</div>
+          </div>
+          <div class="cp-markers"></div>
+          <span class="sc sc-scheduled">Scheduled</span>
+          <div class="cp-row-actions"><button class="cp-action-btn dim">Pending</button></div>
+        </div>
+        <div class="cp-row passive">
+          <div class="cp-avatar dim-av">AW</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Andre W.</div>
+            <div class="cp-patient-meta">Tasso ships May 15 · Test due May 18</div>
+          </div>
+          <div class="cp-markers"></div>
+          <span class="sc sc-scheduled">Scheduled</span>
+          <div class="cp-row-actions"><button class="cp-action-btn dim">Pending</button></div>
+        </div>
+      </div>
+    </div><!-- /view-inbox -->
+
+    <!-- ALL PATIENTS VIEW (hidden by default) -->
+    <div class="cp-content" id="view-patients" style="display:none;">
+      <div class="cp-demo-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        Demo portal — patient data is simulated.
+        <a href="/contact.html">Talk to us about going live →</a>
+      </div>
+      <div class="cp-stats">
+        <div class="cp-stat"><div class="cp-stat-num">6</div><div class="cp-stat-lbl">Total patients</div></div>
+        <div class="cp-stat"><div class="cp-stat-num">3</div><div class="cp-stat-lbl">Results received</div></div>
+        <div class="cp-stat"><div class="cp-stat-num">2</div><div class="cp-stat-lbl">Awaiting results</div></div>
+        <div class="cp-stat"><div class="cp-stat-num">1</div><div class="cp-stat-lbl">Scheduled soon</div></div>
+      </div>
+      <div class="cp-section-lbl">All patients</div>
+      <div class="cp-patient-list">
+        <div class="cp-row flagged" onclick="openDetail('james')">
+          <div class="cp-avatar flagged-av">JT</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">James T.</div>
+            <div class="cp-patient-meta">On TRT 14 months · Cypionate 150mg/wk · 4 tests</div>
+          </div>
+          <span class="sc sc-flagged">Flagged</span>
+          <div class="cp-row-actions"><button class="cp-action-btn primary" onclick="event.stopPropagation();openDetail('james')">View</button></div>
+        </div>
+        <div class="cp-row" onclick="openDetail('marcus')">
+          <div class="cp-avatar">MJ</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Marcus J.</div>
+            <div class="cp-patient-meta">On TRT 9 months · Cypionate 200mg/2wk · 8 tests</div>
+          </div>
+          <span class="sc sc-delivered">Active</span>
+          <div class="cp-row-actions"><button class="cp-action-btn primary" onclick="event.stopPropagation();openDetail('marcus')">View</button></div>
+        </div>
+        <div class="cp-row" onclick="openDetail('derek')">
+          <div class="cp-avatar">DM</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Derek M.</div>
+            <div class="cp-patient-meta">On TRT 18 months · Cypionate 120mg/wk · 6 tests</div>
+          </div>
+          <span class="sc sc-delivered">Active</span>
+          <div class="cp-row-actions"><button class="cp-action-btn primary" onclick="event.stopPropagation();openDetail('derek')">View</button></div>
+        </div>
+        <div class="cp-row passive">
+          <div class="cp-avatar dim-av">RS</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Ryan S.</div>
+            <div class="cp-patient-meta">On TRT 3 months · Cypionate 100mg/wk · 2 tests</div>
+          </div>
+          <span class="sc sc-transit">In transit</span>
+          <div class="cp-row-actions"><button class="cp-action-btn dim">Pending</button></div>
+        </div>
+        <div class="cp-row passive">
+          <div class="cp-avatar dim-av">KP</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Kevin P.</div>
+            <div class="cp-patient-meta">On TRT 6 months · Cypionate 160mg/wk · 3 tests</div>
+          </div>
+          <span class="sc sc-scheduled">Scheduled</span>
+          <div class="cp-row-actions"><button class="cp-action-btn dim">Pending</button></div>
+        </div>
+        <div class="cp-row passive">
+          <div class="cp-avatar dim-av">AW</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Andre W.</div>
+            <div class="cp-patient-meta">On TRT 2 months · Cypionate 200mg/2wk · 1 test</div>
+          </div>
+          <span class="sc sc-scheduled">Scheduled</span>
+          <div class="cp-row-actions"><button class="cp-action-btn dim">Pending</button></div>
+        </div>
+      </div>
+    </div><!-- /view-patients -->
+
+    <!-- PDF REPORTS VIEW (hidden by default) -->
+    <div class="cp-content" id="view-pdfs" style="display:none;">
+      <div class="cp-demo-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        Demo portal — PDF delivery is automatic in the live product.
+        <a href="/contact.html">Talk to us about going live →</a>
+      </div>
+      <div class="cp-section-lbl">Recent PDF reports</div>
+      <div class="cp-patient-list">
+        <div class="cp-row passive" style="cursor:default;">
+          <div class="cp-avatar flagged-av">JT</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">James T. — May 2, 2026</div>
+            <div class="cp-patient-meta">TRT Monitoring Panel · HCT flagged · Auto-delivered to portal</div>
+          </div>
+          <span class="sc sc-flagged">Flagged</span>
+          <div class="cp-row-actions"><button class="cp-action-btn primary">Download PDF</button></div>
+        </div>
+        <div class="cp-row passive" style="cursor:default;">
+          <div class="cp-avatar">MJ</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Marcus J. — May 1, 2026</div>
+            <div class="cp-patient-meta">TRT Monitoring Panel · HCT watch · Auto-delivered to portal</div>
+          </div>
+          <span class="sc sc-delivered">Delivered</span>
+          <div class="cp-row-actions"><button class="cp-action-btn primary">Download PDF</button></div>
+        </div>
+        <div class="cp-row passive" style="cursor:default;">
+          <div class="cp-avatar">DM</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Derek M. — Apr 28, 2026</div>
+            <div class="cp-patient-meta">TRT Monitoring Panel · All normal · Auto-delivered to portal</div>
+          </div>
+          <span class="sc sc-delivered">Delivered</span>
+          <div class="cp-row-actions"><button class="cp-action-btn primary">Download PDF</button></div>
+        </div>
+        <div class="cp-row passive" style="cursor:default;">
+          <div class="cp-avatar">MJ</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">Marcus J. — Feb 3, 2026</div>
+            <div class="cp-patient-meta">TRT Monitoring Panel · All normal · Auto-delivered to portal</div>
+          </div>
+          <span class="sc sc-delivered">Delivered</span>
+          <div class="cp-row-actions"><button class="cp-action-btn">Download PDF</button></div>
+        </div>
+        <div class="cp-row passive" style="cursor:default;">
+          <div class="cp-avatar">JT</div>
+          <div class="cp-patient-info">
+            <div class="cp-patient-name">James T. — Mar 6, 2026</div>
+            <div class="cp-patient-meta">TRT Intake Panel · Baseline panel · Auto-delivered to portal</div>
+          </div>
+          <span class="sc sc-delivered">Delivered</span>
+          <div class="cp-row-actions"><button class="cp-action-btn">Download PDF</button></div>
+        </div>
+      </div>
+    </div><!-- /view-pdfs -->
+
+  </main><!-- /cp-main -->
+</div><!-- /cp-wrap -->
+
+<!-- ── OVERLAY ── -->
+<div class="cp-overlay" id="cp-overlay" onclick="closeDetail()"></div>
+
+<!-- ── DETAIL PANEL ── -->
+<div class="cp-detail" id="cp-detail">
+  <div class="cd-hdr">
+    <div class="cd-hdr-title" id="cd-hdr-title">Patient Report</div>
+    <button class="cd-close" onclick="closeDetail()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cd-body" id="cd-body"></div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/biomarkers.html">Biomarker guide</a><a href="/pricing.html">Pricing</a><a href="/demo-dashboard.html">Demo dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="/clinic.html">Clinic portal</a><a href="/demo-clinic-dashboard.html">Demo portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/privacy.html">Privacy policy</a><a href="/terms.html">Terms of service</a><a href="mailto:support@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/privacy.html#hipaa">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open');m.classList.toggle('open');
+}
+
+/* ── NAV SWITCHING ── */
+var views = {inbox:'view-inbox',patients:'view-patients',pdfs:'view-pdfs'};
+var viewTitles = {inbox:'Results Inbox',patients:'All Patients',pdfs:'PDF Reports'};
+var viewPills = {inbox:'3 new results',patients:'6 patients',pdfs:'5 reports'};
+
+function cpNav(el, view) {
+  document.querySelectorAll('.cp-nav-item').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  Object.values(views).forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+  var v = document.getElementById(views[view]);
+  if(v) v.style.display = 'block';
+  document.getElementById('cp-view-title').textContent = viewTitles[view];
+  document.getElementById('cp-new-pill').textContent = viewPills[view];
+  closeDetail();
+}
+
+/* ── PATIENT DATA ── */
+var patients = {
+  james: {
+    initials:'JT', name:'James T.', flagged:true,
+    date:'May 2, 2026', protocol:'Cypionate 150mg/wk',
+    status:'Hematocrit elevated — 3rd consecutive draw',
+    aiNote:'Hematocrit has increased 4.0 points across 3 consecutive panels (49.8% → 51.2% → 53.8%). This trajectory indicates polycythemia risk. Recommend phlebotomy consultation and/or temporary dose reduction to 100–120mg/wk. Advise patient on hydration (80+ oz/day). Do not administer next injection without clinical review. Full report auto-delivered.',
+    hct:{vals:[49.8,51.2,53.8], labels:['Mar 6','Apr 9','May 2'], status:['ok','watch','flag']},
+    markers:[
+      {name:'Total Testosterone',val:'612 ng/dL',range:'300–1000',s:'ok'},
+      {name:'Free Testosterone',val:'14.8 pg/mL',range:'9–30',s:'ok'},
+      {name:'Estradiol (E2)',val:'31 pg/mL',range:'10–40',s:'ok'},
+      {name:'SHBG',val:'28 nmol/L',range:'16–55',s:'ok'},
+      {name:'Hematocrit',val:'53.8%',range:'38–50',s:'flag'},
+      {name:'Hemoglobin',val:'17.4 g/dL',range:'13.5–17.5',s:'watch'},
+      {name:'LDL Cholesterol',val:'118 mg/dL',range:'<130',s:'ok'},
+      {name:'HDL Cholesterol',val:'42 mg/dL',range:'>40',s:'ok'},
+      {name:'Triglycerides',val:'152 mg/dL',range:'<150',s:'watch'},
+      {name:'Total Cholesterol',val:'198 mg/dL',range:'<200',s:'ok'},
+    ]
+  },
+  marcus: {
+    initials:'MJ', name:'Marcus J.', flagged:false,
+    date:'May 1, 2026', protocol:'Cypionate 200mg/2wk + Anastrozole 0.25mg 2×/wk',
+    status:'HCT trending up — watchlist',
+    aiNote:'Testosterone response is strong at 724 ng/dL with well-balanced estradiol at 29 pg/mL — anastrozole protocol is appropriately calibrated. Hematocrit trending upward (44.8% → 46.1% → 47.2%) across 3 consecutive draws but remains within normal range. Recommend hydration coaching at next visit. No protocol change indicated at this time. Full report auto-delivered.',
+    hct:{vals:[44.8,46.1,47.2], labels:['Nov 4','Feb 3','May 1'], status:['ok','ok','watch']},
+    markers:[
+      {name:'Total Testosterone',val:'724 ng/dL',range:'300–1000',s:'ok'},
+      {name:'Free Testosterone',val:'18.4 pg/mL',range:'9–30',s:'ok'},
+      {name:'Estradiol (E2)',val:'29 pg/mL',range:'10–40',s:'ok'},
+      {name:'SHBG',val:'31 nmol/L',range:'16–55',s:'ok'},
+      {name:'Hematocrit',val:'47.2%',range:'38–50',s:'watch'},
+      {name:'Hemoglobin',val:'15.8 g/dL',range:'13.5–17.5',s:'ok'},
+      {name:'LDL Cholesterol',val:'104 mg/dL',range:'<130',s:'ok'},
+      {name:'HDL Cholesterol',val:'48 mg/dL',range:'>40',s:'ok'},
+      {name:'Triglycerides',val:'128 mg/dL',range:'<150',s:'ok'},
+      {name:'Total Cholesterol',val:'182 mg/dL',range:'<200',s:'ok'},
+    ]
+  },
+  derek: {
+    initials:'DM', name:'Derek M.', flagged:false,
+    date:'Apr 28, 2026', protocol:'Cypionate 120mg/wk',
+    status:'All markers within optimal range',
+    aiNote:'All markers within optimal ranges across the board. Protocol is well-calibrated with consistent testosterone response and stable hematocrit. No concerning trends noted. No action needed — continue current monitoring cadence. Full report auto-delivered.',
+    hct:{vals:[44.2,44.8,45.1], labels:['Jan 14','Mar 2','Apr 28'], status:['ok','ok','ok']},
+    markers:[
+      {name:'Total Testosterone',val:'689 ng/dL',range:'300–1000',s:'ok'},
+      {name:'Free Testosterone',val:'16.8 pg/mL',range:'9–30',s:'ok'},
+      {name:'Estradiol (E2)',val:'27 pg/mL',range:'10–40',s:'ok'},
+      {name:'SHBG',val:'35 nmol/L',range:'16–55',s:'ok'},
+      {name:'Hematocrit',val:'45.1%',range:'38–50',s:'ok'},
+      {name:'Hemoglobin',val:'15.2 g/dL',range:'13.5–17.5',s:'ok'},
+      {name:'LDL Cholesterol',val:'98 mg/dL',range:'<130',s:'ok'},
+      {name:'HDL Cholesterol',val:'54 mg/dL',range:'>40',s:'ok'},
+      {name:'Triglycerides',val:'112 mg/dL',range:'<150',s:'ok'},
+      {name:'Total Cholesterol',val:'174 mg/dL',range:'<200',s:'ok'},
+    ]
+  }
+};
+
+function hctBarColor(s){return s==='flag'?'#EF4444':s==='watch'?'#F59E0B':'#1A4D3B';}
+function hctBarHeight(vals, idx){
+  var min=Math.min.apply(null,vals)-2;
+  var max=Math.max.apply(null,vals)+2;
+  return Math.round(((vals[idx]-min)/(max-min))*70+20)+'%';
+}
+function pillClass(s){return s==='flag'?'bm-flag':s==='watch'?'bm-watch':'bm-ok';}
+function pillLabel(s){return s==='flag'?'Elevated':s==='watch'?'Watch':'Normal';}
+
+function renderDetail(id) {
+  var p = patients[id];
+  if(!p) return '';
+  var avClass = p.flagged ? 'amber' : 'green';
+
+  var trendBars = p.hct.vals.map(function(v,i){
+    return '<div class="cd-bar" style="height:'+hctBarHeight(p.hct.vals,i)+';background:'+hctBarColor(p.hct.status[i])+';" title="'+v+'%"></div>';
+  }).join('');
+  var trendLabels = p.hct.vals.map(function(v,i){
+    return '<div class="cd-trend-lbl'+(p.hct.status[i]==='flag'?' hi':'')+'">'+v+'%<br><span style="font-size:9px;color:var(--subtle);">'+p.hct.labels[i]+'</span></div>';
+  }).join('');
+
+  var bmRows = p.markers.map(function(m){
+    return '<div class="cd-bm"><span class="cd-bm-name">'+m.name+'</span><div class="cd-bm-right"><span class="cd-bm-range">'+m.range+'</span><span class="cd-bm-val">'+m.val+'</span><span class="cd-bm-pill '+pillClass(m.s)+'">'+pillLabel(m.s)+'</span></div></div>';
+  }).join('');
+
+  var flagActions = p.flagged
+    ? '<button class="cd-action amber-btn" onclick="">⚠ Flag for follow-up</button>'
+    : '';
+
+  return '<div class="cd-patient-hdr">'
+    +'<div class="cd-avatar '+avClass+'">'+p.initials+'</div>'
+    +'<div><div class="cd-name">'+p.name+'</div><div class="cd-meta">'+p.date+' · '+p.protocol+'<br>'+p.status+'</div></div>'
+    +'</div>'
+    +'<div class="cd-ai"><div class="cd-ai-lbl"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Clinic Note</div><div class="cd-ai-text">'+p.aiNote+'</div></div>'
+    +'<div class="cd-section">'
+    +'<div class="cd-section-title">Hematocrit trend — last 3 tests</div>'
+    +'<div class="cd-trend">'
+    +'<div class="cd-trend-bars">'+trendBars+'</div>'
+    +'<div class="cd-trend-labels">'+trendLabels+'</div>'
+    +'</div></div>'
+    +'<div class="cd-section"><div class="cd-section-title">Full panel — '+p.date+'</div>'+bmRows+'</div>'
+    +'<div class="cd-actions">'
+    +'<button class="cd-action green" onclick="">Download PDF report</button>'
+    +flagActions
+    +'<button class="cd-action outline" onclick="closeDetail()">Close</button>'
+    +'</div>';
+}
+
+function openDetail(id) {
+  var p = patients[id];
+  if(!p) return;
+  document.getElementById('cd-hdr-title').textContent = p.name + ' — ' + p.date;
+  document.getElementById('cd-body').innerHTML = renderDetail(id);
+  document.getElementById('cp-detail').classList.add('open');
+  document.getElementById('cp-overlay').classList.add('show');
+}
+
+function closeDetail() {
+  document.getElementById('cp-detail').classList.remove('open');
+  document.getElementById('cp-overlay').classList.remove('show');
+}
+
+document.addEventListener('keydown', function(e){if(e.key==='Escape') closeDetail();});
+</script>
+</body>
+</html>
