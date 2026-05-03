@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — TRT LabOS</title>
-<meta name="description" content="The TRT LabOS AI dashboard. Track your testosterone, hematocrit, estradiol, and all 14 biomarkers over time with AI-powered insights.">
+<title>Patient Dashboard Demo — TRT LabOS</title>
+<meta name="description" content="The TRT LabOS patient dashboard. Track testosterone, hematocrit, estradiol, and all core TRT biomarkers over time with AI-powered insights.">
 <link rel="stylesheet" href="styles.css?v=2">
 <style>
 .dash{max-width:1140px;margin:0 auto;padding:2rem 2.5rem 4rem;}
@@ -12,60 +12,127 @@
 .dash-greeting{font-family:'Instrument Serif',serif;font-size:26px;color:var(--ink);margin-bottom:3px;}
 .dash-meta{font-size:12.5px;color:var(--muted);}
 .demo-banner{background:#E4EDE9;border-radius:10px;padding:12px 16px;font-size:13px;color:#1A4D3B;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px;}
+.demo-banner a{color:#1A4D3B;font-weight:500;margin-left:4px;}
+
+/* ── METRICS ── */
 .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
 .metric{background:#ffffff;border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;}
 .metric-lbl{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px;}
 .metric-val{font-family:'Instrument Serif',serif;font-size:30px;line-height:1;color:var(--ink);margin-bottom:2px;}
 .metric-unit{font-size:12px;color:var(--muted);margin-bottom:6px;}
 .trend-pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:20px;}
-.up{background:var(--success-bg);color:var(--success-text);}
-.warn{background:var(--warn-bg);color:var(--warn-text);}
-.ok{background:var(--surface);color:var(--muted);}
+.tp-up{background:var(--success-bg);color:var(--success-text);}
+.tp-warn{background:var(--warn-bg);color:var(--warn-text);}
+.tp-ok{background:var(--surface);color:var(--muted);}
+
+/* ── AI CARD ── */
 .ai-card{background:#ffffff;border:1px solid rgba(26,77,59,0.18);border-left:3px solid #1A4D3B;border-radius:11px;padding:1.25rem;margin-bottom:1.25rem;}
 .ai-header{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:#1A4D3B;margin-bottom:0.6rem;}
 .ai-body{font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:0.75rem;}
 .ai-btns{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ── KIT TRACKER ── */
+.kit-tracker{background:#fff;border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.25rem;margin-bottom:1rem;}
+.kit-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.kit-title{font-size:12.5px;font-weight:500;color:var(--ink);}
+.kit-subtitle{font-size:11px;color:var(--muted);}
+.kit-steps{display:flex;align-items:flex-start;position:relative;padding:0 0 0.25rem;}
+.kit-steps::before{content:'';position:absolute;top:15px;left:calc(10% + 1px);right:calc(10% + 1px);height:1px;background:var(--border);z-index:0;}
+.kit-progress{position:absolute;top:15px;left:calc(10% + 1px);height:1px;background:#1A4D3B;z-index:1;width:35%;}
+.kit-step{flex:1;text-align:center;position:relative;z-index:2;}
+.kit-node{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:11px;}
+.kit-node.done{background:#1A4D3B;color:#fff;}
+.kit-node.next{background:#fff;border:2px solid #1A4D3B;color:#1A4D3B;}
+.kit-node.future{background:#fff;border:1px solid var(--border);color:var(--subtle);}
+.kit-lbl{font-size:10px;line-height:1.3;color:var(--muted);}
+.kit-lbl strong{display:block;color:var(--ink);font-weight:500;}
+.kit-lbl.next-lbl strong{color:#1A4D3B;}
+.kit-date{font-size:9.5px;color:var(--subtle);margin-top:1px;}
+
+/* ── DASH GRID ── */
 .dash-grid{display:grid;grid-template-columns:3fr 2fr;gap:1rem;margin-bottom:1rem;}
 .dash-card{background:#ffffff;border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.25rem;}
-.card-title{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
+.card-title{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:0.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
 .card-sub{font-size:11px;color:var(--muted);font-weight:400;}
-.bar-chart{height:100px;display:flex;align-items:flex-end;gap:5px;}
-.bar{flex:1;border-radius:3px 3px 0 0;background:#E4EDE9;transition:background 0.12s;}
-.bar:hover{background:#255C47;}
-.bar.now{background:#1A4D3B;}
+
+/* ── TREND CHART ── */
+.trend-tabs{display:flex;gap:5px;margin-bottom:0.85rem;flex-wrap:wrap;}
+.trend-tab{font-size:11.5px;padding:4px 11px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.12s;white-space:nowrap;}
+.trend-tab:hover{background:var(--surface);}
+.trend-tab.active{background:#E4EDE9;border-color:#E4EDE9;color:#1A4D3B;font-weight:500;}
+.trend-tab.active-warn{background:#FEF3C7;border-color:#FCD34D;color:#92400E;font-weight:500;}
+.bar-chart{height:110px;display:flex;align-items:flex-end;gap:5px;}
+.bar{flex:1;border-radius:3px 3px 0 0;transition:opacity 0.12s;}
+.bar:hover{opacity:0.75;}
 .chart-x{display:flex;gap:5px;margin-top:5px;}
 .chart-x span{flex:1;font-size:9.5px;color:var(--muted);text-align:center;}
-.lab-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
-.lab-row:last-child{border-bottom:none;}
-.lab-name{color:var(--ink);}
-.lab-right{display:flex;align-items:center;gap:8px;}
-.lab-val{font-weight:500;color:var(--ink);}
-.lab-range{font-size:10.5px;color:var(--muted);}
-.pill{font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:10px;}
-.p-ok{background:var(--success-bg);color:var(--success-text);}
-.p-watch{background:var(--warn-bg);color:var(--warn-text);}
+.trend-footer{display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);font-size:12px;color:var(--muted);}
+.trend-current-val{font-family:'Instrument Serif',serif;font-size:18px;color:var(--ink);}
+
+/* ── CLINIC CARD ── */
 .clinic-hdr{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
-.clinic-ico{width:34px;height:34px;background:#E4EDE9;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.clinic-ico{width:34px;height:34px;background:#E4EDE9;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .clinic-nm{font-size:13.5px;font-weight:500;color:var(--ink);}
 .clinic-dr{font-size:11.5px;color:var(--muted);}
 .clinic-meta-d{font-size:11.5px;color:var(--muted);margin-bottom:10px;}
 .clinic-proto{background:var(--surface);border-radius:7px;padding:9px 11px;margin-bottom:12px;}
 .proto-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:3px;}
 .proto-val{font-size:12.5px;color:var(--ink);font-weight:500;}
-.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-.reminder{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.clinic-sync{display:flex;align-items:center;gap:6px;font-size:11px;color:#1A4D3B;margin-bottom:12px;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:livePulse 2s infinite;}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.45}}
+
+/* ── BOTTOM GRID ── */
+.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+
+/* ── FULL PANEL ── */
+.panel-section{font-size:9.5px;font-weight:500;letter-spacing:0.9px;text-transform:uppercase;color:var(--muted);padding:0.65rem 0 0.4rem;border-top:1px solid var(--border);margin-top:0.4rem;}
+.panel-section:first-child{border-top:none;padding-top:0;margin-top:0;}
+.lab-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.lab-row:last-child{border-bottom:none;}
+.lab-name{color:var(--ink);}
+.lab-name.dim{color:var(--muted);}
+.lab-right{display:flex;align-items:center;gap:8px;}
+.lab-val{font-weight:500;color:var(--ink);}
+.lab-val.dim{color:var(--muted);font-weight:400;}
+.lab-range{font-size:10.5px;color:var(--subtle);}
+.pill{font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:10px;}
+.p-ok{background:var(--success-bg);color:var(--success-text);}
+.p-watch{background:var(--warn-bg);color:var(--warn-text);}
+.p-periodic{background:#EEF2FF;color:#3730A3;}
+
+/* ── REMINDERS ── */
+.reminder{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
 .reminder:last-child{border-bottom:none;}
-.rem-dot{width:8px;height:8px;border-radius:50%;background:#1A4D3B;flex-shrink:0;}
+.rem-dot{width:8px;height:8px;border-radius:50%;background:#1A4D3B;flex-shrink:0;margin-top:4px;}
 .rem-dot.dim{background:var(--subtle);}
-.rem-title{color:var(--ink);}
+.rem-dot.amber{background:#F59E0B;}
+.rem-title{color:var(--ink);line-height:1.3;}
 .rem-date{font-size:11px;color:var(--muted);}
-.dash-cta{background:#1A4D3B;border-radius:14px;padding:2rem 2.5rem;text-align:center;margin-top:2rem;}
+.stats-strip{margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;}
+.stat-mini{font-size:11px;color:var(--muted);}
+.stat-mini strong{display:block;font-size:16px;font-family:'Instrument Serif',serif;color:var(--ink);font-weight:400;line-height:1.1;margin-bottom:1px;}
+
+/* ── HISTORY TABLE ── */
+.history-card{background:#fff;border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;}
+.history-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.history-table th{text-align:left;font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);padding:0 10px 8px 0;border-bottom:1px solid var(--border);}
+.history-table th:last-child{text-align:right;padding-right:0;}
+.history-table td{padding:9px 10px 9px 0;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle;}
+.history-table tr:last-child td{border-bottom:none;}
+.history-table td:last-child{text-align:right;padding-right:0;}
+.ht-date{font-weight:500;white-space:nowrap;}
+.ht-cur{background:#f0f8f4;}
+.ht-v{font-weight:500;}
+.ht-v.watch{color:#B45309;}
+.ht-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;white-space:nowrap;}
+.ht-badge.ok{background:var(--success-bg);color:var(--success-text);}
+.ht-badge.watch{background:var(--warn-bg);color:var(--warn-text);}
+
+/* ── CTA ── */
+.dash-cta{background:#1A4D3B;border-radius:14px;padding:2rem 2.5rem;text-align:center;margin-top:1.25rem;}
 .dash-cta h3{font-family:'Instrument Serif',serif;font-size:24px;color:#ffffff;margin-bottom:0.5rem;}
 .dash-cta p{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:1.5rem;}
-@media(max-width:640px){
-  .metrics-row{grid-template-columns:1fr 1fr;}
-  .dash-grid,.dash-bottom{grid-template-columns:1fr;}
-}
 
 /* ── AI CHAT ── */
 .chat-fab{position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;border-radius:50%;background:#1A4D3B;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(26,77,59,0.4);z-index:300;transition:background 0.15s,transform 0.15s;}
@@ -75,14 +142,12 @@
 .chat-hdr{background:#1A4D3B;padding:13px 16px;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .chat-hdr-left{display:flex;align-items:center;gap:9px;}
 .chat-hdr-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:livePulse 2s infinite;}
-@keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.45}}
 .chat-hdr-title{font-size:14px;font-weight:500;color:#ffffff;font-family:'DM Sans',sans-serif;line-height:1.2;}
 .chat-hdr-sub{font-size:11px;color:rgba(255,255,255,0.5);}
 .chat-close{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.55);padding:2px;display:flex;align-items:center;transition:color 0.15s;}
 .chat-close:hover{color:#ffffff;}
 .chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;min-height:0;}
 .chat-msgs::-webkit-scrollbar{width:4px;}
-.chat-msgs::-webkit-scrollbar-track{background:transparent;}
 .chat-msgs::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:2px;}
 .chat-msg{display:flex;flex-direction:column;max-width:90%;}
 .chat-msg.ai{align-self:flex-start;}
@@ -106,8 +171,20 @@
 .chat-input::placeholder{color:#B0B0A8;}
 .chat-send{width:36px;height:36px;border-radius:8px;background:#1A4D3B;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;}
 .chat-send:hover{background:#255C47;}
-.chat-send:disabled{opacity:0.4;cursor:default;}
-@media(max-width:440px){.chat-drawer{right:0;width:100%;border-radius:16px 16px 0 0;}.chat-fab{bottom:1rem;right:1rem;}}
+
+@media(max-width:768px){
+  .dash-grid,.dash-bottom{grid-template-columns:1fr;}
+  .kit-lbl{display:none;}
+  .kit-date{display:none;}
+}
+@media(max-width:640px){
+  .dash{padding:1.5rem 1.25rem 3rem;}
+  .metrics-row{grid-template-columns:1fr 1fr;}
+  .history-table th:nth-child(3),.history-table td:nth-child(3),
+  .history-table th:nth-child(4),.history-table td:nth-child(4){display:none;}
+  .chat-drawer{right:0;width:100%;border-radius:16px 16px 0 0;}
+  .chat-fab{bottom:1rem;right:1rem;}
+}
 </style>
 </head>
 <body>
@@ -131,93 +208,304 @@
 </div>
 
 <div class="dash">
+
   <div class="demo-banner">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-    This is a sample dashboard — <a href="/signup.html" style="color:#1A4D3B;font-weight:500;margin-left:4px;">Sign up to see your real results →</a>
+    Demo dashboard — data is simulated.
+    <a href="/signup.html">Sign up to see your real results →</a>
   </div>
 
   <div class="dash-header">
     <div>
       <div class="dash-greeting">Good morning, Marcus</div>
-      <div class="dash-meta">Sunday, May 3, 2026 · Pro plan · Next test due in 18 days</div>
+      <div class="dash-meta">Sunday, May 3, 2026 · Pro plan · Next test kit ships in 15 days</div>
     </div>
     <a href="/signup.html" class="btn-primary" style="font-size:13px;padding:10px 20px;">Get started →</a>
   </div>
 
+  <!-- METRICS -->
   <div class="metrics-row">
-    <div class="metric"><div class="metric-lbl">Total T</div><div class="metric-val">724</div><div class="metric-unit">ng/dL</div><span class="trend-pill up">↑ 12% from last</span></div>
-    <div class="metric"><div class="metric-lbl">Free T</div><div class="metric-val">18.4</div><div class="metric-unit">pg/mL</div><span class="trend-pill up">↑ 8% from last</span></div>
-    <div class="metric"><div class="metric-lbl">Estradiol E2</div><div class="metric-val">29</div><div class="metric-unit">pg/mL</div><span class="trend-pill ok">In balance</span></div>
-    <div class="metric"><div class="metric-lbl">Hematocrit</div><div class="metric-val">47.2</div><div class="metric-unit">%</div><span class="trend-pill warn">⚠ Monitor</span></div>
+    <div class="metric">
+      <div class="metric-lbl">Total T</div>
+      <div class="metric-val">724</div>
+      <div class="metric-unit">ng/dL</div>
+      <span class="trend-pill tp-up">↑ 12% from last</span>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Free T</div>
+      <div class="metric-val">18.4</div>
+      <div class="metric-unit">pg/mL</div>
+      <span class="trend-pill tp-up">↑ 8% from last</span>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Estradiol (E2)</div>
+      <div class="metric-val">29</div>
+      <div class="metric-unit">pg/mL</div>
+      <span class="trend-pill tp-ok">In balance</span>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Hematocrit</div>
+      <div class="metric-val">47.2</div>
+      <div class="metric-unit">%</div>
+      <span class="trend-pill tp-warn">↑ Monitor</span>
+    </div>
   </div>
 
+  <!-- AI INSIGHT -->
   <div class="ai-card">
     <div class="ai-header" style="justify-content:space-between;">
-      <span style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Insight</span>
+      <span style="display:flex;align-items:center;gap:6px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>
+        LabOS AI Insight
+      </span>
       <button class="ai-btn" onclick="toggleChat()" style="letter-spacing:0;">Ask a question →</button>
     </div>
-    <div class="ai-body">Your testosterone response is strong — up 12% to 724 ng/dL. However, your hematocrit has climbed 3 points across two consecutive tests and is now at 47.2%. Still within range, but worth discussing with your clinic before your next injection. Increasing hydration and reducing alcohol intake may help moderate the trend.</div>
+    <div class="ai-body">Your testosterone response is strong — up 12% to 724 ng/dL, with Free T and SHBG well-calibrated. One trend worth watching: your hematocrit has climbed 1.1 points per test across three consecutive draws and is now at 47.2%. Still within range, but the trajectory matters. Prioritize hydration before your May 21st draw and flag this at your appointment with Dr. Hendricks on May 28th.</div>
     <div class="ai-btns">
-      <button class="ai-btn" onclick="sendSuggestion('Manage hematocrit')">Manage hematocrit</button>
-      <button class="ai-btn" onclick="sendSuggestion('Explain E2 balance')">Explain E2 balance</button>
-      <button class="ai-btn" onclick="sendSuggestion('Full panel summary')">Full panel summary</button>
+      <button class="ai-btn" onclick="sendSuggestion('Manage hematocrit')">Hematocrit trend</button>
+      <button class="ai-btn" onclick="sendSuggestion('Explain E2 balance')">E2 balance</button>
+      <button class="ai-btn" onclick="sendSuggestion('Full panel summary')">Panel summary</button>
+      <button class="ai-btn" onclick="sendSuggestion('What is my lipid risk?')">Lipid risk</button>
     </div>
   </div>
 
+  <!-- KIT STATUS TRACKER -->
+  <div class="kit-tracker">
+    <div class="kit-header">
+      <div>
+        <div class="kit-title">Test kit status — next panel</div>
+        <div class="kit-subtitle">Pro plan · Quarterly monitoring</div>
+      </div>
+      <div style="font-size:12px;color:#1A4D3B;font-weight:500;">Kit ships in 15 days</div>
+    </div>
+    <div class="kit-steps">
+      <div class="kit-progress"></div>
+      <div class="kit-step">
+        <div class="kit-node done">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="kit-lbl done"><strong>Results received</strong></div>
+        <div class="kit-date">May 1</div>
+      </div>
+      <div class="kit-step">
+        <div class="kit-node done">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="kit-lbl done"><strong>Clinic synced</strong></div>
+        <div class="kit-date">May 1</div>
+      </div>
+      <div class="kit-step">
+        <div class="kit-node next">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="kit-lbl next-lbl"><strong>Kit ships</strong></div>
+        <div class="kit-date">May 18</div>
+      </div>
+      <div class="kit-step">
+        <div class="kit-node future">4</div>
+        <div class="kit-lbl"><strong>Collect at home</strong></div>
+        <div class="kit-date">May 21</div>
+      </div>
+      <div class="kit-step">
+        <div class="kit-node future">5</div>
+        <div class="kit-lbl"><strong>Results ready</strong></div>
+        <div class="kit-date">~May 24</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREND CHART + CLINIC -->
   <div class="dash-grid">
     <div class="dash-card">
-      <div class="card-title">Testosterone trend <span class="card-sub">8 tests · Aug 2025 – May 2026</span></div>
-      <div class="bar-chart">
-        <div class="bar" style="height:52%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:59%"></div><div class="bar" style="height:56%"></div><div class="bar" style="height:64%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:77%"></div><div class="bar now" style="height:90%"></div>
+      <div class="card-title">
+        <span id="trend-title">Total Testosterone trend</span>
+        <span class="card-sub" id="trend-sub">8 tests · Aug 2025 – May 2026</span>
       </div>
-      <div class="chart-x"><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Jan</span><span>Feb</span><span>Mar</span><span>May</span></div>
+      <div class="trend-tabs">
+        <button class="trend-tab active" data-key="totalT" onclick="renderTrend('totalT')">Total T</button>
+        <button class="trend-tab active-warn" data-key="hct" onclick="renderTrend('hct')" style="background:#FEF3C7;border-color:#FCD34D;color:#92400E;font-weight:500;">HCT ↑</button>
+        <button class="trend-tab" data-key="e2" onclick="renderTrend('e2')">E2</button>
+        <button class="trend-tab" data-key="freeT" onclick="renderTrend('freeT')">Free T</button>
+        <button class="trend-tab" data-key="ldl" onclick="renderTrend('ldl')">LDL</button>
+      </div>
+      <div class="bar-chart" id="bar-chart"></div>
+      <div class="chart-x" id="chart-x"></div>
+      <div class="trend-footer">
+        <span>Latest: <span class="trend-current-val" id="trend-current">724 ng/dL</span></span>
+        <span id="trend-range-label" style="font-size:11px;">Normal range: 300–1000 ng/dL</span>
+      </div>
     </div>
+
     <div class="dash-card">
       <div class="card-title">Clinic connection</div>
       <div class="clinic-hdr">
-        <div class="clinic-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-        <div><div class="clinic-nm">TRT Vitality Clinic</div><div class="clinic-dr">Dr. Aaron Hendricks, MD</div></div>
+        <div class="clinic-ico">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div>
+          <div class="clinic-nm">TRT Vitality Clinic</div>
+          <div class="clinic-dr">Dr. Aaron Hendricks, MD</div>
+        </div>
       </div>
-      <div class="clinic-meta-d">Last synced: May 1, 2026 · Auto-share on</div>
-      <div class="clinic-proto"><div class="proto-lbl">Current protocol</div><div class="proto-val">Cypionate 200mg / 2wk</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Anastrozole 0.25mg / 2× wk</div></div>
+      <div class="clinic-sync">
+        <div class="sync-dot"></div>
+        Auto-sharing on · Last synced May 1
+      </div>
+      <div class="clinic-proto">
+        <div class="proto-lbl">Current protocol</div>
+        <div class="proto-val">Cypionate 200mg / 2wk</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Anastrozole 0.25mg / 2× wk</div>
+      </div>
       <button class="btn-dash">Message clinic</button>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--muted);">Next appointment: <strong style="color:var(--ink);">May 28 · Dr. Hendricks</strong></div>
     </div>
   </div>
 
+  <!-- FULL PANEL + REMINDERS -->
   <div class="dash-bottom">
     <div class="dash-card">
-      <div class="card-title">Full panel — May 1, 2026 <span class="card-sub">14 biomarkers</span></div>
-      <div class="lab-row"><span class="lab-name">Total Testosterone</span><div class="lab-right"><span class="lab-val">724 ng/dL</span><span class="lab-range">300–1000</span><span class="pill p-ok">Normal</span></div></div>
-      <div class="lab-row"><span class="lab-name">Free Testosterone</span><div class="lab-right"><span class="lab-val">18.4 pg/mL</span><span class="lab-range">9–30</span><span class="pill p-ok">Normal</span></div></div>
-      <div class="lab-row"><span class="lab-name">Estradiol (E2)</span><div class="lab-right"><span class="lab-val">29 pg/mL</span><span class="lab-range">10–40</span><span class="pill p-ok">Normal</span></div></div>
-      <div class="lab-row"><span class="lab-name">SHBG</span><div class="lab-right"><span class="lab-val">31 nmol/L</span><span class="lab-range">16–55</span><span class="pill p-ok">Normal</span></div></div>
-      <div class="lab-row"><span class="lab-name">Hematocrit</span><div class="lab-right"><span class="lab-val">47.2%</span><span class="lab-range">38–50</span><span class="pill p-watch">Watch</span></div></div>
-      <div class="lab-row"><span class="lab-name">Lipid Risk Score</span><div class="lab-right"><span class="lab-val">Moderate</span><span class="lab-range">—</span><span class="pill p-watch">Watch</span></div></div>
-      <div class="lab-row"><span class="lab-name">PSA</span><div class="lab-right"><span class="lab-val">0.8 ng/mL</span><span class="lab-range">0–4</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="card-title">
+        Full panel — May 1, 2026
+        <span class="card-sub">10 core + 2 safety</span>
+      </div>
+
+      <div class="panel-section">Core — every test</div>
+      <div class="lab-row"><span class="lab-name">Total Testosterone</span><div class="lab-right"><span class="lab-range">300–1000</span><span class="lab-val">724 ng/dL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Free Testosterone</span><div class="lab-right"><span class="lab-range">9–30</span><span class="lab-val">18.4 pg/mL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Estradiol (E2)</span><div class="lab-right"><span class="lab-range">10–40</span><span class="lab-val">29 pg/mL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">SHBG</span><div class="lab-right"><span class="lab-range">16–55</span><span class="lab-val">31 nmol/L</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Hematocrit</span><div class="lab-right"><span class="lab-range">38–50</span><span class="lab-val">47.2%</span><span class="pill p-watch">Watch</span></div></div>
+      <div class="lab-row"><span class="lab-name">Hemoglobin</span><div class="lab-right"><span class="lab-range">13.5–17.5</span><span class="lab-val">15.8 g/dL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">LDL Cholesterol</span><div class="lab-right"><span class="lab-range">&lt;130</span><span class="lab-val">104 mg/dL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">HDL Cholesterol</span><div class="lab-right"><span class="lab-range">&gt;40</span><span class="lab-val">48 mg/dL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Triglycerides</span><div class="lab-right"><span class="lab-range">&lt;150</span><span class="lab-val">128 mg/dL</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Total Cholesterol</span><div class="lab-right"><span class="lab-range">&lt;200</span><span class="lab-val">182 mg/dL</span><span class="pill p-ok">Normal</span></div></div>
+
+      <div class="panel-section">Periodic safety · every 6 months</div>
+      <div class="lab-row"><span class="lab-name dim">CMP (liver / kidney)</span><div class="lab-right"><span class="lab-val dim">Normal — Dec 15</span><span class="pill p-periodic">Periodic</span></div></div>
+      <div class="lab-row"><span class="lab-name dim">PSA</span><div class="lab-right"><span class="lab-range">0–4</span><span class="lab-val dim">0.8 ng/mL — Dec 15</span><span class="pill p-periodic">Periodic</span></div></div>
     </div>
+
     <div class="dash-card">
-      <div class="card-title">Upcoming reminders</div>
-      <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Next test due</div><div class="rem-date">May 21 · Tasso ships May 18</div></div></div>
-      <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Clinic appointment</div><div class="rem-date">May 28 · Dr. Hendricks</div></div></div>
-      <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Next injection day</div><div class="rem-date">May 9 · Cypionate 200mg</div></div></div>
-      <div class="reminder"><div class="rem-dot dim"></div><div><div class="rem-title" style="color:var(--muted);">Anastrozole dose</div><div class="rem-date">May 5 · 0.25mg</div></div></div>
-      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);"><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px;">Longitudinal data</div><div style="font-size:12.5px;color:var(--ink);">8 tests over 9 months · 14 markers tracked · 2 active watchlist items</div></div>
+      <div class="card-title">Upcoming</div>
+      <div class="reminder">
+        <div class="rem-dot"></div>
+        <div>
+          <div class="rem-title">Test kit ships</div>
+          <div class="rem-date">May 18 · Collect same day if possible</div>
+        </div>
+      </div>
+      <div class="reminder">
+        <div class="rem-dot"></div>
+        <div>
+          <div class="rem-title">Next test due</div>
+          <div class="rem-date">May 21 · Mail Tasso device, results in 2–3 days</div>
+        </div>
+      </div>
+      <div class="reminder">
+        <div class="rem-dot"></div>
+        <div>
+          <div class="rem-title">Clinic appointment</div>
+          <div class="rem-date">May 28 · Dr. Hendricks · results auto-shared</div>
+        </div>
+      </div>
+      <div class="reminder">
+        <div class="rem-dot amber"></div>
+        <div>
+          <div class="rem-title">Next injection day</div>
+          <div class="rem-date">May 9 · Cypionate 200mg · draw before if possible</div>
+        </div>
+      </div>
+      <div class="reminder">
+        <div class="rem-dot dim"></div>
+        <div>
+          <div class="rem-title" style="color:var(--muted);">Anastrozole dose</div>
+          <div class="rem-date">May 5 · 0.25mg</div>
+        </div>
+      </div>
+      <div class="stats-strip">
+        <div class="stat-mini"><strong>8</strong>Tests completed</div>
+        <div class="stat-mini"><strong>9 mo</strong>On protocol</div>
+        <div class="stat-mini"><strong>2</strong>Watchlist items</div>
+        <div class="stat-mini"><strong>Jun 2026</strong>Safety check due</div>
+      </div>
     </div>
   </div>
 
+  <!-- RESULT HISTORY -->
+  <div class="history-card">
+    <div class="card-title">
+      Result history
+      <span class="card-sub">Last 4 panels · core markers</span>
+    </div>
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Total T</th>
+          <th>Free T</th>
+          <th>E2</th>
+          <th>HCT</th>
+          <th>LDL</th>
+          <th style="text-align:right;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="ht-cur">
+          <td class="ht-date">May 1, 2026</td>
+          <td class="ht-v">724 ng/dL</td>
+          <td class="ht-v">18.4 pg/mL</td>
+          <td class="ht-v">29 pg/mL</td>
+          <td class="ht-v watch">47.2%</td>
+          <td class="ht-v">104 mg/dL</td>
+          <td><span class="ht-badge watch">1 watch</span></td>
+        </tr>
+        <tr>
+          <td class="ht-date">Feb 3, 2026</td>
+          <td class="ht-v">647 ng/dL</td>
+          <td class="ht-v">16.9 pg/mL</td>
+          <td class="ht-v">31 pg/mL</td>
+          <td class="ht-v watch">46.1%</td>
+          <td class="ht-v">109 mg/dL</td>
+          <td><span class="ht-badge ok">All clear</span></td>
+        </tr>
+        <tr>
+          <td class="ht-date">Nov 4, 2025</td>
+          <td class="ht-v">574 ng/dL</td>
+          <td class="ht-v">14.8 pg/mL</td>
+          <td class="ht-v">34 pg/mL</td>
+          <td class="ht-v">44.8%</td>
+          <td class="ht-v">112 mg/dL</td>
+          <td><span class="ht-badge ok">All clear</span></td>
+        </tr>
+        <tr>
+          <td class="ht-date">Aug 12, 2025</td>
+          <td class="ht-v">541 ng/dL</td>
+          <td class="ht-v">13.8 pg/mL</td>
+          <td class="ht-v">28 pg/mL</td>
+          <td class="ht-v">43.2%</td>
+          <td class="ht-v">116 mg/dL</td>
+          <td><span class="ht-badge ok">All clear</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CTA -->
   <div class="dash-cta">
     <h3>This is your data — own it.</h3>
     <p>Sign up to get your own dashboard with real results, AI insights, and clinic sync.</p>
     <a href="/signup.html" class="btn-white">Get started — $179 for your first test</a>
   </div>
-</div>
+
+</div><!-- /dash -->
 
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
       <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
-      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/pricing.html">Pricing</a><a href="/demo-dashboard.html">Demo dashboard</a></div>
-      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="/clinic.html">Clinic portal</a></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/biomarkers.html">Biomarker guide</a><a href="/pricing.html">Pricing</a><a href="/demo-dashboard.html">Demo dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="/contact.html">Talk to us</a><a href="/clinic.html">Clinic portal</a><a href="/demo-clinic-dashboard.html">Demo clinic dashboard</a></div>
       <div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/privacy.html">Privacy policy</a><a href="/terms.html">Terms of service</a><a href="mailto:support@trtlabos.com">Contact</a></div>
     </div>
     <div class="footer-bottom">
@@ -227,7 +515,7 @@
   </div>
 </footer>
 
-<!-- Floating chat button -->
+<!-- Chat FAB -->
 <button class="chat-fab" id="chat-fab" onclick="toggleChat()" aria-label="Ask LabOS AI">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
 </button>
@@ -242,7 +530,7 @@
         <div class="chat-hdr-sub">Your personal TRT analyst</div>
       </div>
     </div>
-    <button class="chat-close" onclick="toggleChat()" aria-label="Close">
+    <button class="chat-close" onclick="toggleChat()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
@@ -255,7 +543,7 @@
   </div>
   <div class="chat-input-row">
     <input class="chat-input" id="chat-input" type="text" placeholder="Ask LabOS AI…" onkeydown="handleChatKey(event)" autocomplete="off">
-    <button class="chat-send" id="chat-send-btn" onclick="sendMessage()" aria-label="Send">
+    <button class="chat-send" id="chat-send-btn" onclick="sendMessage()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
     </button>
   </div>
@@ -264,122 +552,166 @@
 <script>
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
-  h.classList.toggle('open'); m.classList.toggle('open');
+  h.classList.toggle('open');m.classList.toggle('open');
 }
 
-/* ── AI CHAT ── */
-var chatOpen = false;
-var chatStarted = false;
-var typingTimer = null;
-
-var aiResponses = {
-  'manage hematocrit': "Your hematocrit at 47.2% is still within the normal range (38–50%), but it's climbed 3 points across two consecutive tests — a pattern worth watching on TRT.\n\nA few things that help moderate it: stay well hydrated (80–100 oz/day), reduce alcohol, and consider timing your blood draw before your next injection rather than after. This gives a more stable trough reading.\n\nI'd flag this at your May 28th appointment with Dr. Hendricks — he'll have your full report in advance.",
-  'explain e2 balance': "Your estradiol is at 29 pg/mL — comfortably in the 10–40 pg/mL optimal range for men on TRT. Your anastrozole protocol (0.25mg 2× weekly) is working well.\n\nSigns to watch if E2 drifts high: water retention, mood sensitivity, reduced libido. Signs if too low: joint aches, fatigue, low libido.\n\nYour current trend looks stable. No adjustment needed based on this panel.",
-  'full panel summary': "Here's your May 1st panel at a glance:\n\n✓ Total T: 724 ng/dL — strong, up 12%\n✓ Free T: 18.4 pg/mL — in optimal range\n✓ Estradiol: 29 pg/mL — well balanced\n✓ SHBG: 31 nmol/L — normal\n⚠ Hematocrit: 47.2% — normal but trending up\n⚠ Lipid Risk Score: Moderate — worth discussing\n✓ PSA: 0.8 ng/mL — well within range\n\nOverall: your protocol is responding well. Two watchlist items worth covering at your May 28th appointment.",
-  'when should i test next?': "Your next Monitoring Panel is due May 21st — your Tasso device will ship May 18th. Collect and mail same day for a 2–3 day turnaround.\n\nBest timing: draw before your next injection on May 9th if possible. This gives a trough reading that's more consistent for tracking trends over time.\n\nYour results will auto-share with Dr. Hendricks before your May 28th appointment.",
-  'is my testosterone optimal?': "At 724 ng/dL, your Total T is in a strong therapeutic range. Most TRT physicians target 500–900 ng/dL depending on symptoms and goals.\n\nYour Free T at 18.4 pg/mL is equally solid — this is the bioavailable fraction that actually drives effect in your tissues. Your SHBG at 31 keeps a good amount free.\n\nShort answer: your testosterone is well-dialed. The 12% increase from your last test suggests your protocol is hitting its stride.",
-  'what does shbg mean?': "SHBG stands for Sex Hormone Binding Globulin — a protein that binds to testosterone in your blood, making it unavailable for your body to use.\n\nHigh SHBG can leave you with low Free T even if your Total T looks fine. Low SHBG means more testosterone is bioavailable, but it can also accelerate conversion to estradiol.\n\nAt 31 nmol/L, yours is in a healthy middle range — not binding too much T, which helps explain why your Free T is solid at 18.4.",
-  'what is psa?': "PSA (Prostate-Specific Antigen) measures prostate activity. TRT can cause a modest increase in PSA, so it's monitored regularly on your panel.\n\nYour PSA is 0.8 ng/mL — well within the normal range of 0–4. Nothing to flag here.\n\nIf PSA were to rise significantly above 4, or double within a short window, that would warrant a deeper conversation with your physician.",
-  'lipid': "Your Lipid Risk Score came back Moderate — meaning your cholesterol profile warrants attention but isn't in a danger zone.\n\nTRT can affect lipid balance, particularly by lowering HDL (the 'good' cholesterol). Exercise, dietary changes (less saturated fat, more fiber), and monitoring are typically the first steps.\n\nDr. Hendricks will have the full lipid breakdown in your clinic report. Worth putting on the agenda for May 28th."
+/* ── TREND CHART ── */
+var trends = {
+  totalT: {
+    label:'Total Testosterone', unit:'ng/dL', range:'300–1000',
+    vals:[541,489,598,574,631,647,698,724],
+    months:['Aug','Sep','Oct','Nov','Jan','Feb','Mar','May'],
+    color:function(i,n){return i===n-1?'#1A4D3B':'#C8DCCF';}
+  },
+  hct: {
+    label:'Hematocrit', unit:'%', range:'38–50% (upper limit)',
+    vals:[43.2,43.8,44.1,44.5,44.8,46.1,46.8,47.2],
+    months:['Aug','Sep','Oct','Nov','Jan','Feb','Mar','May'],
+    color:function(i,n){return i===n-1?'#F59E0B':i>=n-3?'#FDE68A':'#C8DCCF';}
+  },
+  e2: {
+    label:'Estradiol (E2)', unit:'pg/mL', range:'10–40',
+    vals:[28,34,31,29,33,31,30,29],
+    months:['Aug','Sep','Oct','Nov','Jan','Feb','Mar','May'],
+    color:function(i,n){return i===n-1?'#1A4D3B':'#C8DCCF';}
+  },
+  freeT: {
+    label:'Free Testosterone', unit:'pg/mL', range:'9–30',
+    vals:[13.8,12.9,15.2,14.8,16.1,16.9,17.8,18.4],
+    months:['Aug','Sep','Oct','Nov','Jan','Feb','Mar','May'],
+    color:function(i,n){return i===n-1?'#1A4D3B':'#C8DCCF';}
+  },
+  ldl: {
+    label:'LDL Cholesterol', unit:'mg/dL', range:'<130',
+    vals:[116,119,115,113,112,110,109,104],
+    months:['Aug','Sep','Oct','Nov','Jan','Feb','Mar','May'],
+    color:function(i,n){return i===n-1?'#1A4D3B':'#C8DCCF';}
+  }
 };
 
-function getAiResponse(text) {
-  var q = text.toLowerCase().trim();
-  if (q.includes('hematocrit') || q.includes('hct') || q.includes('thick') || q.includes('blood viscosity')) return aiResponses['manage hematocrit'];
-  if (q.includes('estradiol') || q.includes('e2') || q.includes('estrogen') || q.includes('anastrozole')) return aiResponses['explain e2 balance'];
-  if (q.includes('summary') || q.includes('all my') || q.includes('full panel') || q.includes('overview')) return aiResponses['full panel summary'];
-  if (q.includes('when') || q.includes('next test') || q.includes('test due') || q.includes('schedule')) return aiResponses['when should i test next?'];
-  if (q.includes('testosterone') || q.includes('optimal') || q.includes('levels') || q.includes('total t')) return aiResponses['is my testosterone optimal?'];
-  if (q.includes('shbg') || q.includes('sex hormone')) return aiResponses['what does shbg mean?'];
-  if (q.includes('psa') || q.includes('prostate')) return aiResponses['what is psa?'];
-  if (q.includes('lipid') || q.includes('cholesterol') || q.includes('hdl') || q.includes('ldl')) return aiResponses['lipid'];
-  // Fuzzy key match
-  for (var key in aiResponses) {
-    if (q.includes(key.split(' ')[0])) return aiResponses[key];
+function renderTrend(key) {
+  var t = trends[key];
+  var vals = t.vals;
+  var n = vals.length;
+  var min = Math.min.apply(null,vals);
+  var max = Math.max.apply(null,vals);
+  var span = max - min || 1;
+
+  document.querySelectorAll('.trend-tab').forEach(function(tab){
+    var isActive = tab.dataset.key === key;
+    tab.classList.toggle('active', isActive && key !== 'hct');
+  });
+  if (key === 'hct') {
+    document.querySelector('[data-key="hct"]').style.background='#FEF3C7';
+    document.querySelector('[data-key="hct"]').style.borderColor='#FCD34D';
+    document.querySelector('[data-key="hct"]').style.color='#92400E';
   }
-  return "That's a great question, Marcus. Your data gives me some context, but for that specific question I'd want Dr. Hendricks to weigh in — he'll have your full history at your May 28th appointment, and your clinic report will be waiting for him.\n\nIs there something specific about your current numbers I can help break down?";
+
+  document.getElementById('trend-title').textContent = t.label + ' trend';
+  document.getElementById('trend-sub').textContent = '8 tests · Aug 2025 – May 2026';
+  document.getElementById('trend-current').textContent = vals[n-1] + ' ' + t.unit;
+  document.getElementById('trend-range-label').textContent = 'Normal range: ' + t.range;
+
+  var bc = document.getElementById('bar-chart');
+  bc.innerHTML = '';
+  vals.forEach(function(v,i){
+    var h = Math.round(((v-min)/span)*65+20);
+    var bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = h + '%';
+    bar.style.background = t.color(i,n);
+    bar.title = v + ' ' + t.unit;
+    bc.appendChild(bar);
+  });
+
+  var cx = document.getElementById('chart-x');
+  cx.innerHTML = t.months.map(function(m){return '<span>'+m+'</span>';}).join('');
 }
 
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('chat-drawer').classList.toggle('open', chatOpen);
-  document.getElementById('chat-fab').innerHTML = chatOpen
-    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>';
-  if (chatOpen && !chatStarted) {
-    chatStarted = true;
-    showTypingIndicator();
-    typingTimer = setTimeout(function() {
-      removeTypingIndicator();
-      addBubble('ai', "Hi Marcus. I've reviewed your May 1st panel — your testosterone response looks strong. I'm keeping an eye on your hematocrit trend. What would you like to dig into?");
-    }, 900);
+renderTrend('totalT');
+
+/* ── AI CHAT ── */
+var chatOpen=false, chatStarted=false, typingTimer=null;
+
+var aiResponses={
+  'manage hematocrit':"Your hematocrit has risen 1.1 points per test across the last three consecutive panels: 44.8% → 46.1% → 47.2%. It's still within the normal range (38–50%), but the consistency of the trend is what I'm flagging.\n\nPractical steps before your May 21st draw:\n• Aim for 80–100 oz of water daily\n• Reduce alcohol in the week before testing\n• Draw before your May 9th injection, not after — trough readings are more stable\n\nMake sure Dr. Hendricks sees this trend at your May 28th appointment. Your full panel report is already queued to share with the clinic.",
+  'explain e2 balance':"Your estradiol is 29 pg/mL — right in the middle of the optimal 10–40 pg/mL range for men on TRT. Your anastrozole protocol (0.25mg twice weekly) is clearly working.\n\nE2 balance on TRT matters because testosterone aromatizes into estradiol. Too high: water retention, mood swings, reduced libido. Too low: joint aches, fatigue, low libido, poor erections.\n\nYour current E2 trend is stable across 4 panels — no adjustment needed based on this data.",
+  'full panel summary':"Here's your May 1st panel at a glance:\n\n✓ Total T: 724 ng/dL — up 12%, strong therapeutic range\n✓ Free T: 18.4 pg/mL — well-optimized, SHBG holding it\n✓ Estradiol: 29 pg/mL — anastrozole well-calibrated\n✓ SHBG: 31 nmol/L — healthy mid-range\n⚠ Hematocrit: 47.2% — normal but 3rd consecutive rise\n✓ Hemoglobin: 15.8 g/dL — normal\n✓ LDL: 104 mg/dL — improving trend over 4 tests\n✓ HDL: 48 mg/dL — good\n✓ Triglycerides: 128 mg/dL — normal\n✓ Total Cholesterol: 182 mg/dL — normal\n\nTwo things to cover May 28th: hematocrit trend and June safety check scheduling.",
+  'when should i test next?':"Your next monitoring panel is due May 21st. Your Tasso device ships May 18th — collect and mail the same day to keep the turnaround tight.\n\nPro tip: draw before your next injection on May 9th if you can. Trough readings (just before your next dose) are more consistent for tracking trends over time and give your physician a better baseline to work from.\n\nYour results will auto-share with Dr. Hendricks before your May 28th appointment.",
+  'is my testosterone optimal?':"At 724 ng/dL, your Total T is in a strong therapeutic range. Most TRT physicians target 500–900 ng/dL depending on symptom goals. You're comfortably in the upper end.\n\nYour Free T at 18.4 pg/mL is equally solid — this is the biologically active fraction that actually drives effect in your tissues. SHBG at 31 is keeping a healthy portion of T unbound and available.\n\nShort answer: well-dialed. Your 12% jump this quarter suggests your protocol is hitting its stride.",
+  'what does shbg mean?':"SHBG (Sex Hormone Binding Globulin) is a protein that binds testosterone in your bloodstream, making it unavailable for your body to use. Total T includes bound + free; Free T is what's actually active.\n\nHigh SHBG: you could have strong Total T numbers but low effective Free T — often presenting as fatigue or low drive despite normal-looking labs.\n\nYour SHBG at 31 nmol/L is in a healthy mid-range — not binding too aggressively, which helps explain why your Free T is solid at 18.4 pg/mL.",
+  'what is psa?':"PSA (Prostate-Specific Antigen) is a marker for prostate activity. TRT can cause a modest PSA rise in some patients, which is why it's monitored periodically.\n\nYour last PSA was 0.8 ng/mL (checked Dec 15) — well within the normal range of 0–4. No concerns here.\n\nOn Pro plan, PSA is rechecked every 6 months. Your next safety check (CMP + PSA) is due around June 2026.",
+  'what is my lipid risk?':"Your lipid panel from May 1st looks solid:\n• LDL: 104 mg/dL (target <130) ✓\n• HDL: 48 mg/dL (target >40) ✓\n• Triglycerides: 128 mg/dL (target <150) ✓\n• Total Cholesterol: 182 mg/dL (target <200) ✓\n\nTRT can lower HDL over time, so we track it every test. Yours has stayed stable. LDL has actually improved slightly across your last 4 panels (116 → 104 mg/dL) — that's a good trend.\n\nNo lipid flags at this time.",
+  'lipid':"Your lipid panel from May 1st looks solid:\n• LDL: 104 mg/dL — improving trend, down from 116 at baseline\n• HDL: 48 mg/dL — healthy, stable\n• Triglycerides: 128 mg/dL — within range\n• Total Cholesterol: 182 mg/dL — normal\n\nTRT can lower HDL over time. Yours has held steady across 4 panels, which is a good sign. No lipid flags currently."
+};
+
+function getAiResponse(text){
+  var q=text.toLowerCase().trim();
+  if(q.includes('hematocrit')||q.includes('hct')||q.includes('polycythemia')) return aiResponses['manage hematocrit'];
+  if(q.includes('estradiol')||q.includes('e2')||q.includes('estrogen')||q.includes('anastrozole')) return aiResponses['explain e2 balance'];
+  if(q.includes('summary')||q.includes('all my')||q.includes('full panel')||q.includes('overview')) return aiResponses['full panel summary'];
+  if(q.includes('when')||q.includes('next test')||q.includes('test due')||q.includes('schedule')) return aiResponses['when should i test next?'];
+  if(q.includes('testosterone')||q.includes('optimal')||q.includes('total t')) return aiResponses['is my testosterone optimal?'];
+  if(q.includes('shbg')||q.includes('sex hormone')||q.includes('binding')) return aiResponses['what does shbg mean?'];
+  if(q.includes('psa')||q.includes('prostate')) return aiResponses['what is psa?'];
+  if(q.includes('lipid')||q.includes('cholesterol')||q.includes('hdl')||q.includes('ldl')||q.includes('triglyceride')) return aiResponses['what is my lipid risk?'];
+  for(var k in aiResponses){if(q.includes(k.split(' ')[0]))return aiResponses[k];}
+  return "Good question, Marcus. Your data gives me useful context, but for that specific question I'd want Dr. Hendricks to weigh in — he'll have your complete history at the May 28th appointment, and your full clinic report is already queued.\n\nAnything specific about your current numbers I can break down for you?";
+}
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chat-drawer').classList.toggle('open',chatOpen);
+  document.getElementById('chat-fab').innerHTML=chatOpen
+    ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    :'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>';
+  if(chatOpen&&!chatStarted){
+    chatStarted=true;
+    showTyping();
+    typingTimer=setTimeout(function(){
+      removeTyping();
+      addBubble('ai',"Hi Marcus. I've reviewed your May 1st panel — strong testosterone response, and your lipids are trending in a good direction. I'm watching your hematocrit. What would you like to dig into?");
+    },900);
   }
-  if (chatOpen) setTimeout(function(){ document.getElementById('chat-input').focus(); }, 320);
+  if(chatOpen)setTimeout(function(){document.getElementById('chat-input').focus();},320);
 }
 
-function addBubble(role, text) {
-  var msgs = document.getElementById('chat-msgs');
-  var t = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-  var el = document.createElement('div');
-  el.className = 'chat-msg ' + role;
-  el.innerHTML = '<div class="chat-bubble">' + text.replace(/\n/g, '<br>') + '</div><div class="chat-time">' + t + '</div>';
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
+function addBubble(role,text){
+  var msgs=document.getElementById('chat-msgs');
+  var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  var el=document.createElement('div');
+  el.className='chat-msg '+role;
+  el.innerHTML='<div class="chat-bubble">'+text.replace(/\n/g,'<br>')+'</div><div class="chat-time">'+t+'</div>';
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
 }
 
-function showTypingIndicator() {
-  var msgs = document.getElementById('chat-msgs');
-  var el = document.createElement('div');
-  el.id = 'chat-typing';
-  el.className = 'chat-msg ai';
-  el.innerHTML = '<div class="chat-typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
+function showTyping(){
+  var msgs=document.getElementById('chat-msgs');
+  var el=document.createElement('div');
+  el.id='chat-typing';el.className='chat-msg ai';
+  el.innerHTML='<div class="chat-typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
 }
 
-function removeTypingIndicator() {
-  var el = document.getElementById('chat-typing');
-  if (el) el.remove();
+function removeTyping(){var el=document.getElementById('chat-typing');if(el)el.remove();}
+function hideSugg(){var s=document.getElementById('chat-suggested');if(s)s.style.display='none';}
+
+function sendMessage(){
+  var input=document.getElementById('chat-input');
+  var text=input.value.trim();if(!text)return;
+  input.value='';hideSugg();addBubble('user',text);showTyping();
+  setTimeout(function(){removeTyping();addBubble('ai',getAiResponse(text));},800+Math.random()*700);
 }
 
-function hideSuggestions() {
-  var s = document.getElementById('chat-suggested');
-  if (s) s.style.display = 'none';
+function sendSuggestion(text){
+  var was=chatOpen;if(!chatOpen)toggleChat();
+  setTimeout(function(){
+    hideSugg();addBubble('user',text);showTyping();
+    setTimeout(function(){removeTyping();addBubble('ai',getAiResponse(text));},900+Math.random()*600);
+  },was?80:1300);
 }
 
-function sendMessage() {
-  var input = document.getElementById('chat-input');
-  var text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  hideSuggestions();
-  addBubble('user', text);
-  showTypingIndicator();
-  var delay = 800 + Math.random() * 700;
-  setTimeout(function() {
-    removeTypingIndicator();
-    addBubble('ai', getAiResponse(text));
-  }, delay);
-}
-
-function sendSuggestion(text) {
-  var wasOpen = chatOpen;
-  if (!chatOpen) toggleChat();
-  var delay = wasOpen ? 80 : 1300;
-  setTimeout(function() {
-    hideSuggestions();
-    addBubble('user', text);
-    showTypingIndicator();
-    setTimeout(function() {
-      removeTypingIndicator();
-      addBubble('ai', getAiResponse(text));
-    }, 900 + Math.random() * 600);
-  }, delay);
-}
-
-function handleChatKey(e) {
-  if (e.key === 'Enter') sendMessage();
-}
+function handleChatKey(e){if(e.key==='Enter')sendMessage();}
 </script>
 </body>
 </html>
