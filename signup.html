@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started — TRT LabOS</title>
+<meta name="description" content="Order your first TRT lab panel or start a subscription. At-home blood collection, TRT-specific biomarkers, AI insights.">
+<link rel="stylesheet" href="styles.css">
+<style>
+.ob-prog-wrap{background:#ffffff;border-bottom:1px solid var(--border);padding:0 2rem;}
+.ob-steps{max-width:520px;margin:0 auto;display:flex;align-items:center;padding:1rem 0;}
+.obs{display:flex;align-items:center;gap:8px;flex:1;}
+.obs-circle{width:24px;height:24px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#6A6A63;transition:all 0.2s;}
+.obs-circle.active{background:#1A4D3B;border-color:#1A4D3B;color:#ffffff;}
+.obs-circle.done{background:#E4EDE9;border-color:#1A4D3B;color:#1A4D3B;}
+.obs-label{font-size:12px;color:var(--muted);white-space:nowrap;}
+.obs-label.active{color:var(--ink);font-weight:500;}
+.obs-line{flex:1;height:1px;background:rgba(0,0,0,0.12);margin:0 8px;}
+.obs-line.done{background:#1A4D3B;}
+.ob-wrap{max-width:520px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
+.ob-step{display:none;}
+.ob-step.active{display:block;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.ob-eyebrow{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:#1A4D3B;margin-bottom:0.5rem;}
+.ob-title{font-family:'Instrument Serif',serif;font-size:30px;color:var(--ink);letter-spacing:-0.5px;line-height:1.1;margin-bottom:0.4rem;}
+.ob-sub{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.55;}
+.plan-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:1.75rem;}
+.plan-opt{background:#ffffff;border:2px solid rgba(0,0,0,0.1);border-radius:12px;padding:1.1rem 1.25rem;cursor:pointer;display:flex;align-items:flex-start;gap:11px;transition:border-color 0.15s;}
+.plan-opt:hover{border-color:rgba(0,0,0,0.2);}
+.plan-opt.selected{border-color:#1A4D3B;background:#E4EDE9;}
+.plan-opt.selected .po-name{color:#1A4D3B;}
+.plan-opt.onetime.selected{border-color:#B5632A;background:#F7EDE3;}
+.plan-opt.onetime.selected .po-name{color:#B5632A;}
+.plan-opt.onetime.selected .radio-c{border-color:#B5632A;background:#B5632A;}
+.radio-c{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.15s;}
+.plan-opt.selected .radio-c{border-color:#1A4D3B;background:#1A4D3B;}
+.radio-d{width:7px;height:7px;border-radius:50%;background:#ffffff;display:none;}
+.plan-opt.selected .radio-d{display:block;}
+.po-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.po-desc{font-size:12.5px;color:var(--muted);line-height:1.45;margin-bottom:5px;}
+.po-price{font-size:12px;font-weight:500;color:#1A4D3B;}
+.plan-opt.onetime .po-price{color:#B5632A;}
+.po-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:8px;background:#1A4D3B;color:#ffffff;margin-left:5px;vertical-align:middle;}
+.sel-pill{display:inline-flex;align-items:center;gap:6px;background:#E4EDE9;color:#1A4D3B;font-size:12px;font-weight:500;padding:4px 11px;border-radius:20px;margin-bottom:1.25rem;cursor:pointer;}
+.sel-pill.warm{background:#F7EDE3;color:#B5632A;}
+.form-group{margin-bottom:1.1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.1rem;}
+.form-label{font-size:12px;font-weight:500;color:var(--ink);display:block;margin-bottom:5px;}
+.form-input{width:100%;padding:12px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;transition:border-color 0.15s;}
+.form-input:focus{border-color:#1A4D3B;}
+.form-input::placeholder{color:#B0B0A8;}
+.form-select{width:100%;padding:12px 13px;border:2px solid rgba(0,0,0,0.12);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;outline:none;}
+.form-select:focus{border-color:#1A4D3B;}
+.form-hint{font-size:11.5px;color:var(--muted);margin-top:4px;}
+.pw-bars{display:flex;gap:4px;margin-top:6px;}
+.pw-bar{height:3px;flex:1;border-radius:2px;background:#EEECEA;transition:background 0.2s;}
+.pw-bar.weak{background:#E57373;}
+.pw-bar.fair{background:#FFB74D;}
+.pw-bar.good{background:#81C784;}
+.pw-bar.strong{background:#1A4D3B;}
+.pw-label{font-size:11px;color:var(--muted);margin-top:4px;}
+.hipaa-note{background:#E4EDE9;border-left:3px solid #1A4D3B;border-radius:0 8px 8px 0;padding:10px 13px;margin-bottom:1.1rem;font-size:12.5px;color:#1A4D3B;line-height:1.55;}
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:0.9rem;}
+.check-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:#1A4D3B;flex-shrink:0;cursor:pointer;}
+.check-row label{font-size:12.5px;color:var(--muted);line-height:1.5;cursor:pointer;}
+.check-row a{color:#1A4D3B;}
+.order-summary{background:#EEECEA;border-radius:11px;padding:1.25rem;margin-bottom:1.5rem;}
+.os-title{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:0.75rem;}
+.os-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.07);}
+.os-row:last-child{border-bottom:none;}
+.os-row.total{padding-top:10px;margin-top:4px;font-size:14px;font-weight:500;}
+.os-label{color:var(--muted);}
+.os-row.total .os-label{color:var(--ink);}
+.sec-note{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);justify-content:center;margin-top:1rem;}
+.signin-note{text-align:center;font-size:13px;color:var(--muted);margin-top:1rem;}
+.signin-note a{color:#1A4D3B;text-decoration:none;font-weight:500;}
+.ship-callout{background:#E4EDE9;border-radius:9px;padding:11px 13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:1.25rem;}
+.confirm-icon{width:56px;height:56px;border-radius:50%;background:#E4EDE9;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;}
+.confirm-title{font-family:'Instrument Serif',serif;font-size:30px;color:var(--ink);text-align:center;margin-bottom:0.5rem;}
+.confirm-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:2rem;line-height:1.6;}
+.confirm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:2rem;}
+.confirm-step{display:flex;align-items:flex-start;gap:11px;background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;}
+.cs-num{width:24px;height:24px;border-radius:50%;background:#1A4D3B;color:#ffffff;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.cs-title{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.cs-desc{font-size:12.5px;color:var(--muted);line-height:1.45;}
+@media(max-width:520px){
+  .form-row{grid-template-columns:1fr;}
+  .ob-steps{overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+  </div>
+  <div id="ob-nav-back" style="display:none;font-size:13px;color:var(--muted);cursor:pointer;align-items:center;gap:5px;" onclick="obBack()">← Back</div>
+</nav>
+
+<div class="ob-prog-wrap">
+  <div class="ob-steps">
+    <div class="obs"><div class="obs-circle active" id="obc1">1</div><span class="obs-label active" id="obl1">Plan</span></div>
+    <div class="obs-line" id="obline1"></div>
+    <div class="obs"><div class="obs-circle" id="obc2">2</div><span class="obs-label" id="obl2">Account</span></div>
+    <div class="obs-line" id="obline2"></div>
+    <div class="obs"><div class="obs-circle" id="obc3">3</div><span class="obs-label" id="obl3">Shipping</span></div>
+    <div class="obs-line" id="obline3"></div>
+    <div class="obs"><div class="obs-circle" id="obc4">4</div><span class="obs-label" id="obl4">Confirm</span></div>
+  </div>
+</div>
+
+<div class="ob-wrap">
+
+  <!-- STEP 1 -->
+  <div class="ob-step active" id="ob-s1">
+    <div class="ob-eyebrow">Step 1 of 4</div>
+    <div class="ob-title">Choose your plan</div>
+    <div class="ob-sub">Start with a single test or subscribe for continuous monitoring and better per-test pricing.</div>
+    <div class="plan-opts">
+      <div class="plan-opt onetime" id="opt-onetime" onclick="selectPlan('onetime')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Single test</div><div class="po-desc">Full intake panel · 14 biomarkers · no commitment</div><div class="po-price">$179 one-time · device included</div></div></div>
+      <div class="plan-opt selected" id="opt-pro" onclick="selectPlan('pro')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Pro <span class="po-badge">Most popular</span></div><div class="po-desc">Quarterly monitoring · AI dashboard · clinic sync</div><div class="po-price">$49/mo · billed quarterly</div></div></div>
+      <div class="plan-opt" id="opt-clinical" onclick="selectPlan('clinical')"><div class="radio-c"><div class="radio-d"></div></div><div><div class="po-name">Clinical+ <span class="po-badge" style="background:#B5632A;">Best value</span></div><div class="po-desc">Monthly testing · priority clinical support</div><div class="po-price">$69/mo · billed quarterly</div></div></div>
+    </div>
+    <button class="btn-full" onclick="obGoTo(2)">Continue →</button>
+    <div class="signin-note">Already have an account? <a href="#">Sign in</a></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="ob-step" id="ob-s2">
+    <div class="ob-eyebrow">Step 2 of 4</div>
+    <div class="ob-title">Create your account</div>
+    <div class="ob-sub">Your health data is encrypted and never sold or shared without your explicit consent.</div>
+    <div class="sel-pill" id="sp2" onclick="obGoTo(1)">Pro · $49/mo · change →</div>
+    <div class="hipaa-note"><strong>Your data, your control.</strong> TRT LabOS does not access your results without your permission. You choose what to share — with your clinic, with us, or no one.</div>
+    <div class="form-row"><div><label class="form-label">First name</label><input class="form-input" type="text" placeholder="Marcus" id="fname"></div><div><label class="form-label">Last name</label><input class="form-input" type="text" placeholder="Johnson" id="lname"></div></div>
+    <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" placeholder="marcus@example.com" id="email"></div>
+    <div class="form-group"><label class="form-label">Date of birth</label><input class="form-input" type="text" placeholder="MM / DD / YYYY" id="dob"><div class="form-hint">Required for physician review of your lab results.</div></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Create a password" id="pw" oninput="checkPw(this.value)">
+      <div class="pw-bars"><div class="pw-bar" id="pb1"></div><div class="pw-bar" id="pb2"></div><div class="pw-bar" id="pb3"></div><div class="pw-bar" id="pb4"></div></div>
+      <div class="pw-label" id="pw-lbl">Enter a password</div>
+    </div>
+    <div class="check-row"><input type="checkbox" id="tos" checked><label for="tos">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label></div>
+    <div class="check-row"><input type="checkbox" id="share"><label for="share">I consent to share my de-identified results with TRT LabOS for product improvement. <a href="#">What does this mean?</a></label></div>
+    <div class="check-row"><input type="checkbox" id="remind" checked><label for="remind">Send me test reminders and AI insights about my results.</label></div>
+    <button class="btn-full" onclick="obGoTo(3)">Create account →</button>
+    <div class="sec-note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit encrypted · HIPAA-aligned · HSA/FSA eligible</div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="ob-step" id="ob-s3">
+    <div class="ob-eyebrow">Step 3 of 4</div>
+    <div class="ob-title">Where should we ship your Tasso device?</div>
+    <div class="ob-sub">First device ships within 2 business days. Return mailer included.</div>
+    <div class="sel-pill" id="sp3" onclick="obGoTo(1)">Pro · $49/mo · change →</div>
+    <div class="form-group"><label class="form-label">Street address</label><input class="form-input" type="text" placeholder="123 Main Street"></div>
+    <div class="form-group"><label class="form-label">Apt / suite <span style="color:#B0B0A8;font-weight:400;">(optional)</span></label><input class="form-input" type="text" placeholder="Apt 4B"></div>
+    <div class="form-row">
+      <div><label class="form-label">City</label><input class="form-input" type="text" placeholder="Indianapolis"></div>
+      <div><label class="form-label">State</label>
+        <select class="form-select">
+          <option value="">Select state</option>
+          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option selected>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row"><div><label class="form-label">ZIP code</label><input class="form-input" type="text" placeholder="46201"></div><div><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(317) 555-0100"></div></div>
+    <div class="ship-callout"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg><div style="font-size:12.5px;color:#1A4D3B;line-height:1.5;">Ships free via USPS Priority Mail. Drop your return sample in any mailbox.</div></div>
+    <div class="order-summary">
+      <div class="os-title">Order summary</div>
+      <div class="os-row"><span class="os-label" id="os-lbl">Pro plan (quarterly)</span><span id="os-val">$147 / quarter</span></div>
+      <div class="os-row"><span class="os-label">Tasso device</span><span>Included</span></div>
+      <div class="os-row"><span class="os-label">Shipping</span><span>Free</span></div>
+      <div class="os-row total"><span class="os-label">Due today</span><span id="os-due" style="color:#1A4D3B;">$147</span></div>
+    </div>
+    <button class="btn-full" onclick="obGoTo(4)">Review &amp; confirm →</button>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="ob-step" id="ob-s4">
+    <div style="text-align:center;padding-top:0.5rem;">
+      <div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="confirm-title">You're in, <span id="cname">there</span>.</div>
+      <div class="confirm-sub">Your <span id="cplan" style="font-weight:500;color:var(--ink);">Pro</span> subscription is active. Here's what happens next.</div>
+    </div>
+    <div class="confirm-steps">
+      <div class="confirm-step"><div class="cs-num">1</div><div><div class="cs-title">Device ships to you</div><div class="cs-desc">Arrives in 2–4 days. About 3 minutes to collect your sample.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">2</div><div><div class="cs-title">Mail your sample</div><div class="cs-desc">Drop the prepaid return mailer in any mailbox.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">3</div><div><div class="cs-title">Results in 2–3 days</div><div class="cs-desc">Dashboard, AI insights, and clinic-ready PDF — auto-generated.</div></div></div>
+      <div class="confirm-step"><div class="cs-num">4</div><div><div class="cs-title">Connect your clinic <span style="font-size:11px;color:var(--muted);font-weight:400;">(optional)</span></div><div class="cs-desc">Auto-deliver results before every appointment.</div></div></div>
+    </div>
+    <a href="/dashboard.html" class="btn-full">Go to my dashboard →</a>
+    <div class="sec-note" style="margin-top:1rem;">Confirmation sent to <strong id="cemail" style="color:var(--ink);">your email</strong></div>
+  </div>
+
+</div>
+
+<script>
+var obStep=1, selPlan='pro';
+var planMeta={
+  onetime:{pill:'Single test · $179 →',osLbl:'Intake panel (one-time)',osVal:'$179',osDue:'$179',name:'Single test',warm:true},
+  pro:{pill:'Pro · $49/mo · change →',osLbl:'Pro plan (quarterly)',osVal:'$147 / quarter',osDue:'$147',name:'Pro',warm:false},
+  clinical:{pill:'Clinical+ · $69/mo · change →',osLbl:'Clinical+ (quarterly)',osVal:'$207 / quarter',osDue:'$207',name:'Clinical+',warm:false}
+};
+
+// Read plan from URL param
+var params=new URLSearchParams(window.location.search);
+var urlPlan=params.get('plan');
+if(urlPlan&&planMeta[urlPlan]) selectPlan(urlPlan);
+
+function selectPlan(p){
+  selPlan=p;
+  ['onetime','pro','clinical'].forEach(function(id){
+    document.getElementById('opt-'+id).classList.toggle('selected',id===p);
+  });
+  syncMeta();
+}
+
+function syncMeta(){
+  var m=planMeta[selPlan];
+  ['sp2','sp3'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    el.className='sel-pill'+(m.warm?' warm':'');
+    el.textContent=m.pill;
+    el.onclick=function(){obGoTo(1);};
+  });
+  if(document.getElementById('os-lbl')) document.getElementById('os-lbl').textContent=m.osLbl;
+  if(document.getElementById('os-val')) document.getElementById('os-val').textContent=m.osVal;
+  if(document.getElementById('os-due')) document.getElementById('os-due').textContent=m.osDue;
+  if(document.getElementById('cplan')) document.getElementById('cplan').textContent=m.name;
+  var fn=document.getElementById('fname'); if(fn&&fn.value.trim()&&document.getElementById('cname')) document.getElementById('cname').textContent=fn.value.trim();
+  var em=document.getElementById('email'); if(em&&em.value.trim()&&document.getElementById('cemail')) document.getElementById('cemail').textContent=em.value.trim();
+}
+
+function obGoTo(n){
+  document.getElementById('ob-s'+obStep).classList.remove('active');
+  obStep=n;
+  document.getElementById('ob-s'+n).classList.add('active');
+  syncMeta(); updateObProg(n);
+  document.getElementById('ob-nav-back').style.display=n>1?'flex':'none';
+  window.scrollTo(0,0);
+}
+
+function obBack(){ if(obStep>1) obGoTo(obStep-1); }
+
+function updateObProg(n){
+  for(var i=1;i<=4;i++){
+    var c=document.getElementById('obc'+i), l=document.getElementById('obl'+i);
+    c.className='obs-circle'+(i<n?' done':i===n?' active':'');
+    c.textContent=i<n?'✓':String(i);
+    l.className='obs-label'+(i===n?' active':'');
+  }
+  for(var j=1;j<=3;j++){
+    var ln=document.getElementById('obline'+j);
+    if(ln) ln.className='obs-line'+(j<n?' done':'');
+  }
+}
+
+function checkPw(v){
+  var s=0;
+  if(v.length>=8)s++; if(/[A-Z]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+  var cls=['','weak','fair','good','strong'],lbl=['','Weak','Fair','Good','Strong'];
+  for(var i=1;i<=4;i++) document.getElementById('pb'+i).className='pw-bar'+(i<=s?' '+cls[s]:'');
+  document.getElementById('pw-lbl').textContent=v.length===0?'Enter a password':lbl[s]||'Weak';
+}
+</script>
+</body>
+</html>

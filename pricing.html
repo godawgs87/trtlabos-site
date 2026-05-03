@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — TRT LabOS</title>
+<meta name="description" content="Simple, transparent pricing for TRT lab testing. One-time intake panel at $179 or subscribe for quarterly monitoring starting at $49/mo.">
+<link rel="stylesheet" href="styles.css">
+<style>
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:2.5rem;}
+.tgl-label{font-size:13px;color:var(--muted);}
+.tgl-label.active{color:var(--ink);font-weight:500;}
+.tgl-track{width:44px;height:24px;background:#1A4D3B;border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;}
+.tgl-thumb{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
+.tgl-track.monthly .tgl-thumb{transform:translateX(20px);}
+.save-badge{background:#F7EDE3;color:#B5632A;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem;}
+.val-item{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;}
+.val-num{font-family:'Instrument Serif',serif;font-size:36px;color:#1A4D3B;line-height:1;margin-bottom:4px;}
+.val-lbl{font-size:12.5px;color:var(--muted);line-height:1.4;}
+.entry-band{background:var(--surface);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.entry-band h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+.entry-band p{font-size:13px;color:var(--muted);max-width:440px;line-height:1.5;}
+.entry-price{text-align:right;flex-shrink:0;}
+.entry-big{font-family:'Instrument Serif',serif;font-size:38px;color:var(--ink);line-height:1;}
+.entry-per{font-size:12px;color:var(--muted);margin-top:2px;}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;}
+.plan{background:#ffffff;border:1px solid var(--border);border-radius:16px;padding:1.75rem;display:flex;flex-direction:column;}
+.plan.featured{border:2px solid #1A4D3B;}
+.plan-eyebrow{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;display:flex;align-items:center;gap:6px;}
+.pop-badge{background:#1A4D3B;color:#ffffff;font-size:9.5px;padding:2px 8px;border-radius:8px;}
+.plan-name{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);line-height:1;margin-bottom:0.4rem;}
+.plan-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:1rem;}
+.plan-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:0.2rem;}
+.plan-price-num{font-family:'Instrument Serif',serif;font-size:44px;color:var(--ink);line-height:1;}
+.plan-price-num sup{font-family:'DM Sans',sans-serif;font-size:18px;vertical-align:super;}
+.plan-cycle{font-size:13px;color:var(--muted);}
+.plan-commit{font-size:11.5px;color:#B5632A;font-weight:500;margin-bottom:1.25rem;}
+.plan-test-row{background:#E4EDE9;border-radius:8px;padding:10px 13px;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.plan-test-row .tl{font-size:12.5px;color:#1A4D3B;font-weight:500;}
+.plan-test-row .tr{font-size:12px;color:#1A4D3B;}
+.feats{list-style:none;flex:1;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:9px;}
+.feats li{font-size:13px;color:var(--ink);display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.feats li.dim{color:var(--muted);}
+.chk{width:16px;height:16px;border-radius:50%;background:#E4EDE9;color:#1A4D3B;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;flex-shrink:0;margin-top:1px;}
+.chk.dim{background:var(--surface);color:var(--subtle);}
+.pdf-note{background:#F7EDE3;border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.5rem;}
+.pdf-icon{width:32px;height:32px;background:#B5632A;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pdf-note h4{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.pdf-note p{font-size:12.5px;color:var(--muted);line-height:1.45;}
+.clinic-band{background:#0D0D0B;border-radius:14px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;}
+.clinic-band h3{font-family:'Instrument Serif',serif;font-size:22px;color:#ffffff;margin-bottom:4px;}
+.clinic-band p{font-size:13px;color:rgba(255,255,255,0.5);max-width:400px;line-height:1.55;}
+.clinic-price-d{font-family:'Instrument Serif',serif;font-size:32px;color:#ffffff;line-height:1;margin-bottom:3px;text-align:right;}
+.clinic-per-d{font-size:12px;color:rgba(255,255,255,0.4);text-align:right;}
+.price-footer{text-align:center;font-size:12.5px;color:var(--muted);padding-bottom:3rem;}
+.price-footer a{color:#1A4D3B;text-decoration:none;}
+@media(max-width:640px){
+  .plans,.val-grid{grid-template-columns:1fr;}
+  .entry-band{flex-direction:column;align-items:flex-start;}
+  .clinic-band{flex-direction:column;}
+  .clinic-price-d,.clinic-per-d{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html" class="active">Pricing</a>
+    <a href="/dashboard.html" class="nav-cta">Dashboard</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">Home</a>
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/dashboard.html" class="mob-cta">My Dashboard</a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Pricing</div>
+    <h1>Invest in your protocol,<br>not your <em>lab visits.</em></h1>
+    <p>One-time or subscription — built around what TRT patients actually need to test, track, and optimize.</p>
+  </div>
+</div>
+
+<section class="wrap">
+  <div class="billing-toggle">
+    <span class="tgl-label active" id="tl-q">Quarterly billing</span>
+    <div class="tgl-track" id="p-tgl" onclick="toggleBilling()"><div class="tgl-thumb"></div></div>
+    <span class="tgl-label" id="tl-m">Monthly billing</span>
+    <span class="save-badge" id="p-save">Save 20% quarterly</span>
+  </div>
+
+  <div class="val-grid">
+    <div class="val-item"><div class="val-num">14</div><div class="val-lbl">TRT biomarkers tracked per panel</div></div>
+    <div class="val-item"><div class="val-num">2–3</div><div class="val-lbl">Day turnaround, physician reviewed</div></div>
+    <div class="val-item"><div class="val-num">40+</div><div class="val-lbl">Integrated TRT clinic partners</div></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="entry-band">
+    <div><h3>Just getting started? Try a single test first.</h3><p>Full TRT intake panel with Tasso device, 14 biomarkers, physician review, and clinic-ready PDF. No commitment required.</p></div>
+    <div class="entry-price"><div class="entry-big">$179</div><div class="entry-per">one-time · device included</div><a href="/signup.html?plan=onetime" class="btn-outline-sm">Order now</a></div>
+  </div>
+
+  <div style="font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Subscription plans</div>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-eyebrow">For most patients</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-desc">Quarterly monitoring with AI insights and clinic sync.</div>
+      <div class="plan-price-row"><div class="plan-price-num" id="pro-price"><sup>$</sup>49</div><div class="plan-cycle" id="pro-cycle">/mo · billed quarterly</div></div>
+      <div class="plan-commit" id="pro-commit">3-month commitment · cancel anytime after</div>
+      <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">4/yr at <strong>$69/test</strong></span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Tasso device each cycle</li>
+        <li><span class="chk">✓</span>TRT monitoring panel (8 markers)</li>
+        <li><span class="chk">✓</span>AI dashboard + trend tracking</li>
+        <li><span class="chk">✓</span>Hematocrit &amp; E2 risk alerts</li>
+        <li><span class="chk">✓</span>Clinic integration + PDF export</li>
+        <li><span class="chk">✓</span>Longitudinal data history</li>
+        <li class="dim"><span class="chk dim">–</span>Monthly testing cadence</li>
+        <li class="dim"><span class="chk dim">–</span>Priority clinical support</li>
+      </ul>
+      <a href="/signup.html?plan=pro" class="btn-plan">Start Pro</a>
+    </div>
+    <div class="plan featured">
+      <div class="plan-eyebrow">Active optimization <span class="pop-badge">Best value</span></div>
+      <div class="plan-name">Clinical+</div>
+      <div class="plan-desc">Monthly testing with priority clinical support.</div>
+      <div class="plan-price-row"><div class="plan-price-num" id="clin-price"><sup>$</sup>69</div><div class="plan-cycle" id="clin-cycle">/mo · billed quarterly</div></div>
+      <div class="plan-commit" id="clin-commit">3-month commitment · cancel anytime after</div>
+      <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">12/yr at <strong>$59/test</strong></span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Tasso device each cycle</li>
+        <li><span class="chk">✓</span>Full TRT panel (14 markers)</li>
+        <li><span class="chk">✓</span>AI dashboard + trend tracking</li>
+        <li><span class="chk">✓</span>Hematocrit, E2 &amp; lipid alerts</li>
+        <li><span class="chk">✓</span>Clinic integration + PDF export</li>
+        <li><span class="chk">✓</span>Longitudinal data history</li>
+        <li><span class="chk">✓</span>Monthly testing cadence</li>
+        <li><span class="chk">✓</span>Priority clinical support</li>
+      </ul>
+      <a href="/signup.html?plan=clinical" class="btn-plan">Start Clinical+</a>
+    </div>
+  </div>
+
+  <div class="pdf-note">
+    <div class="pdf-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    <div><h4>Clinic-ready PDF export included on every plan</h4><p>Every result generates a formatted, physician-ready PDF auto-delivered to your clinic. No manual faxing, no login sharing.</p></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="clinic-band">
+    <div><h3>Are you a TRT clinic?</h3><p>Give your patients at-home lab infrastructure and automatic result delivery. Most clinics go live in 48 hours.</p></div>
+    <div><div class="clinic-price-d">$299<span style="font-size:16px;color:rgba(255,255,255,0.4)">/mo</span></div><div class="clinic-per-d">scales with patient volume</div><a href="mailto:clinics@trtlabos.com" class="btn-white" style="margin-top:10px;display:inline-block;">Talk to us</a></div>
+  </div>
+
+  <div class="price-footer">
+    All plans HSA/FSA eligible · No hidden fees · Results in 2–3 business days<br><br>
+    Questions? <a href="mailto:hello@trtlabos.com">Talk to a LabOS advisor →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/pricing.html">Pricing</a><a href="/dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="mailto:clinics@trtlabos.com">Talk to us</a><a href="#">Partner portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="mailto:hello@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open'); m.classList.toggle('open');
+}
+var billingMonthly=false;
+function toggleBilling(){
+  billingMonthly=!billingMonthly;
+  document.getElementById('p-tgl').classList.toggle('monthly',billingMonthly);
+  document.getElementById('tl-q').classList.toggle('active',!billingMonthly);
+  document.getElementById('tl-m').classList.toggle('active',billingMonthly);
+  document.getElementById('p-save').style.opacity=billingMonthly?'0.4':'1';
+  document.getElementById('pro-price').innerHTML=billingMonthly?'<sup>$</sup>59':'<sup>$</sup>49';
+  document.getElementById('pro-cycle').textContent=billingMonthly?'/mo · billed monthly':'/mo · billed quarterly';
+  document.getElementById('pro-commit').textContent=billingMonthly?'No commitment · cancel anytime':'3-month commitment · cancel anytime after';
+  document.getElementById('clin-price').innerHTML=billingMonthly?'<sup>$</sup>85':'<sup>$</sup>69';
+  document.getElementById('clin-cycle').textContent=billingMonthly?'/mo · billed monthly':'/mo · billed quarterly';
+  document.getElementById('clin-commit').textContent=billingMonthly?'No commitment · cancel anytime':'3-month commitment · cancel anytime after';
+}
+</script>
+</body>
+</html>

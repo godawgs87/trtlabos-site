@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — TRT LabOS</title>
+<meta name="description" content="The TRT LabOS AI dashboard. Track your testosterone, hematocrit, estradiol, and all 14 biomarkers over time with AI-powered insights.">
+<link rel="stylesheet" href="styles.css">
+<style>
+.dash{max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+.dash-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.dash-greeting{font-family:'Instrument Serif',serif;font-size:26px;color:var(--ink);margin-bottom:3px;}
+.dash-meta{font-size:12.5px;color:var(--muted);}
+.demo-banner{background:#E4EDE9;border-radius:10px;padding:12px 16px;font-size:13px;color:#1A4D3B;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px;}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
+.metric{background:#ffffff;border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;}
+.metric-lbl{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px;}
+.metric-val{font-family:'Instrument Serif',serif;font-size:30px;line-height:1;color:var(--ink);margin-bottom:2px;}
+.metric-unit{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.trend-pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:20px;}
+.up{background:var(--success-bg);color:var(--success-text);}
+.warn{background:var(--warn-bg);color:var(--warn-text);}
+.ok{background:var(--surface);color:var(--muted);}
+.ai-card{background:#ffffff;border:1px solid rgba(26,77,59,0.18);border-left:3px solid #1A4D3B;border-radius:11px;padding:1.25rem;margin-bottom:1.25rem;}
+.ai-header{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:#1A4D3B;margin-bottom:0.6rem;}
+.ai-body{font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:0.75rem;}
+.ai-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.dash-grid{display:grid;grid-template-columns:3fr 2fr;gap:1rem;margin-bottom:1rem;}
+.dash-card{background:#ffffff;border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.25rem;}
+.card-title{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
+.card-sub{font-size:11px;color:var(--muted);font-weight:400;}
+.bar-chart{height:100px;display:flex;align-items:flex-end;gap:5px;}
+.bar{flex:1;border-radius:3px 3px 0 0;background:#E4EDE9;transition:background 0.12s;}
+.bar:hover{background:#255C47;}
+.bar.now{background:#1A4D3B;}
+.chart-x{display:flex;gap:5px;margin-top:5px;}
+.chart-x span{flex:1;font-size:9.5px;color:var(--muted);text-align:center;}
+.lab-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.lab-row:last-child{border-bottom:none;}
+.lab-name{color:var(--ink);}
+.lab-right{display:flex;align-items:center;gap:8px;}
+.lab-val{font-weight:500;color:var(--ink);}
+.lab-range{font-size:10.5px;color:var(--muted);}
+.pill{font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:10px;}
+.p-ok{background:var(--success-bg);color:var(--success-text);}
+.p-watch{background:var(--warn-bg);color:var(--warn-text);}
+.clinic-hdr{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
+.clinic-ico{width:34px;height:34px;background:#E4EDE9;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.clinic-nm{font-size:13.5px;font-weight:500;color:var(--ink);}
+.clinic-dr{font-size:11.5px;color:var(--muted);}
+.clinic-meta-d{font-size:11.5px;color:var(--muted);margin-bottom:10px;}
+.clinic-proto{background:var(--surface);border-radius:7px;padding:9px 11px;margin-bottom:12px;}
+.proto-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:3px;}
+.proto-val{font-size:12.5px;color:var(--ink);font-weight:500;}
+.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.reminder{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.reminder:last-child{border-bottom:none;}
+.rem-dot{width:8px;height:8px;border-radius:50%;background:#1A4D3B;flex-shrink:0;}
+.rem-dot.dim{background:var(--subtle);}
+.rem-title{color:var(--ink);}
+.rem-date{font-size:11px;color:var(--muted);}
+.dash-cta{background:#1A4D3B;border-radius:14px;padding:2rem 2.5rem;text-align:center;margin-top:2rem;}
+.dash-cta h3{font-family:'Instrument Serif',serif;font-size:24px;color:#ffffff;margin-bottom:0.5rem;}
+.dash-cta p{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:1.5rem;}
+@media(max-width:640px){
+  .metrics-row{grid-template-columns:1fr 1fr;}
+  .dash-grid,.dash-bottom{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="nav-trt">TRT</span><div class="nav-dot"></div><span class="nav-labos">LabOS</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/panels.html">Lab Panels</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/dashboard.html" class="nav-cta active">Dashboard</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">Home</a>
+  <a href="/panels.html">Lab Panels</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/dashboard.html" class="mob-cta">My Dashboard</a>
+</div>
+
+<div class="dash">
+  <div class="demo-banner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+    This is a sample dashboard — <a href="/signup.html" style="color:#1A4D3B;font-weight:500;margin-left:4px;">Sign up to see your real results →</a>
+  </div>
+
+  <div class="dash-header">
+    <div>
+      <div class="dash-greeting">Good morning, Marcus</div>
+      <div class="dash-meta">Sunday, May 3, 2026 · Pro plan · Next test due in 18 days</div>
+    </div>
+    <a href="/signup.html" class="btn-primary" style="font-size:13px;padding:10px 20px;">Get started →</a>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric"><div class="metric-lbl">Total T</div><div class="metric-val">724</div><div class="metric-unit">ng/dL</div><span class="trend-pill up">↑ 12% from last</span></div>
+    <div class="metric"><div class="metric-lbl">Free T</div><div class="metric-val">18.4</div><div class="metric-unit">pg/mL</div><span class="trend-pill up">↑ 8% from last</span></div>
+    <div class="metric"><div class="metric-lbl">Estradiol E2</div><div class="metric-val">29</div><div class="metric-unit">pg/mL</div><span class="trend-pill ok">In balance</span></div>
+    <div class="metric"><div class="metric-lbl">Hematocrit</div><div class="metric-val">47.2</div><div class="metric-unit">%</div><span class="trend-pill warn">⚠ Monitor</span></div>
+  </div>
+
+  <div class="ai-card">
+    <div class="ai-header"><svg width="12" height="12" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Insight</div>
+    <div class="ai-body">Your testosterone response is strong — up 12% to 724 ng/dL. However, your hematocrit has climbed 3 points across two consecutive tests and is now at 47.2%. Still within range, but worth discussing with your clinic before your next injection. Increasing hydration and reducing alcohol intake may help moderate the trend.</div>
+    <div class="ai-btns">
+      <button class="ai-btn">Manage hematocrit</button>
+      <button class="ai-btn">Explain E2 balance</button>
+      <button class="ai-btn">Full panel summary</button>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="card-title">Testosterone trend <span class="card-sub">8 tests · Aug 2025 – May 2026</span></div>
+      <div class="bar-chart">
+        <div class="bar" style="height:52%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:59%"></div><div class="bar" style="height:56%"></div><div class="bar" style="height:64%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:77%"></div><div class="bar now" style="height:90%"></div>
+      </div>
+      <div class="chart-x"><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Jan</span><span>Feb</span><span>Mar</span><span>May</span></div>
+    </div>
+    <div class="dash-card">
+      <div class="card-title">Clinic connection</div>
+      <div class="clinic-hdr">
+        <div class="clinic-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A4D3B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div><div class="clinic-nm">TRT Vitality Clinic</div><div class="clinic-dr">Dr. Aaron Hendricks, MD</div></div>
+      </div>
+      <div class="clinic-meta-d">Last synced: May 1, 2026 · Auto-share on</div>
+      <div class="clinic-proto"><div class="proto-lbl">Current protocol</div><div class="proto-val">Cypionate 200mg / 2wk</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Anastrozole 0.25mg / 2× wk</div></div>
+      <button class="btn-dash">Message clinic</button>
+    </div>
+  </div>
+
+  <div class="dash-bottom">
+    <div class="dash-card">
+      <div class="card-title">Full panel — May 1, 2026 <span class="card-sub">14 biomarkers</span></div>
+      <div class="lab-row"><span class="lab-name">Total Testosterone</span><div class="lab-right"><span class="lab-val">724 ng/dL</span><span class="lab-range">300–1000</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Free Testosterone</span><div class="lab-right"><span class="lab-val">18.4 pg/mL</span><span class="lab-range">9–30</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Estradiol (E2)</span><div class="lab-right"><span class="lab-val">29 pg/mL</span><span class="lab-range">10–40</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">SHBG</span><div class="lab-right"><span class="lab-val">31 nmol/L</span><span class="lab-range">16–55</span><span class="pill p-ok">Normal</span></div></div>
+      <div class="lab-row"><span class="lab-name">Hematocrit</span><div class="lab-right"><span class="lab-val">47.2%</span><span class="lab-range">38–50</span><span class="pill p-watch">Watch</span></div></div>
+      <div class="lab-row"><span class="lab-name">Lipid Risk Score</span><div class="lab-right"><span class="lab-val">Moderate</span><span class="lab-range">—</span><span class="pill p-watch">Watch</span></div></div>
+      <div class="lab-row"><span class="lab-name">PSA</span><div class="lab-right"><span class="lab-val">0.8 ng/mL</span><span class="lab-range">0–4</span><span class="pill p-ok">Normal</span></div></div>
+    </div>
+    <div class="dash-card">
+      <div class="card-title">Upcoming reminders</div>
+      <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Next test due</div><div class="rem-date">May 21 · Tasso ships May 18</div></div></div>
+      <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Clinic appointment</div><div class="rem-date">May 28 · Dr. Hendricks</div></div></div>
+      <div class="reminder"><div class="rem-dot"></div><div><div class="rem-title">Next injection day</div><div class="rem-date">May 9 · Cypionate 200mg</div></div></div>
+      <div class="reminder"><div class="rem-dot dim"></div><div><div class="rem-title" style="color:var(--muted);">Anastrozole dose</div><div class="rem-date">May 5 · 0.25mg</div></div></div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);"><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px;">Longitudinal data</div><div style="font-size:12.5px;color:var(--ink);">8 tests over 9 months · 14 markers tracked · 2 active watchlist items</div></div>
+    </div>
+  </div>
+
+  <div class="dash-cta">
+    <h3>This is your data — own it.</h3>
+    <p>Sign up to get your own dashboard with real results, AI insights, and clinic sync.</p>
+    <a href="/signup.html" class="btn-white">Get started — $179 for your first test</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>TRT</span>LabOS</div><p class="footer-tagline">The operating system for TRT. At-home lab infrastructure built for how TRT patients actually live.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="/panels.html">Lab panels</a><a href="/pricing.html">Pricing</a><a href="/dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h4>For clinics</h4><a href="mailto:clinics@trtlabos.com">Talk to us</a><a href="#">Partner portal</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="mailto:hello@trtlabos.com">Contact</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TRT LabOS · trtlabos.com · All rights reserved.</p>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">HIPAA notice</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  h.classList.toggle('open'); m.classList.toggle('open');
+}
+</script>
+</body>
+</html>

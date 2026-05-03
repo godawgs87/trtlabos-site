@@ -1,52 +1,64 @@
 # TRT LabOS — trtlabos.com
 
-Marketing site + app prototype for TRT LabOS.
+Full website for TRT LabOS with separate pages, shared stylesheet, and Netlify deployment.
 
-## What's in this repo
+## File structure
 
-- `index.html` — The full site (marketing landing page, lab panels, pricing, dashboard, onboarding). All pages are in a single file using JS-driven navigation.
-- `netlify.toml` — Netlify configuration (redirects all routes to index.html)
+```
+trtlabos-site/
+├── index.html       → trtlabos.com/
+├── panels.html      → trtlabos.com/panels
+├── pricing.html     → trtlabos.com/pricing
+├── dashboard.html   → trtlabos.com/dashboard
+├── signup.html      → trtlabos.com/signup
+├── styles.css       → shared styles across all pages
+├── netlify.toml     → URL redirects (panels vs panels.html etc)
+├── .gitignore
+└── README.md
+```
 
 ## Local development
 
-No build tools needed. Just open `index.html` in your browser, or run a local server:
-
-```bash
-# Option 1: Python (built into macOS/Linux)
-python3 -m http.server 3000
-
-# Option 2: VS Code Live Server extension
-# Right-click index.html → "Open with Live Server"
-```
-
-## Deploying to Netlify (automatic)
-
-1. Push changes to GitHub (main branch)
-2. Netlify auto-deploys within ~30 seconds
-3. Live at trtlabos.com
+No build tools needed. Open any HTML file directly in your browser, or use VS Code Live Server:
+- Install the "Live Server" extension in VS Code
+- Right-click any HTML file → "Open with Live Server"
+- Navigation between pages works correctly on Live Server
 
 ## Making changes
 
-All content, styles, and logic are in `index.html`.
+### Shared across all pages (styles.css)
+- Nav styles, button styles, footer, shared layout
+- Change button colors here to update everywhere at once
 
-### Key sections to update:
-- **Hero headline/subhead** — search for `hero-content` 
-- **Pricing numbers** — search for `pro-price`, `clin-price`
-- **Testimonials** — search for `testi-card` (replace placeholder quotes with real ones)
-- **Biomarkers** — search for `bm-pill`
-- **Clinic email** — replace `clinics@trtlabos.com` with your actual email
-- **Contact email** — replace `hello@trtlabos.com` with your actual email
+### Page-specific content
+- `index.html` — hero, pain/solution, stats, features, testimonials, clinic CTA
+- `panels.html` — panel cards, biomarkers, cadence, differentiators
+- `pricing.html` — billing toggle, plan cards, clinic band
+- `dashboard.html` — metrics, AI insight, charts, lab panel, reminders
+- `signup.html` — 4-step onboarding flow
 
-## GitHub → Netlify workflow
+### Things to update before real launch
+1. Replace placeholder testimonials (search `testi-quote`) with real user quotes
+2. Replace `clinics@trtlabos.com` and `hello@trtlabos.com` with real emails
+3. Wire up the signup form to a real backend (Stripe, auth, etc.)
+4. Add Google Analytics or Plausible for tracking
 
+## Deploy to Netlify
+
+Push to GitHub → Netlify auto-deploys on every push to main.
+
+Clean URLs work via netlify.toml redirects:
+- trtlabos.com/pricing → pricing.html
+- trtlabos.com/panels → panels.html
+- trtlabos.com/dashboard → dashboard.html
+- trtlabos.com/signup → signup.html
+
+## GitHub workflow
+
+```bash
+# After making changes in VS Code:
+git add .
+git commit -m "describe what you changed"
+git push
+# Netlify auto-deploys in ~30 seconds
 ```
-Edit in VS Code → git add . → git commit -m "what you changed" → git push → auto-deploys
-```
-
-## Domain setup (GoDaddy → Netlify)
-
-1. In Netlify: Site Settings → Domain Management → Add custom domain → trtlabos.com
-2. Copy the two Netlify nameservers
-3. In GoDaddy: DNS → Nameservers → Custom → paste Netlify nameservers
-4. Wait 10–60 minutes for DNS propagation
-5. Netlify auto-provisions SSL (https) once DNS is live
