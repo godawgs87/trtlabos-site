@@ -156,6 +156,56 @@
 .cd-action.amber-btn{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}
 .cd-action.amber-btn:hover{background:#FDE68A;}
 
+/* ── SEARCH + FILTER ── */
+.cp-search-bar{display:flex;gap:10px;margin-bottom:1rem;align-items:center;}
+.cp-search{flex:1;position:relative;}
+.cp-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:#9CA3AF;}
+.cp-search input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#fff;outline:none;transition:border-color 0.15s;}
+.cp-search input:focus{border-color:#1A4D3B;}
+.cp-sort{font-size:12.5px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--ink);font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;}
+.cp-filters{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;}
+.cp-filter-pill{font-size:11.5px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.12s,color 0.12s,border-color 0.12s;white-space:nowrap;}
+.cp-filter-pill:hover{border-color:#1A4D3B;color:var(--ink);}
+.cp-filter-pill.active{background:#1A4D3B;color:#fff;border-color:#1A4D3B;}
+.cp-filter-count{font-size:10px;margin-left:4px;opacity:0.65;}
+
+/* ── DETAIL TABS ── */
+.cd-tabs{display:flex;border-bottom:1px solid var(--border);margin:0 -1.5rem 1.25rem;padding:0 1.5rem;}
+.cd-tab{font-size:13px;padding:10px 14px;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:color 0.12s,border-color 0.12s;background:none;border-left:none;border-right:none;border-top:none;white-space:nowrap;}
+.cd-tab:hover{color:var(--ink);}
+.cd-tab.active{border-bottom-color:#1A4D3B;color:#1A4D3B;font-weight:500;}
+.cd-tab-count{font-size:10px;color:var(--subtle);margin-left:4px;}
+
+/* ── HISTORY ROWS ── */
+.cd-hist-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);gap:8px;}
+.cd-hist-row:last-child{border-bottom:none;}
+.cd-hist-info{flex:1;}
+.cd-hist-date{font-size:12.5px;font-weight:500;color:var(--ink);}
+.cd-hist-vals{font-size:11px;color:var(--muted);margin-top:2px;}
+.cd-hist-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.cd-hist-pdf{font-size:11px;padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:#fff;color:var(--ink);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.cd-hist-review{font-size:11px;padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.cd-hist-review:hover{border-color:#1A4D3B;color:#1A4D3B;}
+.cd-reviewed-tag{font-size:10px;color:#1A4D3B;display:flex;align-items:center;gap:3px;}
+
+/* ── NOTES ── */
+.cd-notes-hint{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+.cd-notes-area{width:100%;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border);border-radius:8px;padding:12px;resize:none;outline:none;transition:border-color 0.15s;color:var(--ink);box-sizing:border-box;}
+.cd-notes-area:focus{border-color:#1A4D3B;}
+.cd-notes-save{margin-top:10px;padding:9px 18px;background:#1A4D3B;color:#fff;font-size:13px;font-weight:500;border:none;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.cd-notes-save:hover{background:#255C47;}
+.cd-notes-saved{font-size:12px;color:#1A4D3B;margin-left:10px;display:none;}
+
+/* ── TREND ARROW ── */
+.hct-up{color:#B45309;font-size:11px;}
+.hct-down{color:#1A4D3B;font-size:11px;}
+
+/* ── KIT PIPELINE ── */
+.cd-kit-pipeline{display:flex;align-items:center;gap:0;margin-bottom:4px;}
+.cd-kit-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.cd-kit-line{height:2px;flex:1;}
+.cd-kit-label{font-size:11.5px;color:#1A4D3B;font-weight:500;margin-top:4px;}
+
 @media(max-width:900px){
   .cp-sidebar{display:none;}
   .cp-stats{grid-template-columns:1fr 1fr;}
@@ -254,6 +304,21 @@
         <a href="/contact.html">Talk to us about going live →</a>
       </div>
 
+      <div class="cp-search-bar">
+        <div class="cp-search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search patients…" oninput="" />
+        </div>
+        <select class="cp-sort"><option>Sort: Status</option><option>Sort: Name</option><option>Sort: Last test</option></select>
+      </div>
+      <div class="cp-filters">
+        <button class="cp-filter-pill active" onclick="setFilter(this)">All <span class="cp-filter-count">6</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Flagged <span class="cp-filter-count">1</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Watch <span class="cp-filter-count">2</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Clear <span class="cp-filter-count">1</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Kit active <span class="cp-filter-count">3</span></button>
+      </div>
+
       <div class="cp-alert">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#92400E" stroke-width="2" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <div><strong>1 result requires attention —</strong> James T. · Hematocrit 53.8% on 3rd consecutive draw. Consider protocol review before next injection.</div>
@@ -276,7 +341,7 @@
           </div>
           <div class="cp-markers">
             <span class="cp-marker">Total T: 612</span>
-            <span class="cp-marker flag">HCT: 53.8% ↑↑</span>
+            <span class="cp-marker flag">HCT: 53.8% <span class="hct-up">↑↑</span></span>
             <span class="cp-marker ok">E2: 31</span>
           </div>
           <span class="sc sc-flagged">Needs review</span>
@@ -297,7 +362,7 @@
           </div>
           <div class="cp-markers">
             <span class="cp-marker ok">Total T: 724</span>
-            <span class="cp-marker watch">HCT: 47.2% ↑</span>
+            <span class="cp-marker watch">HCT: 47.2% <span class="hct-up">↑</span></span>
             <span class="cp-marker ok">E2: 29</span>
           </div>
           <span class="sc sc-delivered">Delivered</span>
@@ -373,7 +438,21 @@
         <div class="cp-stat"><div class="cp-stat-num">2</div><div class="cp-stat-lbl">Awaiting results</div></div>
         <div class="cp-stat"><div class="cp-stat-num">1</div><div class="cp-stat-lbl">Scheduled soon</div></div>
       </div>
-      <div class="cp-section-lbl">All patients</div>
+      <div class="cp-search-bar">
+        <div class="cp-search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search patients…" oninput="" />
+        </div>
+        <select class="cp-sort"><option>Sort: Status</option><option>Sort: Name</option><option>Sort: Last test</option></select>
+      </div>
+      <div class="cp-filters" style="margin-bottom:0.75rem;">
+        <button class="cp-filter-pill active" onclick="setFilter(this)">All <span class="cp-filter-count">6</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Flagged <span class="cp-filter-count">1</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Watch <span class="cp-filter-count">2</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Clear <span class="cp-filter-count">1</span></button>
+        <button class="cp-filter-pill" onclick="setFilter(this)">Kit active <span class="cp-filter-count">3</span></button>
+      </div>
+      <div class="cp-section-lbl" style="margin-top:0;">All patients</div>
       <div class="cp-patient-list">
         <div class="cp-row flagged" onclick="openDetail('james')">
           <div class="cp-avatar flagged-av">JT</div>
@@ -546,13 +625,23 @@ function cpNav(el, view) {
   closeDetail();
 }
 
+/* ── FILTER PILLS ── */
+function setFilter(el) {
+  el.closest('.cp-filters').querySelectorAll('.cp-filter-pill').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+}
+
 /* ── PATIENT DATA ── */
+var reviewed = {};
+var currentTab = {};
+
 var patients = {
   james: {
     initials:'JT', name:'James T.', flagged:true,
-    date:'May 2, 2026', protocol:'Cypionate 150mg/wk',
+    date:'May 2, 2026', protocol:'Cypionate 150mg/wk', plan:'Pro',
     status:'Hematocrit elevated — 3rd consecutive draw',
-    aiNote:'Hematocrit has increased 4.0 points across 3 consecutive panels (49.8% → 51.2% → 53.8%). This trajectory indicates polycythemia risk. Recommend phlebotomy consultation and/or temporary dose reduction to 100–120mg/wk. Advise patient on hydration (80+ oz/day). Do not administer next injection without clinical review. Full report auto-delivered.',
+    kit:null,
+    aiNote:'Hematocrit has increased 4.0 points across 3 consecutive panels (49.8% → 51.2% → 53.8%). This trajectory indicates polycythemia risk. Recommend phlebotomy consultation and/or temporary dose reduction to 100–120mg/wk. Advise patient on hydration (80+ oz/day). Do not administer next injection without clinical review.',
     hct:{vals:[49.8,51.2,53.8], labels:['Mar 6','Apr 9','May 2'], status:['ok','watch','flag']},
     markers:[
       {name:'Total Testosterone',val:'612 ng/dL',range:'300–1000',s:'ok'},
@@ -565,13 +654,20 @@ var patients = {
       {name:'HDL Cholesterol',val:'42 mg/dL',range:'>40',s:'ok'},
       {name:'Triglycerides',val:'152 mg/dL',range:'<150',s:'watch'},
       {name:'Total Cholesterol',val:'198 mg/dL',range:'<200',s:'ok'},
-    ]
+    ],
+    history:[
+      {date:'May 2, 2026', type:'Monitoring', vals:'T: 612 · HCT: 53.8% · E2: 31', flag:'flag', new:true},
+      {date:'Apr 9, 2026', type:'Monitoring', vals:'T: 588 · HCT: 51.2% · E2: 33', flag:'watch', new:false},
+      {date:'Mar 6, 2026', type:'Intake', vals:'T: 544 · HCT: 49.8% · E2: 28', flag:'ok', new:false},
+    ],
+    note:'Patient needs phlebotomy referral discussion at next visit. Flagged 3× consecutive HCT elevation. Follow up before next Cypionate injection cycle.',
   },
   marcus: {
     initials:'MJ', name:'Marcus J.', flagged:false,
-    date:'May 1, 2026', protocol:'Cypionate 200mg/2wk + Anastrozole 0.25mg 2×/wk',
+    date:'May 1, 2026', protocol:'Cypionate 200mg/2wk + Anastrozole 0.25mg 2×/wk', plan:'Clinical+',
     status:'HCT trending up — watchlist',
-    aiNote:'Testosterone response is strong at 724 ng/dL with well-balanced estradiol at 29 pg/mL — anastrozole protocol is appropriately calibrated. Hematocrit trending upward (44.8% → 46.1% → 47.2%) across 3 consecutive draws but remains within normal range. Recommend hydration coaching at next visit. No protocol change indicated at this time. Full report auto-delivered.',
+    kit:{status:'in_transit', step:4},
+    aiNote:'Testosterone response is strong at 724 ng/dL with well-balanced estradiol at 29 pg/mL — anastrozole protocol is appropriately calibrated. Hematocrit trending upward (44.8% → 46.1% → 47.2%) across 3 consecutive draws but remains within normal range. Recommend hydration coaching at next visit.',
     hct:{vals:[44.8,46.1,47.2], labels:['Nov 4','Feb 3','May 1'], status:['ok','ok','watch']},
     markers:[
       {name:'Total Testosterone',val:'724 ng/dL',range:'300–1000',s:'ok'},
@@ -584,13 +680,20 @@ var patients = {
       {name:'HDL Cholesterol',val:'48 mg/dL',range:'>40',s:'ok'},
       {name:'Triglycerides',val:'128 mg/dL',range:'<150',s:'ok'},
       {name:'Total Cholesterol',val:'182 mg/dL',range:'<200',s:'ok'},
-    ]
+    ],
+    history:[
+      {date:'May 1, 2026', type:'Monitoring', vals:'T: 724 · HCT: 47.2% · E2: 29', flag:'watch', new:true},
+      {date:'Feb 3, 2026', type:'Monitoring', vals:'T: 698 · HCT: 46.1% · E2: 31', flag:'ok', new:false},
+      {date:'Nov 4, 2025', type:'Monitoring', vals:'T: 671 · HCT: 44.8% · E2: 33', flag:'ok', new:false},
+    ],
+    note:'',
   },
   derek: {
     initials:'DM', name:'Derek M.', flagged:false,
-    date:'Apr 28, 2026', protocol:'Cypionate 120mg/wk',
+    date:'Apr 28, 2026', protocol:'Cypionate 120mg/wk', plan:'Pro',
     status:'All markers within optimal range',
-    aiNote:'All markers within optimal ranges across the board. Protocol is well-calibrated with consistent testosterone response and stable hematocrit. No concerning trends noted. No action needed — continue current monitoring cadence. Full report auto-delivered.',
+    kit:null,
+    aiNote:'All markers within optimal ranges across the board. Protocol is well-calibrated with consistent testosterone response and stable hematocrit. No concerning trends noted. No action needed — continue current monitoring cadence.',
     hct:{vals:[44.2,44.8,45.1], labels:['Jan 14','Mar 2','Apr 28'], status:['ok','ok','ok']},
     markers:[
       {name:'Total Testosterone',val:'689 ng/dL',range:'300–1000',s:'ok'},
@@ -603,7 +706,13 @@ var patients = {
       {name:'HDL Cholesterol',val:'54 mg/dL',range:'>40',s:'ok'},
       {name:'Triglycerides',val:'112 mg/dL',range:'<150',s:'ok'},
       {name:'Total Cholesterol',val:'174 mg/dL',range:'<200',s:'ok'},
-    ]
+    ],
+    history:[
+      {date:'Apr 28, 2026', type:'Monitoring', vals:'T: 689 · HCT: 45.1% · E2: 27', flag:'ok', new:false},
+      {date:'Mar 2, 2026', type:'Monitoring', vals:'T: 672 · HCT: 44.8% · E2: 25', flag:'ok', new:false},
+      {date:'Jan 14, 2026', type:'Monitoring', vals:'T: 651 · HCT: 44.2% · E2: 24', flag:'ok', new:false},
+    ],
+    note:'',
   }
 };
 
@@ -615,44 +724,139 @@ function hctBarHeight(vals, idx){
 }
 function pillClass(s){return s==='flag'?'bm-flag':s==='watch'?'bm-watch':'bm-ok';}
 function pillLabel(s){return s==='flag'?'Elevated':s==='watch'?'Watch':'Normal';}
+function histPillClass(s){return s==='flag'?'sc sc-flagged':s==='watch'?'sc sc-scheduled':'sc sc-delivered';}
+function histPillLabel(s){return s==='flag'?'Flagged':s==='watch'?'Watch':'Clear';}
+
+function switchTab(id, tab) {
+  currentTab[id] = tab;
+  document.querySelectorAll('.cd-tab').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab')===tab);
+  });
+  document.querySelectorAll('.cd-tab-content').forEach(function(c){
+    c.style.display = c.getAttribute('data-content')===tab ? 'block' : 'none';
+  });
+}
+
+function markReviewed(id, btn) {
+  reviewed[id] = true;
+  btn.closest('.cd-hist-actions').innerHTML = '<span class="cd-reviewed-tag">✓ Reviewed</span>';
+  // Also update overview button if present
+  var ovBtn = document.getElementById('review-btn-'+id);
+  if(ovBtn) ovBtn.outerHTML = '<span class="cd-reviewed-tag">✓ Reviewed</span>';
+}
+
+function saveNote(id) {
+  var val = document.getElementById('note-'+id).value;
+  patients[id].note = val;
+  var saved = document.getElementById('note-saved-'+id);
+  if(saved){saved.style.display='inline';setTimeout(function(){saved.style.display='none';},2000);}
+}
 
 function renderDetail(id) {
   var p = patients[id];
   if(!p) return '';
   var avClass = p.flagged ? 'amber' : 'green';
+  var tab = currentTab[id] || 'overview';
 
+  /* ── TABS ── */
+  var tabs = '<div class="cd-tabs">'
+    +'<button class="cd-tab'+(tab==='overview'?' active':'')+'" data-tab="overview" onclick="switchTab(\''+id+'\',\'overview\')">Overview</button>'
+    +'<button class="cd-tab'+(tab==='history'?' active':'')+'" data-tab="history" onclick="switchTab(\''+id+'\',\'history\')">'
+    +'History<span class="cd-tab-count">'+p.history.length+'</span></button>'
+    +'<button class="cd-tab'+(tab==='notes'?' active':'')+'" data-tab="notes" onclick="switchTab(\''+id+'\',\'notes\')">Notes</button>'
+    +'</div>';
+
+  /* ── PATIENT HEADER ── */
+  var header = '<div class="cd-patient-hdr">'
+    +'<div class="cd-avatar '+avClass+'">'+p.initials+'</div>'
+    +'<div><div class="cd-name">'+p.name+'</div>'
+    +'<div class="cd-meta">'+p.plan+' plan · '+p.history.length+' results · Last: '+p.date+'<br>'+p.protocol+'</div></div>'
+    +'</div>';
+
+  /* ── OVERVIEW CONTENT ── */
   var trendBars = p.hct.vals.map(function(v,i){
     return '<div class="cd-bar" style="height:'+hctBarHeight(p.hct.vals,i)+';background:'+hctBarColor(p.hct.status[i])+';" title="'+v+'%"></div>';
   }).join('');
   var trendLabels = p.hct.vals.map(function(v,i){
     return '<div class="cd-trend-lbl'+(p.hct.status[i]==='flag'?' hi':'')+'">'+v+'%<br><span style="font-size:9px;color:var(--subtle);">'+p.hct.labels[i]+'</span></div>';
   }).join('');
-
   var bmRows = p.markers.map(function(m){
     return '<div class="cd-bm"><span class="cd-bm-name">'+m.name+'</span><div class="cd-bm-right"><span class="cd-bm-range">'+m.range+'</span><span class="cd-bm-val">'+m.val+'</span><span class="cd-bm-pill '+pillClass(m.s)+'">'+pillLabel(m.s)+'</span></div></div>';
   }).join('');
 
-  var flagActions = p.flagged
-    ? '<button class="cd-action amber-btn" onclick="">⚠ Flag for follow-up</button>'
-    : '';
+  /* Kit pipeline */
+  var kitHtml = '';
+  if(p.kit) {
+    var kitSteps = ['ordered','shipped','delivered','collected','in_transit','processing'];
+    var kitLabels = {ordered:'Ordered',shipped:'Shipped',delivered:'Delivered',collected:'Collected',in_transit:'In transit',processing:'Processing'};
+    var curIdx = kitSteps.indexOf(p.kit.status);
+    var dots = kitSteps.map(function(s,i){
+      var bg = i < curIdx ? 'background:#1A4D3B;opacity:0.4;' : (i===curIdx ? 'background:#1A4D3B;' : 'background:#E5E7EB;');
+      var line = i < kitSteps.length-1 ? ('<div style="height:2px;flex:1;background:'+(i<curIdx?'#1A4D3B':'#E5E7EB')+';opacity:'+(i<curIdx?'0.4':'1')+'"></div>') : '';
+      return '<div style="display:flex;align-items:center;flex:1;"><div style="width:10px;height:10px;border-radius:50%;flex-shrink:0;'+bg+'"></div>'+line+'</div>';
+    }).join('');
+    kitHtml = '<div class="cd-section"><div class="cd-section-title">Kit pipeline</div>'
+      +'<div class="cd-kit-pipeline">'+dots+'</div>'
+      +'<div class="cd-kit-label">'+kitLabels[p.kit.status]+'</div></div>';
+  }
 
-  return '<div class="cd-patient-hdr">'
-    +'<div class="cd-avatar '+avClass+'">'+p.initials+'</div>'
-    +'<div><div class="cd-name">'+p.name+'</div><div class="cd-meta">'+p.date+' · '+p.protocol+'<br>'+p.status+'</div></div>'
-    +'</div>'
+  var reviewBtn = reviewed[id]
+    ? '<span class="cd-reviewed-tag">✓ Reviewed</span>'
+    : '<button id="review-btn-'+id+'" class="cd-action outline" onclick="markReviewed(\''+id+'\',this)" style="font-size:12.5px;padding:9px 14px;">Mark reviewed</button>';
+
+  var overviewContent = '<div class="cd-tab-content" data-content="overview" style="display:'+(tab==='overview'?'block':'none')+'">'
     +'<div class="cd-ai"><div class="cd-ai-lbl"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1A4D3B"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14.5h-2v-6h2v6zm0-8h-2V6h2v2.5z"/></svg>LabOS AI Clinic Note</div><div class="cd-ai-text">'+p.aiNote+'</div></div>'
-    +'<div class="cd-section">'
-    +'<div class="cd-section-title">Hematocrit trend — last 3 tests</div>'
-    +'<div class="cd-trend">'
-    +'<div class="cd-trend-bars">'+trendBars+'</div>'
-    +'<div class="cd-trend-labels">'+trendLabels+'</div>'
-    +'</div></div>'
+    +kitHtml
+    +'<div class="cd-section"><div class="cd-section-title">Hematocrit trend — last 3 tests</div>'
+    +'<div class="cd-trend"><div class="cd-trend-bars">'+trendBars+'</div>'
+    +'<div class="cd-trend-labels">'+trendLabels+'</div></div></div>'
     +'<div class="cd-section"><div class="cd-section-title">Full panel — '+p.date+'</div>'+bmRows+'</div>'
     +'<div class="cd-actions">'
-    +'<button class="cd-action green" onclick="">Download PDF report</button>'
-    +flagActions
-    +'<button class="cd-action outline" onclick="closeDetail()">Close</button>'
+    +'<button class="cd-action green" onclick="">Download PDF</button>'
+    +reviewBtn
+    +'</div>'
     +'</div>';
+
+  /* ── HISTORY CONTENT ── */
+  var histRows = p.history.map(function(h){
+    var isRev = reviewed[id+'-'+h.date] || !h.new;
+    var revBtn = isRev
+      ? '<span class="cd-reviewed-tag">✓ Reviewed</span>'
+      : '<button class="cd-hist-review" onclick="markReviewed(\''+id+'-'+h.date+'\',this)">Review</button>';
+    return '<div class="cd-hist-row">'
+      +'<div class="cd-hist-info">'
+      +'<div class="cd-hist-date">'+h.date+' <span style="font-size:10.5px;font-weight:400;color:var(--muted);">'+h.type+'</span>'
+      +(h.new&&!reviewed[id+'-'+h.date]?' <span style="font-size:9px;background:#E4EDE9;color:#1A4D3B;padding:1px 6px;border-radius:10px;font-weight:500;">new</span>':'')
+      +'</div>'
+      +'<div class="cd-hist-vals">'+h.vals+'</div>'
+      +'</div>'
+      +'<div class="cd-hist-actions">'
+      +'<span class="'+histPillClass(h.flag)+'">'+histPillLabel(h.flag)+'</span>'
+      +'<button class="cd-hist-pdf" onclick="">PDF</button>'
+      +revBtn
+      +'</div>'
+      +'</div>';
+  }).join('');
+
+  var histContent = '<div class="cd-tab-content" data-content="history" style="display:'+(tab==='history'?'block':'none')+'">'
+    +'<div style="background:var(--surface);border-radius:10px;padding:1rem;margin-bottom:1rem;">'
+    +'<div class="cd-section-title" style="margin-bottom:8px;">HCT trend — last '+p.hct.vals.length+' tests</div>'
+    +'<div class="cd-trend-bars">'+trendBars+'</div>'
+    +'<div class="cd-trend-labels">'+trendLabels+'</div></div>'
+    +histRows
+    +'</div>';
+
+  /* ── NOTES CONTENT ── */
+  var notesContent = '<div class="cd-tab-content" data-content="notes" style="display:'+(tab==='notes'?'block':'none')+'">'
+    +'<p class="cd-notes-hint">Chart notes are visible to all staff at your clinic. One note per patient.</p>'
+    +'<textarea id="note-'+id+'" class="cd-notes-area" rows="6" placeholder="Add chart notes, protocol details, follow-up reminders…">'+p.note+'</textarea>'
+    +'<div style="margin-top:10px;">'
+    +'<button class="cd-notes-save" onclick="saveNote(\''+id+'\')">Save note</button>'
+    +'<span id="note-saved-'+id+'" class="cd-notes-saved">Saved ✓</span>'
+    +'</div>'
+    +'</div>';
+
+  return header + tabs + overviewContent + histContent + notesContent;
 }
 
 function openDetail(id) {
