@@ -4,27 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pricing — TRT LabOS</title>
-<meta name="description" content="Simple, transparent pricing for TRT lab testing. One-time intake panel at $179 or subscribe for quarterly monitoring starting at $49/mo.">
+<meta name="description" content="Simple, transparent pricing for TRT patients and clinics. Track your labs, get AI insights, or run your entire TRT practice on one platform.">
 <link rel="stylesheet" href="styles.css?v=2">
 <style>
-.billing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:2.5rem;}
-.tgl-label{font-size:13px;color:var(--muted);}
-.tgl-label.active{color:var(--ink);font-weight:500;}
-.tgl-track{width:44px;height:24px;background:#1A4D3B;border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;}
-.tgl-thumb{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
-.tgl-track.monthly .tgl-thumb{transform:translateX(20px);}
 .save-badge{background:#F7EDE3;color:#B5632A;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
-.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem;}
-.val-item{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;}
-.val-num{font-family:'Instrument Serif',serif;font-size:36px;color:#1A4D3B;line-height:1;margin-bottom:4px;}
-.val-lbl{font-size:12.5px;color:var(--muted);line-height:1.4;}
-.entry-band{background:var(--surface);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
-.entry-band h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px;}
-.entry-band p{font-size:13px;color:var(--muted);max-width:440px;line-height:1.5;}
-.entry-price{text-align:right;flex-shrink:0;}
-.entry-big{font-family:'Instrument Serif',serif;font-size:38px;color:var(--ink);line-height:1;}
-.entry-per{font-size:12px;color:var(--muted);margin-top:2px;}
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;}
+
+/* ── Section labels ── */
+.section-label{font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
+.section-header{margin-bottom:0.35rem;}
+.section-header h2{font-family:'Instrument Serif',serif;font-size:30px;color:var(--ink);line-height:1.15;}
+.section-sub{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.5;}
+
+/* ── Plans grid (3-col) ── */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.5rem;}
+.plans.two-col{grid-template-columns:1fr 1fr;}
 .plan{background:#ffffff;border:1px solid var(--border);border-radius:16px;padding:1.75rem;display:flex;flex-direction:column;}
 .plan.featured{border:2px solid #1A4D3B;}
 .plan-eyebrow{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;display:flex;align-items:center;gap:6px;}
@@ -44,22 +37,55 @@
 .feats li.dim{color:var(--muted);}
 .chk{width:16px;height:16px;border-radius:50%;background:#E4EDE9;color:#1A4D3B;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;flex-shrink:0;margin-top:1px;}
 .chk.dim{background:var(--surface);color:var(--subtle);}
+
+/* ── One-time entry band ── */
+.entry-band{background:var(--surface);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.entry-band h3{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+.entry-band p{font-size:13px;color:var(--muted);max-width:440px;line-height:1.5;}
+.entry-price{text-align:right;flex-shrink:0;}
+.entry-big{font-family:'Instrument Serif',serif;font-size:38px;color:var(--ink);line-height:1;}
+.entry-per{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── PDF note ── */
 .pdf-note{background:#F7EDE3;border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.5rem;}
 .pdf-icon{width:32px;height:32px;background:#B5632A;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .pdf-note h4{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;}
 .pdf-note p{font-size:12.5px;color:var(--muted);line-height:1.45;}
-.clinic-band{background:#0D0D0B;border-radius:14px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;}
-.clinic-band h3{font-family:'Instrument Serif',serif;font-size:22px;color:#ffffff;margin-bottom:4px;}
-.clinic-band p{font-size:13px;color:rgba(255,255,255,0.5);max-width:400px;line-height:1.55;}
-.clinic-price-d{font-family:'Instrument Serif',serif;font-size:32px;color:#ffffff;line-height:1;margin-bottom:3px;text-align:right;}
-.clinic-per-d{font-size:12px;color:rgba(255,255,255,0.4);text-align:right;}
+
+/* ── Clinic plans ── */
+.clinic-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.25rem;}
+.clinic-plan{background:#ffffff;border:1px solid var(--border);border-radius:16px;padding:1.75rem;display:flex;flex-direction:column;}
+.clinic-plan.featured{border:2px solid #1A4D3B;}
+.clinic-plan-eyebrow{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;display:flex;align-items:center;gap:6px;}
+.clinic-plan-name{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);line-height:1;margin-bottom:0.35rem;}
+.clinic-plan-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:1rem;}
+.clinic-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:0.2rem;}
+.clinic-price-num{font-family:'Instrument Serif',serif;font-size:44px;color:var(--ink);line-height:1;}
+.clinic-price-num sup{font-family:'DM Sans',sans-serif;font-size:18px;vertical-align:super;}
+.clinic-price-cycle{font-size:13px;color:var(--muted);}
+.patient-limit{background:#E4EDE9;border-radius:8px;padding:10px 13px;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.patient-limit .tl{font-size:12.5px;color:#1A4D3B;font-weight:500;}
+.patient-limit .tr{font-size:12px;color:#1A4D3B;font-weight:600;}
+
+/* ── Enterprise band ── */
+.enterprise-band{background:#0D0D0B;border-radius:14px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;}
+.enterprise-band h3{font-family:'Instrument Serif',serif;font-size:22px;color:#ffffff;margin-bottom:4px;}
+.enterprise-band p{font-size:13px;color:rgba(255,255,255,0.5);max-width:400px;line-height:1.55;}
+.enterprise-price{text-align:right;flex-shrink:0;}
+.enterprise-price-d{font-family:'Instrument Serif',serif;font-size:32px;color:#ffffff;line-height:1;margin-bottom:3px;}
+.enterprise-price-sub{font-size:12px;color:rgba(255,255,255,0.4);}
+
+/* ── Footer note ── */
 .price-footer{text-align:center;font-size:12.5px;color:var(--muted);padding-bottom:3rem;}
 .price-footer a{color:#1A4D3B;text-decoration:none;}
-@media(max-width:640px){
-  .plans,.val-grid{grid-template-columns:1fr;}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .plans,.clinic-plans{grid-template-columns:1fr;}
+  .plans.two-col{grid-template-columns:1fr;}
   .entry-band{flex-direction:column;align-items:flex-start;}
-  .clinic-band{flex-direction:column;}
-  .clinic-price-d,.clinic-per-d{text-align:left;}
+  .enterprise-band{flex-direction:column;}
+  .enterprise-price{text-align:left;}
 }
 </style>
 </head>
@@ -86,73 +112,103 @@
 <div class="page-hero">
   <div class="page-hero-inner">
     <div class="eyebrow">Pricing</div>
-    <h1>Invest in your protocol,<br>not your <em>lab visits.</em></h1>
-    <p>One-time or subscription — built around what TRT patients actually need to test, track, and optimize.</p>
+    <h1>Built for patients.<br>Scaled for <em>clinics.</em></h1>
+    <p>Track and optimize your protocol, or give your entire practice at-home lab infrastructure. Simple, transparent pricing — no hidden fees.</p>
   </div>
 </div>
 
 <section class="wrap">
-  <div class="billing-toggle">
-    <span class="tgl-label active" id="tl-q">Quarterly billing</span>
-    <div class="tgl-track" id="p-tgl" onclick="toggleBilling()"><div class="tgl-thumb"></div></div>
-    <span class="tgl-label" id="tl-m">Monthly billing</span>
-    <span class="save-badge" id="p-save">Save 20% quarterly</span>
+
+  <!-- ── PATIENT PLANS ─────────────────────────────── -->
+  <div class="section-label">For patients</div>
+  <div class="section-header"><h2>Track, analyze, and optimize your TRT.</h2></div>
+  <p class="section-sub">At-home testing, AI-powered insights, and automatic clinic delivery — every plan includes everything.</p>
+
+  <div style="background:var(--surface);border-radius:12px;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px;">Just exploring? Create a free account.</div>
+      <div style="font-size:12.5px;color:var(--muted);">View results from tests you've purchased — no card required. Upgrade anytime from inside the app.</div>
+    </div>
+    <a href="https://app.trtlabos.com/auth/signup" class="btn-outline-sm" style="white-space:nowrap;">Create free account →</a>
   </div>
 
-  <div class="val-grid">
-    <div class="val-item"><div class="val-num">10</div><div class="val-lbl">Core TRT markers tracked every test</div></div>
-    <div class="val-item"><div class="val-num">2–3</div><div class="val-lbl">Day turnaround, physician reviewed</div></div>
-    <div class="val-item"><div class="val-num">48hr</div><div class="val-lbl">To connect your clinic and go live</div></div>
-  </div>
+  <div class="plans">
+    <!-- Member -->
+    <div class="plan">
+      <div class="plan-eyebrow">Bring your own labs</div>
+      <div class="plan-name">Member</div>
+      <div class="plan-desc">Upload labs from any source. Full AI analysis, trend tracking, and clinic integration — no kit required.</div>
+      <div class="plan-price-row"><div class="plan-price-num"><sup>$</sup>19</div><div class="plan-cycle">/mo</div></div>
+      <div class="plan-commit">No commitment · cancel anytime</div>
+      <div class="plan-test-row"><span class="tl">Lab testing</span><span class="tr">Bring your own</span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>PDF lab upload &amp; AI extraction</li>
+        <li><span class="chk">✓</span>AI insights &amp; trend tracking</li>
+        <li><span class="chk">✓</span>Full result history &amp; dashboard</li>
+        <li><span class="chk">✓</span>Hematocrit, E2 &amp; lipid risk alerts</li>
+        <li><span class="chk">✓</span>Clinic integration &amp; protocol visibility</li>
+        <li><span class="chk">✓</span>PDF export</li>
+        <li class="dim"><span class="chk dim">–</span>At-home collection device</li>
+        <li class="dim"><span class="chk dim">–</span>Monthly or quarterly testing</li>
+        <li class="dim"><span class="chk dim">–</span>À la carte add-on tests</li>
+      </ul>
+      <a href="https://app.trtlabos.com/auth/signup" class="btn-plan">Get started</a>
+    </div>
 
-  <hr class="divider">
+    <!-- Monthly -->
+    <div class="plan featured">
+      <div class="plan-eyebrow">Active monitoring <span class="pop-badge">Most popular</span></div>
+      <div class="plan-name">Monthly</div>
+      <div class="plan-desc">Test every month. Ideal for patients actively dialing in their protocol or making dose adjustments.</div>
+      <div class="plan-price-row"><div class="plan-price-num"><sup>$</sup>99</div><div class="plan-cycle">/mo</div></div>
+      <div class="plan-commit">3-month minimum · cancel anytime after</div>
+      <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">12/yr · 1 per month</span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Tasso at-home collection device monthly</li>
+        <li><span class="chk">✓</span>Core TRT panel — 10 markers per test</li>
+        <li><span class="chk">✓</span>CMP + PSA safety check every 3 months</li>
+        <li><span class="chk">✓</span>AI insights &amp; trend tracking</li>
+        <li><span class="chk">✓</span>Hematocrit, E2 &amp; lipid risk alerts</li>
+        <li><span class="chk">✓</span>Clinic integration &amp; PDF auto-delivery</li>
+        <li><span class="chk">✓</span>Full result history &amp; dashboard</li>
+        <li><span class="chk">✓</span>Protocol visibility</li>
+        <li><span class="chk">✓</span>À la carte add-on tests available</li>
+      </ul>
+      <a href="https://app.trtlabos.com/auth/signup" class="btn-plan">Start Monthly</a>
+    </div>
+
+    <!-- Quarterly -->
+    <div class="plan">
+      <div class="plan-eyebrow">Stable monitoring <span class="save-badge" style="margin-left:0;">Save 20%</span></div>
+      <div class="plan-name">Quarterly</div>
+      <div class="plan-desc">Test every three months. Best for patients on a stable, established protocol.</div>
+      <div class="plan-price-row"><div class="plan-price-num"><sup>$</sup>79</div><div class="plan-cycle">/mo · billed $237/quarter</div></div>
+      <div class="plan-commit">Billed every 3 months · cancel anytime</div>
+      <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">4/yr · 1 per quarter</span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Tasso at-home collection device quarterly</li>
+        <li><span class="chk">✓</span>Core TRT panel — 10 markers per test</li>
+        <li><span class="chk">✓</span>CMP + PSA safety check every 6 months</li>
+        <li><span class="chk">✓</span>AI insights &amp; trend tracking</li>
+        <li><span class="chk">✓</span>Hematocrit, E2 &amp; lipid risk alerts</li>
+        <li><span class="chk">✓</span>Clinic integration &amp; PDF auto-delivery</li>
+        <li><span class="chk">✓</span>Full result history &amp; dashboard</li>
+        <li><span class="chk">✓</span>Protocol visibility</li>
+        <li><span class="chk">✓</span>À la carte add-on tests available</li>
+      </ul>
+      <a href="https://app.trtlabos.com/auth/signup" class="btn-plan">Start Quarterly</a>
+    </div>
+  </div>
 
   <div class="entry-band">
-    <div><h3>Just getting started? Try a single test first.</h3><p>Full TRT intake panel — complete diagnostic baseline including hormones, blood safety, lipids, CMP, PSA, thyroid, and pituitary markers. Physician reviewed. No commitment required.</p></div>
-    <div class="entry-price"><div class="entry-big">$179</div><div class="entry-per">one-time · device included</div><a href="https://app.trtlabos.com/auth/signup" class="btn-outline-sm">Order now</a></div>
-  </div>
-
-  <div style="font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Subscription plans</div>
-  <div class="plans">
-    <div class="plan">
-      <div class="plan-eyebrow">For most patients</div>
-      <div class="plan-name">Pro</div>
-      <div class="plan-desc">Quarterly monitoring with AI insights and clinic sync.</div>
-      <div class="plan-price-row"><div class="plan-price-num" id="pro-price"><sup>$</sup>49</div><div class="plan-cycle" id="pro-cycle">/mo · billed quarterly</div></div>
-      <div class="plan-commit" id="pro-commit">3-month commitment · cancel anytime after</div>
-      <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">4/yr at <strong>$69/test</strong></span></div>
-      <ul class="feats">
-        <li><span class="chk">✓</span>Tasso device each cycle</li>
-        <li><span class="chk">✓</span>Core TRT panel — 10 markers every test</li>
-        <li><span class="chk">✓</span>CMP + PSA safety check every 6 months</li>
-        <li><span class="chk">✓</span>AI dashboard + trend tracking</li>
-        <li><span class="chk">✓</span>Hematocrit &amp; E2 risk alerts</li>
-        <li><span class="chk">✓</span>Clinic integration + PDF export</li>
-        <li><span class="chk">✓</span>Longitudinal data history</li>
-        <li class="dim"><span class="chk dim">–</span>Monthly testing cadence</li>
-        <li class="dim"><span class="chk dim">–</span>Priority clinical support</li>
-      </ul>
-      <a href="https://app.trtlabos.com/auth/signup" class="btn-plan">Start Pro</a>
+    <div>
+      <h3>Not ready to subscribe? Try a single intake panel first.</h3>
+      <p>Full TRT diagnostic baseline — hormones, blood safety, lipids, CMP, PSA, thyroid, and pituitary markers. Physician reviewed. No commitment required. Includes Tasso device.</p>
     </div>
-    <div class="plan featured">
-      <div class="plan-eyebrow">Active optimization <span class="pop-badge">Best value</span></div>
-      <div class="plan-name">Clinical+</div>
-      <div class="plan-desc">Monthly testing with priority clinical support.</div>
-      <div class="plan-price-row"><div class="plan-price-num" id="clin-price"><sup>$</sup>69</div><div class="plan-cycle" id="clin-cycle">/mo · billed quarterly</div></div>
-      <div class="plan-commit" id="clin-commit">3-month commitment · cancel anytime after</div>
-      <div class="plan-test-row"><span class="tl">Tests included</span><span class="tr">12/yr at <strong>$59/test</strong></span></div>
-      <ul class="feats">
-        <li><span class="chk">✓</span>Tasso device each cycle</li>
-        <li><span class="chk">✓</span>Core TRT panel — 10 markers every test</li>
-        <li><span class="chk">✓</span>CMP + PSA safety check every 3 months</li>
-        <li><span class="chk">✓</span>AI dashboard + trend tracking</li>
-        <li><span class="chk">✓</span>Hematocrit, E2 &amp; lipid alerts</li>
-        <li><span class="chk">✓</span>Clinic integration + PDF export</li>
-        <li><span class="chk">✓</span>Longitudinal data history</li>
-        <li><span class="chk">✓</span>Monthly testing cadence</li>
-        <li><span class="chk">✓</span>Priority clinical support</li>
-      </ul>
-      <a href="https://app.trtlabos.com/auth/signup" class="btn-plan">Start Clinical+</a>
+    <div class="entry-price">
+      <div class="entry-big">$179</div>
+      <div class="entry-per">one-time · device included</div>
+      <a href="https://app.trtlabos.com/auth/signup" class="btn-outline-sm" style="margin-top:10px;display:inline-block;">Order now</a>
     </div>
   </div>
 
@@ -163,15 +219,96 @@
 
   <hr class="divider">
 
-  <div class="clinic-band">
-    <div><h3>Are you a TRT clinic?</h3><p>Give your patients at-home lab infrastructure and automatic result delivery. Most clinics go live in 48 hours.</p></div>
-    <div><div class="clinic-price-d">$299<span style="font-size:16px;color:rgba(255,255,255,0.4)">/mo</span></div><div class="clinic-per-d">scales with patient volume</div><a href="/contact.html" class="btn-white" style="margin-top:10px;display:inline-block;">Talk to us</a></div>
+  <!-- ── CLINIC PLANS ─────────────────────────────── -->
+  <div class="section-label">For clinics</div>
+  <div class="section-header"><h2>One platform for your entire TRT practice.</h2></div>
+  <p class="section-sub">Monitor patients, automate lab delivery, manage protocols, and track results — all in one place. Priced by patient volume so you only pay for what you use.</p>
+
+  <div class="clinic-plans">
+    <!-- Starter -->
+    <div class="clinic-plan">
+      <div class="clinic-plan-eyebrow">Small practice</div>
+      <div class="clinic-plan-name">Starter</div>
+      <div class="clinic-plan-desc">Everything you need to get up and running. Full portal, full features, from day one.</div>
+      <div class="clinic-price-row"><div class="clinic-price-num"><sup>$</sup>149</div><div class="clinic-price-cycle">/mo</div></div>
+      <div class="plan-commit" style="margin-bottom:1.25rem;">Cancel anytime</div>
+      <div class="patient-limit"><span class="tl">Patient capacity</span><span class="tr">Up to 50</span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Full clinic portal &amp; patient dashboard</li>
+        <li><span class="chk">✓</span>Automated result delivery</li>
+        <li><span class="chk">✓</span>Protocol management</li>
+        <li><span class="chk">✓</span>Team roles &amp; permissions</li>
+        <li><span class="chk">✓</span>Chart notes &amp; result review</li>
+        <li><span class="chk">✓</span>PDF export for all patients</li>
+        <li class="dim"><span class="chk dim">–</span>Usage analytics</li>
+        <li class="dim"><span class="chk dim">–</span>Priority onboarding</li>
+        <li class="dim"><span class="chk dim">–</span>Dedicated account support</li>
+      </ul>
+      <a href="/contact.html" class="btn-plan">Get started</a>
+    </div>
+
+    <!-- Growth -->
+    <div class="clinic-plan featured">
+      <div class="clinic-plan-eyebrow">Growing clinic <span class="pop-badge">Best value</span></div>
+      <div class="clinic-plan-name">Growth</div>
+      <div class="clinic-plan-desc">For practices scaling their TRT patient base. Includes analytics and priority onboarding.</div>
+      <div class="clinic-price-row"><div class="clinic-price-num"><sup>$</sup>299</div><div class="clinic-price-cycle">/mo</div></div>
+      <div class="plan-commit" style="margin-bottom:1.25rem;">Cancel anytime</div>
+      <div class="patient-limit"><span class="tl">Patient capacity</span><span class="tr">Up to 150</span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Everything in Starter</li>
+        <li><span class="chk">✓</span>Usage analytics &amp; reporting</li>
+        <li><span class="chk">✓</span>Capacity alerts &amp; upgrade prompts</li>
+        <li><span class="chk">✓</span>Priority onboarding (live setup)</li>
+        <li><span class="chk">✓</span>Chart notes &amp; result review</li>
+        <li><span class="chk">✓</span>PDF export for all patients</li>
+        <li><span class="chk">✓</span>Team roles &amp; permissions</li>
+        <li><span class="chk">✓</span>Protocol management</li>
+        <li class="dim"><span class="chk dim">–</span>Dedicated account support</li>
+      </ul>
+      <a href="/contact.html" class="btn-plan">Get started</a>
+    </div>
+
+    <!-- Pro -->
+    <div class="clinic-plan">
+      <div class="clinic-plan-eyebrow">Established practice</div>
+      <div class="clinic-plan-name">Pro</div>
+      <div class="clinic-plan-desc">High-volume practices with a large and active TRT patient panel. Includes dedicated support.</div>
+      <div class="clinic-price-row"><div class="clinic-price-num"><sup>$</sup>599</div><div class="clinic-price-cycle">/mo</div></div>
+      <div class="plan-commit" style="margin-bottom:1.25rem;">Cancel anytime</div>
+      <div class="patient-limit"><span class="tl">Patient capacity</span><span class="tr">Up to 500</span></div>
+      <ul class="feats">
+        <li><span class="chk">✓</span>Everything in Growth</li>
+        <li><span class="chk">✓</span>Dedicated account support</li>
+        <li><span class="chk">✓</span>Advanced usage analytics</li>
+        <li><span class="chk">✓</span>Capacity alerts &amp; upgrade prompts</li>
+        <li><span class="chk">✓</span>Priority onboarding</li>
+        <li><span class="chk">✓</span>Full team roles &amp; permissions</li>
+        <li><span class="chk">✓</span>Protocol management</li>
+        <li><span class="chk">✓</span>PDF export for all patients</li>
+        <li><span class="chk">✓</span>Chart notes &amp; result review</li>
+      </ul>
+      <a href="/contact.html" class="btn-plan">Get started</a>
+    </div>
+  </div>
+
+  <div class="enterprise-band">
+    <div>
+      <h3>Enterprise &amp; multi-location</h3>
+      <p>Over 500 patients, multiple locations, or need custom integrations? Let's build something together. Unlimited patient capacity, dedicated SLA, and a direct line to our team.</p>
+    </div>
+    <div class="enterprise-price">
+      <div class="enterprise-price-d">Custom</div>
+      <div class="enterprise-price-sub">Unlimited patients · SLA included</div>
+      <a href="/contact.html" class="btn-white" style="margin-top:10px;display:inline-block;">Talk to us</a>
+    </div>
   </div>
 
   <div class="price-footer">
-    All plans HSA/FSA eligible · No hidden fees · Results in 2–3 business days<br><br>
+    All patient plans are HSA/FSA eligible · No hidden fees · Results in 2–3 business days<br><br>
     Questions? <a href="mailto:support@trtlabos.com">Talk to a LabOS advisor →</a>
   </div>
+
 </section>
 
 <footer>
@@ -193,20 +330,6 @@
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   h.classList.toggle('open'); m.classList.toggle('open');
-}
-var billingMonthly=false;
-function toggleBilling(){
-  billingMonthly=!billingMonthly;
-  document.getElementById('p-tgl').classList.toggle('monthly',billingMonthly);
-  document.getElementById('tl-q').classList.toggle('active',!billingMonthly);
-  document.getElementById('tl-m').classList.toggle('active',billingMonthly);
-  document.getElementById('p-save').style.opacity=billingMonthly?'0.4':'1';
-  document.getElementById('pro-price').innerHTML=billingMonthly?'<sup>$</sup>59':'<sup>$</sup>49';
-  document.getElementById('pro-cycle').textContent=billingMonthly?'/mo · billed monthly':'/mo · billed quarterly';
-  document.getElementById('pro-commit').textContent=billingMonthly?'No commitment · cancel anytime':'3-month commitment · cancel anytime after';
-  document.getElementById('clin-price').innerHTML=billingMonthly?'<sup>$</sup>85':'<sup>$</sup>69';
-  document.getElementById('clin-cycle').textContent=billingMonthly?'/mo · billed monthly':'/mo · billed quarterly';
-  document.getElementById('clin-commit').textContent=billingMonthly?'No commitment · cancel anytime':'3-month commitment · cancel anytime after';
 }
 </script>
 </body>

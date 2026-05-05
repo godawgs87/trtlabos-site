@@ -136,22 +136,22 @@
           <div class="po-price">$179 one-time · Tasso device included</div>
         </div>
       </div>
-      <div class="plan-opt selected" id="opt-pro" onclick="selectPlan('pro')">
+      <div class="plan-opt selected" id="opt-monthly" onclick="selectPlan('monthly')">
         <div class="radio-c"><div class="radio-d"></div></div>
         <div>
-          <div class="po-best">Already on TRT · most patients</div>
-          <div class="po-name">Pro <span class="po-badge">Most popular</span></div>
-          <div class="po-desc">10 core markers every quarter + CMP &amp; PSA safety check every 6 months. AI dashboard, trend tracking, and clinic sync.</div>
-          <div class="po-price">$49/mo · billed quarterly · 4 tests/year</div>
+          <div class="po-best">Active monitoring · most popular</div>
+          <div class="po-name">Monthly <span class="po-badge">Most popular</span></div>
+          <div class="po-desc">10 core markers every month + CMP &amp; PSA safety check every 3 months. Ideal for active dose adjustment and protocol optimization.</div>
+          <div class="po-price">$99/mo · 3-month minimum · 12 tests/year</div>
         </div>
       </div>
-      <div class="plan-opt" id="opt-clinical" onclick="selectPlan('clinical')">
+      <div class="plan-opt" id="opt-quarterly" onclick="selectPlan('quarterly')">
         <div class="radio-c"><div class="radio-d"></div></div>
         <div>
-          <div class="po-best">Active optimization</div>
-          <div class="po-name">Clinical+ <span class="po-badge" style="background:#B5632A;">Best value</span></div>
-          <div class="po-desc">10 core markers every month + CMP &amp; PSA safety check every 3 months. Monthly cadence with priority clinical support.</div>
-          <div class="po-price">$69/mo · billed quarterly · 12 tests/year</div>
+          <div class="po-best">Stable monitoring · save 20%</div>
+          <div class="po-name">Quarterly <span class="po-badge" style="background:#1A4D3B;">Save 20%</span></div>
+          <div class="po-desc">10 core markers every quarter + CMP &amp; PSA safety check every 6 months. Best for patients on a stable, established protocol.</div>
+          <div class="po-price">$79/mo · billed $237/quarter · 4 tests/year</div>
         </div>
       </div>
     </div>
@@ -231,7 +231,7 @@
 
     <div class="order-summary">
       <div class="os-title">Order summary</div>
-      <div class="os-row"><span class="os-label" id="os-lbl">Pro plan (quarterly)</span><span id="os-val">$147 / quarter</span></div>
+      <div class="os-row"><span class="os-label" id="os-lbl">Monthly plan (3-month min)</span><span id="os-val">$99 / mo</span></div>
       <div class="os-row"><span class="os-label">Tasso device</span><span>Included</span></div>
       <div class="os-row"><span class="os-label">Shipping</span><span>Free</span></div>
       <div class="os-row total"><span class="os-label">Due today</span><span id="os-due" style="color:#1A4D3B;font-weight:600;">$147</span></div>
@@ -287,11 +287,11 @@
 </div>
 
 <script>
-var obStep=1, selPlan='pro';
+var obStep=1, selPlan='monthly';
 var planMeta={
   onetime:{pill:'Single test · $179',osLbl:'Intake panel (one-time)',osVal:'$179',osDue:'$179',name:'Single test',warm:true},
-  pro:{pill:'Pro · $49/mo · change',osLbl:'Pro plan (quarterly)',osVal:'$147 / quarter',osDue:'$147',name:'Pro',warm:false},
-  clinical:{pill:'Clinical+ · $69/mo · change',osLbl:'Clinical+ (quarterly)',osVal:'$207 / quarter',osDue:'$207',name:'Clinical+',warm:false}
+  monthly:{pill:'Monthly · $99/mo · change',osLbl:'Monthly plan (3-month min)',osVal:'$99 / mo',osDue:'$99',name:'Monthly',warm:false},
+  quarterly:{pill:'Quarterly · $79/mo · change',osLbl:'Quarterly plan',osVal:'$237 / quarter',osDue:'$237',name:'Quarterly',warm:false}
 };
 
 var params=new URLSearchParams(window.location.search);
@@ -300,7 +300,7 @@ if(urlPlan&&planMeta[urlPlan]) selectPlan(urlPlan);
 
 function selectPlan(p){
   selPlan=p;
-  ['onetime','pro','clinical'].forEach(function(id){
+  ['onetime','monthly','quarterly'].forEach(function(id){
     document.getElementById('opt-'+id).classList.toggle('selected',id===p);
   });
   syncMeta();
