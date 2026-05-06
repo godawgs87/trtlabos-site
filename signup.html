@@ -370,5 +370,16 @@ function fmtExp(el){
   el.value=v;
 }
 </script>
+<script>
+(function(){
+  var m=document.cookie.match('(^|;)\s*trtl_display\s*=\s*([^;]+)');
+  var name=m?decodeURIComponent(m.pop()):'';
+  if(!name)return;
+  var nc=document.querySelector('.nav-cta');
+  if(nc){nc.textContent='My Dashboard →';nc.href='https://app.trtlabos.com/dashboard';}
+  var mc=document.querySelector('.mob-cta');
+  if(mc){mc.textContent='My Dashboard';mc.href='https://app.trtlabos.com/dashboard';}
+})();
+</script>
 </body>
 </html>
